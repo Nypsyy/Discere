@@ -1,6 +1,6 @@
 # Discere
 
-## Authors
+### Authors
 Thomas ARNETTE
 
 Julien VERNAY
