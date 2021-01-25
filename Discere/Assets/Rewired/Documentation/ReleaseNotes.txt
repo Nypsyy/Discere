@@ -1,3 +1,27 @@
+1.1.38.1:
+
+    Bug Fixes:
+      - Fixed D-pad mapping bug in Sony DualSense controller definition internal driver mapping.
+
+1.1.38.0:
+
+    Changes:
+      - Added support for Game Core Xbox platforms through additional plugin.
+      - Added Enhanced Device Support for Sony DualSense controller (Windows and MacOS).
+      - Changed display name of Nintendo Switch handheld controller to meet Nintendo's new naming requirements.
+      
+    API Changes:
+      - Added ControllerExtensions.DualSenseExtension class.
+      - Added ControllerExtensions.DualSenseMicrophoneLightMode enum.
+      - Added ControllerExtensions.DualSenseOtherLightBrightness enum.
+      - Added ControllerExtensions.DualSensePlayerLightFlags enum.
+
+    New Controller Definitions:
+      - Sony DualSense
+
+    Bug Fixes:
+      - Fixed broken ReInput.MappingHelper.GetActionElementMap function.
+
 1.1.37.0:
 
   Changes:
