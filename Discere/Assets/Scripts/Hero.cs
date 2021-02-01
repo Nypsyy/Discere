@@ -13,6 +13,9 @@ public class Hero : MonoBehaviour {
     private Vector2 input_vec;
     private bool is_idle;
 
+    // Components
+    private Health health;
+
     void Awake() {
         player = ReInput.players.GetPlayer(0);
         body = GetComponent<Rigidbody2D>();
@@ -28,12 +31,18 @@ public class Hero : MonoBehaviour {
 
     // Start is called before the first frame update
     void Start() {
-        
+        health = GetComponent<Health>();
     }
 
     // Update is called once per frame
     void Update() {
         input_vec = player.GetAxis2D("Move Horizontal", "Move Vertical");
+
+        // DEBUG : hurt hero when dashing
+        if (player.GetButtonDown("Dash"))
+        {
+            health.TakeDamage(30f);
+        }
         
         UpdateAnimation();
     }
@@ -74,5 +83,10 @@ public class Hero : MonoBehaviour {
     
     void FixedUpdate() {
         body.velocity = input_vec * speed;
+    }
+
+    public void OnHealthEmpty()
+    {
+        Debug.Log("Should die");
     }
 }
