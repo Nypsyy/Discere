@@ -15,6 +15,7 @@ public class Hero : MonoBehaviour {
 
     // Components
     private Health health;
+    private FightingStyle fightingStyle;
 
     void Awake() {
         player = ReInput.players.GetPlayer(0);
@@ -32,16 +33,18 @@ public class Hero : MonoBehaviour {
     // Start is called before the first frame update
     void Start() {
         health = GetComponent<Health>();
+        fightingStyle = GetComponent<FightingStyle>();
     }
 
     // Update is called once per frame
     void Update() {
         input_vec = player.GetAxis2D("Move Horizontal", "Move Vertical");
 
-        // DEBUG : hurt hero when dashing
+        // DEBUG : hurt hero when dashing, and switch fighting style
         if (player.GetButtonDown("Dash"))
         {
             health.TakeDamage(30f);
+            fightingStyle.SwitchStyle();
         }
         
         UpdateAnimation();
