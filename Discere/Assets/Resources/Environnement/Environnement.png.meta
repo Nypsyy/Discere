@@ -8602,13 +8602,13 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Environnement_286
+      name: PillarObject
       rect:
         serializedVersion: 2
         x: 592
-        y: 496
-        width: 16
-        height: 16
+        y: 448
+        width: 32
+        height: 64
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -8618,27 +8618,6 @@ TextureImporter:
       bones: []
       spriteID: 30e978a297448ec90800000000000000
       internalID: -7140381922000658941
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Environnement_287
-      rect:
-        serializedVersion: 2
-        x: 608
-        y: 496
-        width: 16
-        height: 16
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 214a00caa5d531910800000000000000
-      internalID: 1806890519519863826
       vertices: []
       indices: 
       edges: []
@@ -8933,48 +8912,6 @@ TextureImporter:
       bones: []
       spriteID: 194baf34d892c7140800000000000000
       internalID: 4718692196285068433
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Environnement_312
-      rect:
-        serializedVersion: 2
-        x: 592
-        y: 480
-        width: 16
-        height: 16
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: b10c88b54fa8052a0800000000000000
-      internalID: -6750743059316031461
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Environnement_313
-      rect:
-        serializedVersion: 2
-        x: 608
-        y: 480
-        width: 16
-        height: 16
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 7e48042c3a663af60800000000000000
-      internalID: 8044386212938548455
       vertices: []
       indices: 
       edges: []
@@ -9332,48 +9269,6 @@ TextureImporter:
       bones: []
       spriteID: 7bff1c795f5705db0800000000000000
       internalID: -4805211104730808393
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Environnement_341
-      rect:
-        serializedVersion: 2
-        x: 592
-        y: 464
-        width: 16
-        height: 16
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: b92834058a20da7a0800000000000000
-      internalID: -6364427776480279909
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Environnement_342
-      rect:
-        serializedVersion: 2
-        x: 608
-        y: 464
-        width: 16
-        height: 16
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 2d74e6dda93cf5fc0800000000000000
-      internalID: -3503866915163584558
       vertices: []
       indices: 
       edges: []
@@ -9794,48 +9689,6 @@ TextureImporter:
       bones: []
       spriteID: f706e8b8c82fc6150800000000000000
       internalID: 5867331100007620735
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Environnement_370
-      rect:
-        serializedVersion: 2
-        x: 592
-        y: 448
-        width: 16
-        height: 16
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: b96bda3a9fdd319d0800000000000000
-      internalID: -2804654078659021157
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Environnement_371
-      rect:
-        serializedVersion: 2
-        x: 608
-        y: 448
-        width: 16
-        height: 16
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: e456d48be8a4f2690800000000000000
-      internalID: -7624793667277068978
       vertices: []
       indices: 
       edges: []
