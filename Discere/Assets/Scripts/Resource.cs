@@ -47,9 +47,10 @@ public class Resource : MonoBehaviour
         }
     }
 
-    protected void ChangeValue(float amount)
+    protected void ChangeValue(float amount, bool transitionEffect = true)
     {
         value = Mathf.Clamp(value + amount, minValue, maxValue);
+        Debug.Log(value);
 
         // Manage visual
         if (ui != null)
@@ -57,7 +58,8 @@ public class Resource : MonoBehaviour
             ui.value = value; 
             if (transitionSlider != null)
             {
-                StartCoroutine(ChangeTransitionValue());
+                if (transitionEffect) StartCoroutine(ChangeTransitionValue());
+                else if (transitionCnt <= 0) transitionSlider.value = ui.value;
             }
         }
 

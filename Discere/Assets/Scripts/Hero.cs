@@ -15,6 +15,7 @@ public class Hero : MonoBehaviour {
 
     // Components
     private Health health;
+    private Mana mana;
     private FightingStyle fightingStyle;
 
     void Awake() {
@@ -33,6 +34,7 @@ public class Hero : MonoBehaviour {
     // Start is called before the first frame update
     void Start() {
         health = GetComponent<Health>();
+        mana = GetComponent<Mana>();
         fightingStyle = GetComponent<FightingStyle>();
     }
 
@@ -44,6 +46,7 @@ public class Hero : MonoBehaviour {
         if (player.GetButtonDown("Dash"))
         {
             health.TakeDamage(30f);
+            mana.UseMana(50f);
             fightingStyle.SwitchStyle();
         }
         
