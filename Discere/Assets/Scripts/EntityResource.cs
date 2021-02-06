@@ -5,10 +5,10 @@ using UnityEngine.UI;
 using UnityEngine.Events;
 
 /**
- * Defines a resource shown by a UI bar
- * e.g. Health, Mana, ...
+ *   Defines a resource shown by a UI bar
+ *   e.g. Health, Mana, ...
  */
-public class Resource : MonoBehaviour
+public class EntityResource : MonoBehaviour
 {
     public Slider ui;                               // UI Element
     public float minValue = 0f, maxValue = 100f;    // Bounds

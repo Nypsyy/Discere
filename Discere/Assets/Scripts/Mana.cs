@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Mana : Resource
+public class Mana : EntityResource
 {
     public float recovering = 4f;
 
