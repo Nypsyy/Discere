@@ -6,8 +6,8 @@
  * is handled automatically by InputMapper to keep this example small and focused.
  */
 
-namespace Rewired.Demos {
-
+namespace Rewired.Demos
+{
     using UnityEngine;
     using UnityEngine.UI;
     using UnityEngine.EventSystems;
@@ -15,8 +15,8 @@ namespace Rewired.Demos {
     using System.Collections;
 
     [AddComponentMenu("")]
-    public class SimpleControlRemapping : MonoBehaviour {
-
+    public class SimpleControlRemapping : MonoBehaviour
+    {
         private const string category = "Default";
         private const string layout = "Default";
         private const string uiCategory = "UI";
@@ -34,17 +34,23 @@ namespace Rewired.Demos {
         private int selectedControllerId = 0;
         private List<Row> rows = new List<Row>();
 
-        private Player player { get { return ReInput.players.GetPlayer(0); } }
+        private Player player {
+            get { return ReInput.players.GetPlayer(0); }
+        }
+
         private ControllerMap controllerMap {
             get {
-                if(controller == null) return null;
+                if (controller == null) return null;
                 return player.controllers.maps.GetMap(controller.type, controller.id, category, layout);
             }
         }
-        private Controller controller { get { return player.controllers.GetController(selectedControllerType, selectedControllerId); } }
+
+        private Controller controller {
+            get { return player.controllers.GetController(selectedControllerType, selectedControllerId); }
+        }
 
         private void OnEnable() {
-            if(!ReInput.isReady) return; // don't run if Rewired hasn't been initialized
+            if (!ReInput.isReady) return; // don't run if Rewired hasn't been initialized
 
             // Timeout after 5 seconds of listening
             inputMapper.options.timeout = 5f;
@@ -52,7 +58,7 @@ namespace Rewired.Demos {
             // Ignore Mouse X and Y axes
             inputMapper.options.ignoreMouseXAxis = true;
             inputMapper.options.ignoreMouseYAxis = true;
-            
+
             // Subscribe to events
             ReInput.ControllerConnectedEvent += OnControllerChanged;
             ReInput.ControllerDisconnectedEvent += OnControllerChanged;
@@ -64,7 +70,6 @@ namespace Rewired.Demos {
         }
 
         private void OnDisable() {
-
             // Make sure the input mapper is stopped first
             inputMapper.Stop();
 
@@ -75,7 +80,8 @@ namespace Rewired.Demos {
         }
 
         private void RedrawUI() {
-            if(controller == null) { // no controller is selected
+            if (controller == null) {
+                // no controller is selected
                 ClearUI();
                 return;
             }
@@ -84,7 +90,7 @@ namespace Rewired.Demos {
             controllerNameUIText.text = controller.name;
 
             // Update each button label with the currently mapped element identifier
-            for(int i = 0; i < rows.Count; i++) {
+            for (int i = 0; i < rows.Count; i++) {
                 Row row = rows[i];
                 InputAction action = rows[i].action;
 
@@ -92,8 +98,8 @@ namespace Rewired.Demos {
                 int actionElementMapId = -1;
 
                 // Find the first ActionElementMap that maps to this Action and is compatible with this field type
-                foreach(var actionElementMap in controllerMap.ElementMapsWithAction(action.id)) {
-                    if(actionElementMap.ShowInField(row.actionRange)) {
+                foreach (var actionElementMap in controllerMap.ElementMapsWithAction(action.id)) {
+                    if (actionElementMap.ShowInField(row.actionRange)) {
                         name = actionElementMap.elementIdentifierName;
                         actionElementMapId = actionElementMap.id;
                         break;
@@ -111,35 +117,41 @@ namespace Rewired.Demos {
         }
 
         private void ClearUI() {
-
             // Clear the controller name
-            if(selectedControllerType == ControllerType.Joystick) controllerNameUIText.text = "No joysticks attached";
+            if (selectedControllerType == ControllerType.Joystick) controllerNameUIText.text = "No joysticks attached";
             else controllerNameUIText.text = string.Empty;
 
             // Clear button labels
-            for(int i = 0; i < rows.Count; i++) {
+            for (int i = 0; i < rows.Count; i++) {
                 rows[i].text.text = string.Empty;
             }
         }
 
         private void InitializeUI() {
-
             // Delete placeholders
-            foreach(Transform t in actionGroupTransform) {
+            foreach (Transform t in actionGroupTransform) {
                 Object.Destroy(t.gameObject);
             }
-            foreach(Transform t in fieldGroupTransform) {
+
+            foreach (Transform t in fieldGroupTransform) {
                 Object.Destroy(t.gameObject);
             }
 
             // Create Action fields and input field buttons
-            foreach(var action in ReInput.mapping.ActionsInCategory(category)) {
-                if(action.type == InputActionType.Axis) {
+            foreach (var action in ReInput.mapping.ActionsInCategory(category)) {
+                if (action.type == InputActionType.Axis) {
                     // Create a full range, one positive, and one negative field for Axis-type Actions
                     CreateUIRow(action, AxisRange.Full, action.descriptiveName);
-                    CreateUIRow(action, AxisRange.Positive, !string.IsNullOrEmpty(action.positiveDescriptiveName) ? action.positiveDescriptiveName : action.descriptiveName + " +");
-                    CreateUIRow(action, AxisRange.Negative, !string.IsNullOrEmpty(action.negativeDescriptiveName) ? action.negativeDescriptiveName : action.descriptiveName + " -");
-                } else if(action.type == InputActionType.Button) {
+                    CreateUIRow(action, AxisRange.Positive,
+                                !string.IsNullOrEmpty(action.positiveDescriptiveName)
+                                    ? action.positiveDescriptiveName
+                                    : action.descriptiveName + " +");
+                    CreateUIRow(action, AxisRange.Negative,
+                                !string.IsNullOrEmpty(action.negativeDescriptiveName)
+                                    ? action.negativeDescriptiveName
+                                    : action.descriptiveName + " -");
+                }
+                else if (action.type == InputActionType.Button) {
                     // Just create one positive field for Button-type Actions
                     CreateUIRow(action, AxisRange.Positive, action.descriptiveName);
                 }
@@ -163,11 +175,11 @@ namespace Rewired.Demos {
             // Add the row to the rows list
             rows.Add(
                 new Row() {
-                    action = action,
-                    actionRange = actionRange,
-                    button = buttonGo.GetComponent<Button>(),
-                    text = buttonGo.GetComponentInChildren<Text>()
-                }
+                              action = action,
+                              actionRange = actionRange,
+                              button = buttonGo.GetComponent<Button>(),
+                              text = buttonGo.GetComponentInChildren<Text>()
+                          }
             );
         }
 
@@ -175,23 +187,26 @@ namespace Rewired.Demos {
             bool changed = false;
 
             // Check if the controller type changed
-            if(controllerType != selectedControllerType) { // controller type changed
+            if (controllerType != selectedControllerType) {
+                // controller type changed
                 selectedControllerType = controllerType;
                 changed = true;
             }
 
             // Check if the controller id changed
             int origId = selectedControllerId;
-            if(selectedControllerType == ControllerType.Joystick) {
-                if(player.controllers.joystickCount > 0) selectedControllerId = player.controllers.Joysticks[0].id;
+            if (selectedControllerType == ControllerType.Joystick) {
+                if (player.controllers.joystickCount > 0) selectedControllerId = player.controllers.Joysticks[0].id;
                 else selectedControllerId = -1;
-            } else {
+            }
+            else {
                 selectedControllerId = 0;
             }
-            if(selectedControllerId != origId) changed = true;
+
+            if (selectedControllerId != origId) changed = true;
 
             // If the controller changed, stop the input mapper and update the UI
-            if(changed) {
+            if (changed) {
                 inputMapper.Stop();
                 RedrawUI();
             }
@@ -201,13 +216,13 @@ namespace Rewired.Demos {
 
         // Called by the controller UI Buttons when pressed
         public void OnControllerSelected(int controllerType) {
-            SetSelectedController((ControllerType)controllerType);
+            SetSelectedController((ControllerType) controllerType);
         }
 
         // Called by the input field UI Button when pressed
         private void OnInputFieldClicked(int index, int actionElementMapToReplaceId) {
-            if(index < 0 || index >= rows.Count) return; // index out of range
-            if(controller == null) return; // there is no Controller selected
+            if (index < 0 || index >= rows.Count) return; // index out of range
+            if (controller == null) return; // there is no Controller selected
 
             // Begin listening for input, but use a coroutine so it starts only after a short delay to prevent
             // the button bound to UI Submit from binding instantly when the input field is activated.
@@ -215,7 +230,6 @@ namespace Rewired.Demos {
         }
 
         private IEnumerator StartListeningDelayed(int index, int actionElementMapToReplaceId) {
-
             // Don't allow a binding for a short period of time after input field is activated
             // to prevent button bound to UI Submit from binding instantly when input field is activated.
             yield return new WaitForSeconds(0.1f);
@@ -223,11 +237,12 @@ namespace Rewired.Demos {
             // Start listening
             inputMapper.Start(
                 new InputMapper.Context() {
-                    actionId = rows[index].action.id,
-                    controllerMap = controllerMap,
-                    actionRange = rows[index].actionRange,
-                    actionElementMapToReplace = controllerMap.GetElementMap(actionElementMapToReplaceId)
-                }
+                                              actionId = rows[index].action.id,
+                                              controllerMap = controllerMap,
+                                              actionRange = rows[index].actionRange,
+                                              actionElementMapToReplace =
+                                                  controllerMap.GetElementMap(actionElementMapToReplaceId)
+                                          }
             );
 
             // Disable the UI Controller Maps while listening to prevent UI control and submissions.
@@ -253,7 +268,8 @@ namespace Rewired.Demos {
         }
 
         // A small class to store information about the input field buttons
-        private class Row {
+        private class Row
+        {
             public InputAction action;
             public AxisRange actionRange;
             public Button button;

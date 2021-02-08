@@ -1,6 +1,7 @@
 ﻿// Copyright (c) 2018 Augie R. Maddox, Guavaman Enterprises. All rights reserved.
 
 #region Defines
+
 #if UNITY_2020 || UNITY_2021 || UNITY_2022 || UNITY_2023 || UNITY_2024 || UNITY_2025
 #define UNITY_2020_PLUS
 #endif
@@ -47,16 +48,18 @@
 #pragma warning disable 0618
 #pragma warning disable 0649
 #pragma warning disable 0067
+
 #endregion
 
-namespace Rewired.Demos {
+namespace Rewired.Demos
+{
     using UnityEngine;
     using System.Collections.Generic;
-	using Rewired.ControllerExtensions;
+    using Rewired.ControllerExtensions;
 
     [AddComponentMenu("")]
-    public class DualShock4SpecialFeaturesExample : MonoBehaviour {
-
+    public class DualShock4SpecialFeaturesExample : MonoBehaviour
+    {
         private const int maxTouches = 2;
 
         public int playerId = 0;
@@ -69,19 +72,20 @@ namespace Rewired.Demos {
         private bool isFlashing;
         private GUIStyle textStyle;
 
-        private Player player { get { return ReInput.players.GetPlayer(playerId); } }
+        private Player player {
+            get { return ReInput.players.GetPlayer(playerId); }
+        }
 
         private void Awake() {
             InitializeTouchObjects();
         }
 
-		private void Update() {
-			if (!ReInput.isReady) return;
-            
+        private void Update() {
+            if (!ReInput.isReady) return;
+
             // Get the first DS4 found assigned to the Player
             var ds4 = GetFirstDS4(player);
-            if(ds4 != null) {
-
+            if (ds4 != null) {
                 // Set the model's rotation to match the controller's
                 transform.rotation = ds4.GetOrientation();
 
@@ -93,20 +97,22 @@ namespace Rewired.Demos {
                 accelerometerTransform.LookAt(accelerometerTransform.position + accelerometerValue);
             }
 
-            if(player.GetButtonDown("CycleLight")) {
+            if (player.GetButtonDown("CycleLight")) {
                 SetRandomLightColor();
             }
 
-            if(player.GetButtonDown("ResetOrientation")) {
+            if (player.GetButtonDown("ResetOrientation")) {
                 ResetOrientation();
             }
 
-            if(player.GetButtonDown("ToggleLightFlash")) {
-                if(isFlashing) {
+            if (player.GetButtonDown("ToggleLightFlash")) {
+                if (isFlashing) {
                     StopLightFlash();
-                } else {
+                }
+                else {
                     StartLightFlash();
                 }
+
                 isFlashing = !isFlashing;
             }
 
@@ -120,13 +126,13 @@ namespace Rewired.Demos {
         }
 
         private void OnGUI() {
-            if(textStyle == null) {
+            if (textStyle == null) {
                 textStyle = new GUIStyle(GUI.skin.label);
                 textStyle.fontSize = 20;
                 textStyle.wordWrap = true;
             }
 
-            if(GetFirstDS4(player) == null) return; // no DS4 is assigned
+            if (GetFirstDS4(player) == null) return; // no DS4 is assigned
 
             GUILayout.BeginArea(new Rect(200f, 100f, Screen.width - 400f, Screen.height - 200f));
 
@@ -135,23 +141,29 @@ namespace Rewired.Demos {
             GUILayout.Label("Touch the touchpad to see them appear on the model.", textStyle);
 
             ActionElementMap aem;
-            
-            aem = player.controllers.maps.GetFirstElementMapWithAction(ControllerType.Joystick, "ResetOrientation", true);
-            if(aem != null) {
-                GUILayout.Label("Press " + aem.elementIdentifierName + " to reset the orientation. Hold the gamepad facing the screen with sticks pointing up and press the button.", textStyle);
+
+            aem = player.controllers.maps.GetFirstElementMapWithAction(ControllerType.Joystick, "ResetOrientation",
+                                                                       true);
+            if (aem != null) {
+                GUILayout.Label(
+                    "Press " + aem.elementIdentifierName +
+                    " to reset the orientation. Hold the gamepad facing the screen with sticks pointing up and press the button.",
+                    textStyle);
             }
 
             aem = player.controllers.maps.GetFirstElementMapWithAction(ControllerType.Joystick, "CycleLight", true);
-            if(aem != null) {
+            if (aem != null) {
                 GUILayout.Label("Press " + aem.elementIdentifierName + " to change the light color.", textStyle);
             }
 
 #if !UNITY_PS4
 
             // Light flash is not supported on the PS4 platform.
-            aem = player.controllers.maps.GetFirstElementMapWithAction(ControllerType.Joystick, "ToggleLightFlash", true);
-            if(aem != null) {
-                GUILayout.Label("Press " + aem.elementIdentifierName + " to start or stop the light flashing.", textStyle);
+            aem = player.controllers.maps.GetFirstElementMapWithAction(ControllerType.Joystick, "ToggleLightFlash",
+                                                                       true);
+            if (aem != null) {
+                GUILayout.Label("Press " + aem.elementIdentifierName + " to start or stop the light flashing.",
+                                textStyle);
             }
 
 #endif
@@ -167,18 +179,18 @@ namespace Rewired.Demos {
             }
 
             GUILayout.EndArea();
-		}
+        }
 
         private void ResetOrientation() {
             var ds4 = GetFirstDS4(player);
-            if(ds4 != null) {
+            if (ds4 != null) {
                 ds4.ResetOrientation();
             }
         }
 
         private void SetRandomLightColor() {
             var ds4 = GetFirstDS4(player);
-            if(ds4 != null) {
+            if (ds4 != null) {
                 Color color = new Color(
                     Random.Range(0f, 1f),
                     Random.Range(0f, 1f),
@@ -193,7 +205,7 @@ namespace Rewired.Demos {
         private void StartLightFlash() {
             // This is not supported on PS4 so get the Standalone DualShock4Extension
             DualShock4Extension ds4 = GetFirstDS4(player) as DualShock4Extension;
-            if(ds4 != null) {
+            if (ds4 != null) {
                 ds4.SetLightFlash(0.5f, 0.5f);
                 // Light flash is handled by the controller hardware itself and not software.
                 // The current value cannot be obtained from the controller so it
@@ -204,28 +216,28 @@ namespace Rewired.Demos {
         private void StopLightFlash() {
             // This is not supported on PS4 so get the Standalone DualShock4Extension
             DualShock4Extension ds4 = GetFirstDS4(player) as DualShock4Extension;
-            if(ds4 != null) {
+            if (ds4 != null) {
                 ds4.StopLightFlash();
             }
         }
 
         private IDualShock4Extension GetFirstDS4(Player player) {
-            foreach(Joystick j in player.controllers.Joysticks) {
+            foreach (Joystick j in player.controllers.Joysticks) {
                 // Use the interface because it works for both PS4 and desktop platforms
                 IDualShock4Extension ds4 = j.GetExtension<IDualShock4Extension>();
-                if(ds4 == null) continue;
+                if (ds4 == null) continue;
                 return ds4;
             }
+
             return null;
         }
 
         private void InitializeTouchObjects() {
-
             touches = new List<Touch>(maxTouches);
             unusedTouches = new Queue<Touch>(maxTouches);
 
             // Setup touch objects
-            for(int i = 0; i < maxTouches; i++) {
+            for (int i = 0; i < maxTouches; i++) {
                 Touch touch = new Touch();
                 // Create spheres to reprensent touches
                 touch.go = GameObject.CreatePrimitive(PrimitiveType.Sphere);
@@ -243,9 +255,10 @@ namespace Rewired.Demos {
 
         private void HandleTouchpad(IDualShock4Extension ds4) {
             // Expire old touches first
-            for(int i = touches.Count - 1; i >= 0; i--) {
+            for (int i = touches.Count - 1; i >= 0; i--) {
                 Touch touch = touches[i];
-                if(!ds4.IsTouchingByTouchId(touch.touchId)) { // the touch id is no longer valid
+                if (!ds4.IsTouchingByTouchId(touch.touchId)) {
+                    // the touch id is no longer valid
                     touch.go.SetActive(false); // disable the game object
                     unusedTouches.Enqueue(touch); // return to the pool
                     touches.RemoveAt(i); // remove from active touches list
@@ -253,14 +266,15 @@ namespace Rewired.Demos {
             }
 
             // Process new touches
-            for(int i = 0; i < ds4.maxTouches; i++) {
-                if(!ds4.IsTouching(i)) continue;
+            for (int i = 0; i < ds4.maxTouches; i++) {
+                if (!ds4.IsTouching(i)) continue;
                 int touchId = ds4.GetTouchId(i);
                 Touch touch = touches.Find(x => x.touchId == touchId); // find the touch with this id
-                if(touch == null) {
+                if (touch == null) {
                     touch = unusedTouches.Dequeue(); // get a new touch from the pool
                     touches.Add(touch); // add to active touches list
                 }
+
                 touch.touchId = touchId; // store the touch id
                 touch.go.SetActive(true); // show the object
 
@@ -277,9 +291,10 @@ namespace Rewired.Demos {
             }
         }
 
-        private class Touch {
+        private class Touch
+        {
             public GameObject go;
             public int touchId = -1;
         }
-	}
+    }
 }

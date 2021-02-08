@@ -2,8 +2,8 @@
 
 #pragma warning disable 0649 // disable warnings about unused variables
 
-namespace Rewired.Demos.GamepadTemplateUI {
-
+namespace Rewired.Demos.GamepadTemplateUI
+{
     using UnityEngine;
     using UnityEngine.UI;
     using System;
@@ -11,10 +11,9 @@ namespace Rewired.Demos.GamepadTemplateUI {
     using Rewired;
 
     [RequireComponent(typeof(Image))]
-    public class ControllerUIEffect : MonoBehaviour {
-
-        [SerializeField]
-        private Color _highlightColor = Color.white;
+    public class ControllerUIEffect : MonoBehaviour
+    {
+        [SerializeField] private Color _highlightColor = Color.white;
 
         private Image _image;
         private Color _color;
@@ -30,7 +29,7 @@ namespace Rewired.Demos.GamepadTemplateUI {
 
         public void Activate(float amount) {
             amount = Mathf.Clamp01(amount);
-            if(_isActive && amount == _highlightAmount) return; // no change to current state
+            if (_isActive && amount == _highlightAmount) return; // no change to current state
             _highlightAmount = amount;
             _color = Color.Lerp(_origColor, _highlightColor, _highlightAmount);
             _isActive = true;
@@ -38,7 +37,7 @@ namespace Rewired.Demos.GamepadTemplateUI {
         }
 
         public void Deactivate() {
-            if(!_isActive) return; // no change to current state
+            if (!_isActive) return; // no change to current state
             _color = _origColor;
             _highlightAmount = 0f;
             _isActive = false;
