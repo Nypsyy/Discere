@@ -309,6 +309,9 @@ GameObject:
   m_Component:
   - component: {fileID: 7979706435529279151}
   - component: {fileID: 7979706435529279136}
+  - component: {fileID: 7733037757450647018}
+  - component: {fileID: 4289030029014302929}
+  - component: {fileID: 2610826702232178495}
   - component: {fileID: 7979706435529279149}
   - component: {fileID: 7979706435529279150}
   m_Layer: 0
@@ -349,6 +352,72 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 5
   anim: {fileID: 6975449846129666976}
+--- !u!114 &7733037757450647018
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7979706435529279137}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bb10ff0447d5a2b419c757790aeb7d4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &4289030029014302929
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7979706435529279137}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e97d9a6e6006e904387ddd8f10b321d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ui: {fileID: 0}
+  minValue: 0
+  maxValue: 100
+  emptyEvt:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 7979706435529279136}
+        m_TargetAssemblyTypeName: Hero, Assembly-CSharp
+        m_MethodName: OnHealthEmpty
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  fullEvt:
+    m_PersistentCalls:
+      m_Calls: []
+  transitionWaitingTime: 1
+  transitionTime: 0.2
+--- !u!114 &2610826702232178495
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7979706435529279137}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 57e52ed4a73c0f146a0cff62425e9ffc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  stylesUI:
+  - style: 0
+    image: {fileID: 0}
+  - style: 1
+    image: {fileID: 0}
+  - style: 2
+    image: {fileID: 0}
 --- !u!50 &7979706435529279149
 Rigidbody2D:
   serializedVersion: 4
