@@ -37,6 +37,9 @@ public class Hero : MonoBehaviour {
     
     
     void FixedUpdate() {
-        body.velocity = input_vec * speed;
+        if (anim.is_slashing)
+            body.velocity = input_vec * speed * 0.0f;
+        else
+            body.velocity = input_vec * speed;
     }
 }

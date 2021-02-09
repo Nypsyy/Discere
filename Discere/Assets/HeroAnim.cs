@@ -8,7 +8,7 @@ public class HeroAnim : MonoBehaviour
     private Animator animator;
     private Vector2 input_vec;
     private bool is_idle;
-    private bool is_slashing;
+    public bool is_slashing { get; private set; }
     
     public void UpdateDirection(Vector2 dir) {
         input_vec = dir;
@@ -24,6 +24,7 @@ public class HeroAnim : MonoBehaviour
         animator.SetBool("Slashing", false);
         animator.Update(0.01f);
     }
+    
     
     // Start is called before the first frame update
     void Start() {
