@@ -13,6 +13,11 @@ public class Hero : MonoBehaviour {
     private Vector2 input_vec;
     private bool is_idle;
 
+    // Components
+    private Health health;
+    private Mana mana;
+    private FightingStyle fightingStyle;
+
     void Awake() {
         player = ReInput.players.GetPlayer(0);
         body = GetComponent<Rigidbody2D>();
@@ -28,12 +33,22 @@ public class Hero : MonoBehaviour {
 
     // Start is called before the first frame update
     void Start() {
-        
+        health = GetComponent<Health>();
+        mana = GetComponent<Mana>();
+        fightingStyle = GetComponent<FightingStyle>();
     }
 
     // Update is called once per frame
     void Update() {
         input_vec = player.GetAxis2D("Move Horizontal", "Move Vertical");
+
+        // DEBUG : hurt hero when dashing, and switch fighting style
+        if (player.GetButtonDown("Dash"))
+        {
+            health.TakeDamage(30f);
+            mana.UseMana(50f);
+            fightingStyle.SwitchStyle();
+        }
         
         UpdateAnimation();
     }
@@ -74,5 +89,10 @@ public class Hero : MonoBehaviour {
     
     void FixedUpdate() {
         body.velocity = input_vec * speed;
+    }
+
+    public void OnHealthEmpty()
+    {
+        Debug.Log("Should die");
     }
 }
