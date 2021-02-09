@@ -7,9 +7,11 @@ public class Hero : MonoBehaviour {
 
     public float speed;
     public HeroAnim anim;
+    public GameObject daggerPrefab;
 
     private Player player;
     private Vector2 input_vec;
+    private Vector2 facing_vec;
     private Rigidbody2D body;
 
     // Components
@@ -32,15 +34,32 @@ public class Hero : MonoBehaviour {
         health = GetComponent<Health>();
         mana = GetComponent<Mana>();
         fightingStyle = GetComponent<FightingStyle>();
+        facing_vec = new Vector2(1.0f, 0);
     }
 
     // Update is called once per frame
     void Update() {
         input_vec = player.GetAxis2D("Move Horizontal", "Move Vertical");
 
+        if(input_vec.x != 0 || input_vec.y != 0)
+        {
+            facing_vec = input_vec;
+        }
+
         anim.UpdateDirection(input_vec);
         if (player.GetButtonDown("Light Attack"))
+        {
             anim.TriggerSlash();
+            if(fightingStyle.currentStyle == FightingStyle.Style.Range)
+            {
+                Vector2 shootingDirection = facing_vec.normalized;
+                GameObject dagger = Instantiate(daggerPrefab, transform.position - new Vector3(0.0f,0.5f), Quaternion.identity);
+                dagger.GetComponent<Rigidbody2D>().velocity = shootingDirection * dagger.GetComponent<Projectiles>().Velocity;
+                dagger.transform.Rotate(0.0f, 0.0f, -45.0f);
+                dagger.transform.Rotate(0.0f, 0.0f, Mathf.Atan2(shootingDirection.y, shootingDirection.x) * Mathf.Rad2Deg);
+            }
+        }
+            
 
         // DEBUG : hurt hero when dashing, and switch fighting style
         if (player.GetButtonDown("Dash"))

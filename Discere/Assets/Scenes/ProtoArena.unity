@@ -730,6 +730,10 @@ PrefabInstance:
       propertyPath: recovering
       value: 4
       objectReference: {fileID: 0}
+    - target: {fileID: 7979706435529279136, guid: 6dbafb5815ce909f684e2b1db38865ae, type: 3}
+      propertyPath: daggerPrefab
+      value: 
+      objectReference: {fileID: 518262662827734034, guid: 4883094df5d4809448b9492580cf09a1, type: 3}
     - target: {fileID: 7979706435529279137, guid: 6dbafb5815ce909f684e2b1db38865ae, type: 3}
       propertyPath: m_Name
       value: Hero
