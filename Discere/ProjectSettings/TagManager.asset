@@ -50,3 +50,6 @@ TagManager:
   - name: Hero
     uniqueID: 1759803225
     locked: 0
+  - name: Sword
+    uniqueID: 3313729511
+    locked: 0
