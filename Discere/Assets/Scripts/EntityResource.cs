@@ -50,7 +50,6 @@ public class EntityResource : MonoBehaviour
     protected void ChangeValue(float amount, bool transitionEffect = true)
     {
         value = Mathf.Clamp(value + amount, minValue, maxValue);
-        Debug.Log(value);
 
         // Manage visual
         if (ui != null)
