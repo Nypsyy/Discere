@@ -1,6 +1,7 @@
 ﻿// Copyright (c) 2018 Augie R. Maddox, Guavaman Enterprises. All rights reserved.
 
 #region Defines
+
 #if UNITY_2020 || UNITY_2021 || UNITY_2022 || UNITY_2023 || UNITY_2024 || UNITY_2025
 #define UNITY_2020_PLUS
 #endif
@@ -50,14 +51,16 @@
 #pragma warning disable 0618
 #pragma warning disable 0649
 #pragma warning disable 0067
+
 #endregion
 
-namespace Rewired.Demos {
+namespace Rewired.Demos
+{
     using UnityEngine;
 
     [AddComponentMenu("")]
-    public class PlayerMouseSpriteExample : MonoBehaviour {
-
+    public class PlayerMouseSpriteExample : MonoBehaviour
+    {
 #if UNITY_4_6_PLUS
         [Tooltip("The Player that will control the mouse")]
 #endif
@@ -118,19 +121,16 @@ namespace Rewired.Demos {
 #endif
         public bool hideHardwarePointer = true;
 
-        [System.NonSerialized]
-        private GameObject pointer;
+        [System.NonSerialized] private GameObject pointer;
 
-        [System.NonSerialized]
-        private PlayerMouse mouse;
+        [System.NonSerialized] private PlayerMouse mouse;
 
         void Awake() {
-
-            pointer = (GameObject)GameObject.Instantiate(pointerPrefab);
+            pointer = (GameObject) GameObject.Instantiate(pointerPrefab);
             pointer.transform.localScale = new Vector3(spriteScale, spriteScale, spriteScale);
 
 #if UNITY_5_PLUS
-            if(hideHardwarePointer) Cursor.visible = false; // hide the hardware pointer
+            if (hideHardwarePointer) Cursor.visible = false; // hide the hardware pointer
 #endif
 
             // Create the Player Mouse
@@ -181,7 +181,7 @@ namespace Rewired.Demos {
             // Use the left or right button to create an object where you clicked
             if (mouse.leftButton.justPressed) CreateClickEffect(new Color(0f, 1f, 0f, 1f)); // green for left
             if (mouse.rightButton.justPressed) CreateClickEffect(new Color(1f, 0f, 0f, 1f)); // red for right
-            if(mouse.middleButton.justPressed) CreateClickEffect(new Color(1f, 1f, 0f, 1f)); // yellow for middle
+            if (mouse.middleButton.justPressed) CreateClickEffect(new Color(1f, 1f, 0f, 1f)); // yellow for middle
         }
 
         void OnDestroy() {
@@ -190,16 +190,17 @@ namespace Rewired.Demos {
         }
 
         void CreateClickEffect(Color color) {
-            GameObject go = (GameObject)GameObject.Instantiate(clickEffectPrefab);
+            GameObject go = (GameObject) GameObject.Instantiate(clickEffectPrefab);
             go.transform.localScale = new Vector3(spriteScale, spriteScale, spriteScale);
-            go.transform.position = Camera.main.ScreenToWorldPoint(new Vector3(mouse.screenPosition.x, mouse.screenPosition.y, distanceFromCamera));
+            go.transform.position =
+                Camera.main.ScreenToWorldPoint(new Vector3(mouse.screenPosition.x, mouse.screenPosition.y,
+                                                           distanceFromCamera));
             go.GetComponentInChildren<SpriteRenderer>().color = color;
             Object.Destroy(go, 0.5f);
         }
 
         // Callback when the screen position changes
         void OnScreenPositionChanged(Vector2 position) {
-
             // Convert from screen space to world space
             Vector3 worldPos = Camera.main.ScreenToWorldPoint(new Vector3(position.x, position.y, distanceFromCamera));
 

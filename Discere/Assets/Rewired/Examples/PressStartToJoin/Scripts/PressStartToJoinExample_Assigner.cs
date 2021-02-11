@@ -12,28 +12,31 @@
  * 7. Leave joystick auto-assignment enabled.
  */
 
-namespace Rewired.Demos {
-
+namespace Rewired.Demos
+{
     using UnityEngine;
     using System.Collections.Generic;
     using Rewired;
 
     [AddComponentMenu("")]
-    public class PressStartToJoinExample_Assigner : MonoBehaviour {
-
+    public class PressStartToJoinExample_Assigner : MonoBehaviour
+    {
         // Static
 
         private static PressStartToJoinExample_Assigner instance;
 
         public static Rewired.Player GetRewiredPlayer(int gamePlayerId) {
-            if(!Rewired.ReInput.isReady) return null;
-            if(instance == null) {
+            if (!Rewired.ReInput.isReady) return null;
+            if (instance == null) {
                 Debug.LogError("Not initialized. Do you have a PressStartToJoinPlayerSelector in your scehe?");
                 return null;
             }
-            for(int i = 0; i < instance.playerMap.Count; i++) {
-                if(instance.playerMap[i].gamePlayerId == gamePlayerId) return ReInput.players.GetPlayer(instance.playerMap[i].rewiredPlayerId);
+
+            for (int i = 0; i < instance.playerMap.Count; i++) {
+                if (instance.playerMap[i].gamePlayerId == gamePlayerId)
+                    return ReInput.players.GetPlayer(instance.playerMap[i].rewiredPlayerId);
             }
+
             return null;
         }
 
@@ -50,17 +53,16 @@ namespace Rewired.Demos {
         }
 
         void Update() {
-
             // Watch for JoinGame action in each Player
-            for(int i = 0; i < ReInput.players.playerCount; i++) {
-                if(ReInput.players.GetPlayer(i).GetButtonDown("JoinGame")) {
+            for (int i = 0; i < ReInput.players.playerCount; i++) {
+                if (ReInput.players.GetPlayer(i).GetButtonDown("JoinGame")) {
                     AssignNextPlayer(i);
                 }
             }
         }
 
         void AssignNextPlayer(int rewiredPlayerId) {
-            if(playerMap.Count >= maxPlayers) {
+            if (playerMap.Count >= maxPlayers) {
                 Debug.LogError("Max player limit already reached!");
                 return;
             }
@@ -86,7 +88,8 @@ namespace Rewired.Demos {
         }
 
         // This class is used to map the Rewired Player Id to your game player id
-        private class PlayerMap {
+        private class PlayerMap
+        {
             public int rewiredPlayerId;
             public int gamePlayerId;
 
