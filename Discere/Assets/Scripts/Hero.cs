@@ -7,6 +7,7 @@ public class Hero : MonoBehaviour {
 
     public float speed;
     public HeroAnim anim;
+    public HeroSword sword;
     public GameObject daggerPrefab;
 
     private Player player;
@@ -41,22 +42,24 @@ public class Hero : MonoBehaviour {
     void Update() {
         input_vec = player.GetAxis2D("Move Horizontal", "Move Vertical");
 
-        if(input_vec.x != 0 || input_vec.y != 0)
+        if (input_vec.x != 0 || input_vec.y != 0)
         {
             facing_vec = input_vec;
         }
 
         anim.UpdateDirection(input_vec);
-        if (player.GetButtonDown("Light Attack"))
+        if (player.GetButtonDown("Light Attack") && !anim.is_slashing)
         {
             anim.TriggerSlash();
-            if(fightingStyle.currentStyle == FightingStyle.Style.Range)
-            {
+            if (fightingStyle.currentStyle == FightingStyle.Style.Range) {
                 Vector2 shootingDirection = facing_vec.normalized;
                 GameObject dagger = Instantiate(daggerPrefab, transform.position - new Vector3(0.0f,0.5f), Quaternion.identity);
                 dagger.GetComponent<Rigidbody2D>().velocity = shootingDirection * dagger.GetComponent<Projectiles>().velocity;
                 dagger.transform.Rotate(0.0f, 0.0f, -45.0f);
                 dagger.transform.Rotate(0.0f, 0.0f, Mathf.Atan2(shootingDirection.y, shootingDirection.x) * Mathf.Rad2Deg);
+            }
+            else if (fightingStyle.currentStyle == FightingStyle.Style.Melee) {
+                sword.TriggerSlash(facing_vec);
             }
         }
             

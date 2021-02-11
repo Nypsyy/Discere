@@ -9,6 +9,7 @@ public class HeroAnim : MonoBehaviour
     private Vector2 input_vec;
     private bool is_idle;
     public bool is_slashing { get; private set; }
+    public int current_direction { get; private set; }
     
     public void UpdateDirection(Vector2 dir) {
         input_vec = dir;
@@ -57,12 +58,12 @@ public class HeroAnim : MonoBehaviour
                 
                 // Special case for direction = Up = 0
                 if (angle_deg < 22.5f || angle_deg >= 337.5f) {
-                    animator.SetInteger("Direction(Up:0,Clockwise)", 0);
+                    current_direction = 0;
                 }
                 else {
-                    int dir = (int)((angle_deg + 22.5f) / 45); // [22.5;67.5[ gives 1, [67.5;112.5[ gives 2, etc
-                    animator.SetInteger("Direction(Up:0,Clockwise)", dir);
+                    current_direction = (int)((angle_deg + 22.5f) / 45); // [22.5;67.5[ gives 1, [67.5;112.5[ gives 2, etc
                 }
+                animator.SetInteger("Direction(Up:0,Clockwise)", current_direction);
                 if (is_idle) {
                     // if we were idle, directly starts the animation at the next frame
                     // because the animation sample rate is 6 per second,
