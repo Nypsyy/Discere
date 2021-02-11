@@ -34,7 +34,7 @@ public class Minautor : MonoBehaviour
             return;
         }
 
-        Debug.Log(meleeRage.value + "\t" + rangedRage.value + "\t" + magicRage.value);
+        // Debug.Log(meleeRage.value + "\t" + rangedRage.value + "\t" + magicRage.value);
     }
 
     // Increases the boss' rages

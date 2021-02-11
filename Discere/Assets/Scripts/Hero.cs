@@ -54,7 +54,7 @@ public class Hero : MonoBehaviour {
             {
                 Vector2 shootingDirection = facing_vec.normalized;
                 GameObject dagger = Instantiate(daggerPrefab, transform.position - new Vector3(0.0f,0.5f), Quaternion.identity);
-                dagger.GetComponent<Rigidbody2D>().velocity = shootingDirection * dagger.GetComponent<Projectiles>().Velocity;
+                dagger.GetComponent<Rigidbody2D>().velocity = shootingDirection * dagger.GetComponent<Projectiles>().velocity;
                 dagger.transform.Rotate(0.0f, 0.0f, -45.0f);
                 dagger.transform.Rotate(0.0f, 0.0f, Mathf.Atan2(shootingDirection.y, shootingDirection.x) * Mathf.Rad2Deg);
             }
