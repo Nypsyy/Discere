@@ -26,7 +26,7 @@ public class EntityResource : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        value = maxValue;
+        value = initialValue;
 
         if (ui == null)
         {
