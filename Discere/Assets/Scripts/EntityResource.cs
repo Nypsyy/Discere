@@ -12,6 +12,7 @@ public class EntityResource : MonoBehaviour
 {
     public Slider ui;                               // UI Element
     public float minValue = 0f, maxValue = 100f;    // Bounds
+    public float initialValue = 100f;               // Initial Value
     public UnityEvent emptyEvt, fullEvt;            // Events
 
     [Header("Transition")]
@@ -34,7 +35,7 @@ public class EntityResource : MonoBehaviour
         }
         ui.maxValue = maxValue;
         ui.minValue = minValue;
-        ui.value = maxValue;
+        ui.value = initialValue;
 
         // Check if ui has a slider for transition
         Slider[] sliders = ui.GetComponentsInChildren<Slider>();
