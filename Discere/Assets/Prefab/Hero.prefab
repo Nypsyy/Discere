@@ -352,7 +352,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 5
   anim: {fileID: 6975449846129666976}
-  daggerPrefab: {fileID: 0}
+  daggerPrefab: {fileID: 518262662827734034, guid: 4883094df5d4809448b9492580cf09a1, type: 3}
 --- !u!114 &7733037757450647018
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -1,21 +1,16 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Projectiles : MonoBehaviour
 {
-    public float Velocity;
-    public float Damage;
+    public float velocity;
+    public float damage;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+    private void OnCollisionEnter2D(Collision2D other) {
+        if (other.collider.gameObject.layer == LayerMask.NameToLayer("Boss")) {
+            Debug.Log("HIT");
+        }
     }
 }
