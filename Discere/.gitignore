@@ -1,3 +1,5 @@
+### Custom ignored files ###
+.vsconfig
 
 # Created by https://www.toptal.com/developers/gitignore/api/vscode,visualstudio,windows,linux,csharp,unity
 # Edit at https://www.toptal.com/developers/gitignore?templates=vscode,visualstudio,windows,linux,csharp,unity
