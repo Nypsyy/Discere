@@ -7,10 +7,37 @@ public class Projectiles : MonoBehaviour
 {
     public float velocity;
     public float damage;
+    public int destructionTime;
+    private bool destructing;
+    private int destructionTimer;
+
+    private void Start()
+    {
+        destructing = false;
+        destructionTimer = destructionTime;
+    }
+
+    private void Update()
+    {
+        if (destructing)
+        {
+            destructionTimer--;
+
+        }
+
+        if(destructionTimer <= 0)
+        {
+            Destroy(gameObject);
+        }
+    }
 
     private void OnCollisionEnter2D(Collision2D other) {
         if (other.collider.gameObject.layer == LayerMask.NameToLayer("Boss")) {
             Debug.Log("HIT");
+        }
+        if (other.collider.gameObject.layer == LayerMask.NameToLayer("Obstacle"))
+        {
+            destructing = true;
         }
     }
 }
