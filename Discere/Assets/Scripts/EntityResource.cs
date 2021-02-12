@@ -44,7 +44,7 @@ public class EntityResource : MonoBehaviour
             transitionSlider = sliders[1];
             transitionSlider.maxValue = maxValue;
             transitionSlider.minValue = minValue;
-            transitionSlider.value = maxValue;
+            transitionSlider.value = initialValue;
         }
     }
 
