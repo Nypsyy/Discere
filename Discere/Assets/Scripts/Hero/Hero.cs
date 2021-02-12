@@ -42,23 +42,27 @@ public class Hero : MonoBehaviour {
     void Update() {
         input_vec = player.GetAxis2D("Move Horizontal", "Move Vertical");
 
-        if (input_vec.x != 0 || input_vec.y != 0)
-        {
+        if (anim.mode == HeroAnim.Mode.Move && !(input_vec.x == 0 && input_vec.y == 0)) {
+            // only updating facing_vec when actually moving
             facing_vec = input_vec;
         }
-
         anim.UpdateDirection(input_vec);
-        if (player.GetButtonDown("Light Attack") && anim.mode == HeroAnim.Mode.Move)
-        {
-            anim.SwitchMode(HeroAnim.Mode.Slash);
+
+        if (player.GetButtonDown("Light Attack") && anim.mode == HeroAnim.Mode.Move) {
             if (fightingStyle.currentStyle == FightingStyle.Style.Range) {
+                anim.UpdateSlashDirection(facing_vec); // TODO: replace facing_vec by appropriate target direction
+                anim.SwitchMode(HeroAnim.Mode.Slash);
+                
                 Vector2 shootingDirection = facing_vec.normalized;
+                
                 GameObject dagger = Instantiate(daggerPrefab, transform.position - new Vector3(0.0f,0.5f), Quaternion.identity);
                 dagger.GetComponent<Rigidbody2D>().velocity = shootingDirection * dagger.GetComponent<Projectiles>().velocity;
                 dagger.transform.Rotate(0.0f, 0.0f, -45.0f);
                 dagger.transform.Rotate(0.0f, 0.0f, Mathf.Atan2(shootingDirection.y, shootingDirection.x) * Mathf.Rad2Deg);
             }
             else if (fightingStyle.currentStyle == FightingStyle.Style.Melee) {
+                anim.UpdateSlashDirection(facing_vec);
+                anim.SwitchMode(HeroAnim.Mode.Slash);
                 sword.TriggerSlash(facing_vec);
             }
         }
@@ -76,10 +80,17 @@ public class Hero : MonoBehaviour {
     
     
     void FixedUpdate() {
-        if (anim.mode == HeroAnim.Mode.Move)
-            body.velocity = input_vec * speed;
-        else
-            body.velocity = Vector2.zero;
+        switch (anim.mode) {
+            case HeroAnim.Mode.Move:
+                body.velocity = input_vec * speed;
+                break;
+            case HeroAnim.Mode.Slash:
+                body.velocity = input_vec * speed * 0.2f;
+                break;
+            default:
+                body.velocity = Vector2.zero;
+                break;
+        }
     }
 
     public void OnHealthEmpty()
