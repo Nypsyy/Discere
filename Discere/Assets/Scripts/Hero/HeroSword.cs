@@ -23,7 +23,6 @@ public class HeroSword : MonoBehaviour
     public void TriggerSlash(Vector2 direction) {
         // get direction as angle
         float angle_deg = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-        Debug.Log(angle_deg);
         // ensuring angle is in [0;360[
         angle_deg = (angle_deg + 360 + 67.5f) % 360;
         // we want to have 0=right, 1=down, 2=left, 3=up
