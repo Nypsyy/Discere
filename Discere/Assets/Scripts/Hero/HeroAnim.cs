@@ -5,40 +5,40 @@ using UnityEngine;
 public class HeroAnim : MonoBehaviour
 {
 
+    public enum Mode {
+        Move = 0,
+        Slash = 1,
+    }
+    
+    public Mode mode { get; private set; }
+    public int current_direction { get; private set; }
+    
+    
     private Animator animator;
     private Vector2 input_vec;
     private bool is_idle;
-    public bool is_slashing { get; private set; }
-    public int current_direction { get; private set; }
     
     public void UpdateDirection(Vector2 dir) {
         input_vec = dir;
     }    
     
-    public void TriggerSlash() {
-        is_slashing = true;
-        animator.SetBool("Slashing", true);
+    public void SwitchMode(Mode m) {
+        mode = m;
+        animator.SetInteger("Mode", (int)m);
+        animator.SetTrigger("SwitchMode");
     }
-    
-    public void ResetSlash() {
-        is_slashing = false;
-        animator.SetBool("Slashing", false);
-        animator.Update(0.01f);
-    }
-    
     
     // Start is called before the first frame update
     void Start() {
         animator = GetComponent<Animator>();
         input_vec = new Vector2(0,0);
         is_idle = true;
-        is_slashing = false;
-        
+        mode = Mode.Move;
     }
     
     // Update is called once per frame
     void Update() {
-        if (input_vec.x == 0 && input_vec.y == 0 && !is_slashing) {
+        if (input_vec.x == 0 && input_vec.y == 0 && mode == Mode.Move) {
             // if no movements, we stay with the first frame of the current animation.
             animator.speed = 0;
             is_idle = true;
@@ -48,9 +48,7 @@ public class HeroAnim : MonoBehaviour
         else {
             // if movements, restart animation
             animator.speed = 1;
-            if (is_slashing) {
-            
-            } else {
+            if (mode == Mode.Move) {
                 // find the direction, negative to make it clockwise
                 float angle_deg = -Mathf.Atan2(input_vec.y, input_vec.x) * Mathf.Rad2Deg;
                 // currently angle_deg has 0 for Right, so we offset such that 0 is Up

@@ -48,9 +48,9 @@ public class Hero : MonoBehaviour {
         }
 
         anim.UpdateDirection(input_vec);
-        if (player.GetButtonDown("Light Attack") && !anim.is_slashing)
+        if (player.GetButtonDown("Light Attack") && anim.mode == HeroAnim.Mode.Move)
         {
-            anim.TriggerSlash();
+            anim.SwitchMode(HeroAnim.Mode.Slash);
             if (fightingStyle.currentStyle == FightingStyle.Style.Range) {
                 Vector2 shootingDirection = facing_vec.normalized;
                 GameObject dagger = Instantiate(daggerPrefab, transform.position - new Vector3(0.0f,0.5f), Quaternion.identity);
@@ -76,10 +76,10 @@ public class Hero : MonoBehaviour {
     
     
     void FixedUpdate() {
-        if (anim.is_slashing)
-            body.velocity = input_vec * speed * 0.0f;
-        else
+        if (anim.mode == HeroAnim.Mode.Move)
             body.velocity = input_vec * speed;
+        else
+            body.velocity = Vector2.zero;
     }
 
     public void OnHealthEmpty()
