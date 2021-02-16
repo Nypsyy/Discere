@@ -6,6 +6,9 @@ public class MagicProjectile : MonoBehaviour
 {
     public float speed = 10;
     public float destructionTime = 5f;
+    public float autoSeekRadius = 2f;
+    public float autoSeekStrength = 4f;
+    public LayerMask autoSeekLayer;
 
     private Rigidbody2D rb;
     private Vector2 heading;
@@ -19,12 +22,20 @@ public class MagicProjectile : MonoBehaviour
 
     private void Update()
     {
+        // Destruction timer
         if (destructionTimer <= 0f)
         {
             Vanish();
             return;
         }
         destructionTimer -= Time.deltaTime;
+
+        // Auto Seek system
+        Collider2D target = Physics2D.OverlapCircle(transform.position, autoSeekRadius, autoSeekLayer);
+        if (target != null)
+        {
+            heading = Vector2.MoveTowards(heading, (target.transform.position - transform.position).normalized, autoSeekStrength * Time.deltaTime).normalized;
+        }
     }
 
     private void FixedUpdate()
@@ -54,5 +65,11 @@ public class MagicProjectile : MonoBehaviour
     private void Vanish()
     {
         Destroy(gameObject);
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, autoSeekRadius);
     }
 }

@@ -98,6 +98,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 10
+  destructionTime: 5
+  autoSeekRadius: 2
+  autoSeekStrength: 4
+  autoSeekLayer:
+    serializedVersion: 2
+    m_Bits: 512
 --- !u!58 &3116203969415044231
 CircleCollider2D:
   m_ObjectHideFlags: 0

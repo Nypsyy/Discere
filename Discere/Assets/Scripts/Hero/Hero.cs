@@ -83,7 +83,7 @@ public class Hero : MonoBehaviour {
         if (player.GetButtonDown("Dash"))
         {
             health.TakeDamage(30f);
-            mana.UseMana(50f);
+            // mana.UseMana(50f);
             fightingStyle.SwitchStyle();
         }
 
