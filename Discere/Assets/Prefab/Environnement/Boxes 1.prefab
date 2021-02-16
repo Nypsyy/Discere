@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3855695561167170934}
   - component: {fileID: 3855695561167170935}
   - component: {fileID: 3855695561167170932}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: decorative_18
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -140,7 +140,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3855695561959792411}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Boxes 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
