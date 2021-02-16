@@ -10,9 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 518262662827734038}
   - component: {fileID: 518262662827734039}
-  - component: {fileID: 518262662827734032}
   - component: {fileID: 518262662827734033}
   - component: {fileID: -5895406624348650594}
+  - component: {fileID: 6077082021597246109}
   m_Layer: 7
   m_Name: Dagger
   m_TagString: Untagged
@@ -85,32 +85,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!61 &518262662827734032
-BoxCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 518262662827734034}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0.2164017, y: 0.1893515}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1, y: 1}
-    newSize: {x: 1, y: 1}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 0.5942466, y: 0.621297}
-  m_EdgeRadius: 0
 --- !u!50 &518262662827734033
 Rigidbody2D:
   serializedVersion: 4
@@ -146,4 +120,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   velocity: 10
   damage: 1
-  destructionTime: 1000
+  destructionTime: 700
+--- !u!58 &6077082021597246109
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 518262662827734034}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0.20777303, y: 0.20934719}
+  serializedVersion: 2
+  m_Radius: 0.3630585

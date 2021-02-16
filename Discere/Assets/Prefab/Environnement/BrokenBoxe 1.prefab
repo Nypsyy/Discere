@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6877616923638147720}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: BrokenBoxe 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -23,7 +23,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6877616923638147721}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 13.13, y: 23.4, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -43,7 +43,7 @@ GameObject:
   - component: {fileID: 6877616925088029274}
   - component: {fileID: 6877616925088029271}
   - component: {fileID: 6877616925088029272}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: decorative_24
   m_TagString: Untagged
   m_Icon: {fileID: 0}
