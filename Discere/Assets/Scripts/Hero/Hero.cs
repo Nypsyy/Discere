@@ -9,7 +9,10 @@ public class Hero : MonoBehaviour {
     public HeroAnim anim;
     public HeroSword sword;
     public GameObject daggerPrefab;
+    public GameObject magicBallPrefab;
     public float firingFrequency;
+    public float magicFiringFrequency;
+    public float magicManaCost = 10f;
 
     private Player player;
     private Vector2 input_vec;
@@ -18,6 +21,7 @@ public class Hero : MonoBehaviour {
     private Vector2 aiming_vec_Mouse;
     private Rigidbody2D body;
     private float firingCooldown;
+    private float magicFiringCooldown;
 
     // Components
     private Health health;
@@ -41,6 +45,7 @@ public class Hero : MonoBehaviour {
         fightingStyle = GetComponent<FightingStyle>();
         facing_vec = new Vector2(1.0f, 0);
         firingCooldown = -1;
+        magicFiringCooldown = -1;
     }
 
 
@@ -64,6 +69,10 @@ public class Hero : MonoBehaviour {
                 
             case FightingStyle.Style.Range:
                 UpdateAttackRange();
+                break;
+
+            case FightingStyle.Style.Magic:
+                UpdateAttackMagic();
                 break;
                 
             default:
@@ -104,6 +113,32 @@ public class Hero : MonoBehaviour {
         dagger.transform.Rotate(0.0f, 0.0f, Mathf.Atan2(shootingDirection.y, shootingDirection.x) * Mathf.Rad2Deg);
         firingCooldown = (1 / firingFrequency) * 60;
         
+        // triggering the animation
+        anim.UpdateDirection(shootingDirection);
+        anim.UpdateSlashDirection(shootingDirection);
+        anim.SwitchMode(HeroAnim.Mode.Slash);
+        anim.SetModeSpeed(3); // Slash animation 3 times faster
+    }
+
+    void UpdateAttackMagic()
+    {
+        magicFiringCooldown -= Time.deltaTime;
+        if (magicFiringCooldown >= 0) return; // ensures cooldown has expired
+        if (mana.value < magicManaCost) return; // ensure enough mana is available
+
+        Vector2 shootingDirection = getAimingDirection();
+        if (shootingDirection.x == 0 && shootingDirection.y == 0) return;
+
+        shootingDirection = shootingDirection.normalized;
+
+        // shooting the magic ball
+        GameObject magicBall = Instantiate(magicBallPrefab, transform.position, Quaternion.identity);
+        magicBall.GetComponent<MagicProjectile>().SetDirection(shootingDirection);
+        magicFiringCooldown = (1 / magicFiringFrequency);
+
+        // Use mana
+        mana.UseMana(magicManaCost);
+
         // triggering the animation
         anim.UpdateDirection(shootingDirection);
         anim.UpdateSlashDirection(shootingDirection);
