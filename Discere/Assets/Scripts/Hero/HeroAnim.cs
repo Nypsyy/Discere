@@ -8,6 +8,7 @@ public class HeroAnim : MonoBehaviour
     public enum Mode {
         Move = 0,
         Slash = 1,
+        Jump = 2,
     }
     
     public Mode mode { get; private set; }
@@ -21,7 +22,7 @@ public class HeroAnim : MonoBehaviour
     private int previous_current_direction;
     
     public void UpdateDirection(Vector2 dir) {
-        if (mode != Mode.Move) return; // allowing direction changing only when moving
+        if (mode != Mode.Move && mode != Mode.Jump) return; // allowing direction changing only when moving/jumping
     
         is_idle = (dir.x == 0 && dir.y == 0);
         if (is_idle) return; // when staying in place, keep previous direction

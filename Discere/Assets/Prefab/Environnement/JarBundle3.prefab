@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 2745031988173341838}
   - component: {fileID: 6233462520496808779}
   - component: {fileID: 7228323462917015317}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: decorative_38
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -143,7 +143,7 @@ GameObject:
   - component: {fileID: 2745031989253614510}
   - component: {fileID: 3691200769529879708}
   - component: {fileID: 7133713622421216036}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: decorative_40
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -271,7 +271,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8033224007244749855}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: JarBundle3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
