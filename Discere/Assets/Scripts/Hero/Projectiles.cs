@@ -38,12 +38,13 @@ public class Projectiles : MonoBehaviour
         if (other.collider.gameObject.layer == LayerMask.NameToLayer("Obstacle"))
         {
             destructing = true;
-            gameObject.GetComponent<Rigidbody2D>().gravityScale = 0.25f;
-            gameObject.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
+            Rigidbody2D rb = GetComponent<Rigidbody2D>();
+            rb.gravityScale = 0.25f;
+            rb.velocity = Vector2.zero;
             Vector3 direction = Quaternion.AngleAxis(45, transform.forward) * new Vector2(transform.right.x, transform.right.y);
             Vector2 forceDirection = new Vector2(-1* direction.x * 2, 1);
             Debug.Log(Quaternion.AngleAxis(45, transform.forward) * new Vector2(transform.right.x, transform.right.y));
-            gameObject.GetComponent<Rigidbody2D>().AddForce(forceDirection ,ForceMode2D.Impulse);
+            rb.AddForce(forceDirection ,ForceMode2D.Impulse);
         }
         if(other.collider.gameObject.layer == LayerMask.NameToLayer("HeroProjectile"))
         {
