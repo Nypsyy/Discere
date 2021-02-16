@@ -50,26 +50,33 @@ public class Hero : MonoBehaviour {
         input_vec = player.GetAxis2D("Move Horizontal", "Move Vertical");
 
 
-        if (anim.mode == HeroAnim.Mode.Move && !(input_vec.x == 0 && input_vec.y == 0)) {
-            // only updating facing_vec when actually moving
-            facing_vec = input_vec;
+        if (!(input_vec.x == 0 && input_vec.y == 0)) {
+            if (anim.mode == HeroAnim.Mode.Move || anim.mode == HeroAnim.Mode.Jump) {
+                // only updating facing_vec when actually moving
+                facing_vec = input_vec;
+            }
         }
         anim.UpdateDirection(input_vec);
 
-
-        switch (fightingStyle.currentStyle) {
-            case FightingStyle.Style.Melee:
-                UpdateAttackMelee();
-                break;
-                
-            case FightingStyle.Style.Range:
-                UpdateAttackRange();
-                break;
-                
-            default:
-                break;
+        if (player.GetButtonDown("Dash")) {
+            anim.SwitchMode(HeroAnim.Mode.Jump);
         }
-
+        
+        if (anim.mode == HeroAnim.Mode.Move) {
+            switch (fightingStyle.currentStyle) {
+                case FightingStyle.Style.Melee:
+                    UpdateAttackMelee();
+                    break;
+                    
+                case FightingStyle.Style.Range:
+                    UpdateAttackRange();
+                    break;
+                    
+                default:
+                    break;
+            }
+        }
+        
         // DEBUG : hurt hero when dashing, and switch fighting style
         if (player.GetButtonDown("Dash"))
         {
@@ -131,6 +138,7 @@ public class Hero : MonoBehaviour {
         if (firingCooldown >= 0)
             firingCooldown--;
         switch (anim.mode) {
+            case HeroAnim.Mode.Jump:
             case HeroAnim.Mode.Move:
                 body.velocity = input_vec * speed;
                 break;
