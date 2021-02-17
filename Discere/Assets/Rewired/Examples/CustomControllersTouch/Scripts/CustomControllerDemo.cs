@@ -63,7 +63,7 @@ namespace Rewired.Demos
             buttonValues = new bool[buttonCount];
 
             // Find the controller we want to manage
-            Player player = ReInput.players.GetPlayer(playerId); // get the player
+            Player player = ReInput.players.GetPlayer(playerId);                                   // get the player
             controller = player.controllers.GetControllerWithTag<CustomController>(controllerTag); // get the controller
 
             if (controller == null) {
@@ -91,7 +91,7 @@ namespace Rewired.Demos
 
         private void Update() {
             if (!ReInput.isReady)
-                return; // Exit if Rewired isn't ready. This would only happen during a script recompile in the editor.
+                return;                     // Exit if Rewired isn't ready. This would only happen during a script recompile in the editor.
             if (!initialized) Initialize(); // Reinitialize after a recompile in the editor
         }
 
