@@ -64,11 +64,12 @@ public class Hero : MonoBehaviour {
         anim.UpdateDirection(input_vec);
 
 
-        switch (fightingStyle.currentStyle) {
+        switch (fightingStyle.currentStyle)
+        {
             case FightingStyle.Style.Melee:
                 UpdateAttackMelee();
                 break;
-                
+
             case FightingStyle.Style.Range:
                 UpdateAttackRange();
                 break;
@@ -76,9 +77,10 @@ public class Hero : MonoBehaviour {
             case FightingStyle.Style.Magic:
                 UpdateAttackMagic();
                 break;
-                
+
             default:
                 break;
+        }
         if (player.GetButtonDown("Dash")) {
             anim.SwitchMode(HeroAnim.Mode.Jump);
         }

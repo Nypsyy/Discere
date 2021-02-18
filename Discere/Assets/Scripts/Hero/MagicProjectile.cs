@@ -13,15 +13,20 @@ public class MagicProjectile : MonoBehaviour
     private Rigidbody2D rb;
     private Vector2 heading;
     private float destructionTimer;
+    private Animator anim;
+    private bool isDestroying = false;
 
     private void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        anim = GetComponent<Animator>();
         destructionTimer = destructionTime;
     }
 
     private void Update()
     {
+        if (isDestroying) return;
+
         // Destruction timer
         if (destructionTimer <= 0f)
         {
@@ -64,7 +69,11 @@ public class MagicProjectile : MonoBehaviour
 
     private void Vanish()
     {
-        Destroy(gameObject);
+        rb.velocity = Vector2.zero;
+        heading = Vector2.zero;
+        isDestroying = true;
+        anim.SetTrigger("Destroy");
+        //Destroy(gameObject);
     }
 
     private void OnDrawGizmosSelected()
