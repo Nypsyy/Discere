@@ -71,9 +71,10 @@ public class Hero : MonoBehaviour
             }
         }
 
-        if (player.GetButtonDown("Attack Style +"))
+        float switch_attack_style = player.GetAxis("Attack Style");
+        if (switch_attack_style > 0)
             fightingStyle.NextStyle();
-        else if (player.GetButtonDown("Attack Style -"))
+        else if (switch_attack_style < 0)
             fightingStyle.PreviousStyle();
 
 
