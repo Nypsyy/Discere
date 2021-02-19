@@ -145,20 +145,18 @@ public class Hero : MonoBehaviour {
     {
         magicFiringCooldown -= Time.deltaTime;
         if (magicFiringCooldown >= 0) return; // ensures cooldown has expired
-        if (mana.value < magicManaCost) return; // ensure enough mana is available
 
         Vector2 shootingDirection = getAimingDirection();
         if (shootingDirection.x == 0 && shootingDirection.y == 0) return;
 
         shootingDirection = shootingDirection.normalized;
 
+        if (!mana.UseMana(magicManaCost)) return; // ensure enough mana is available, and use mana
+
         // shooting the magic ball
         GameObject magicBall = Instantiate(magicBallPrefab, transform.position, Quaternion.identity);
         magicBall.GetComponent<MagicProjectile>().SetDirection(shootingDirection);
         magicFiringCooldown = (1 / magicFiringFrequency);
-
-        // Use mana
-        mana.UseMana(magicManaCost);
 
         // triggering the animation
         anim.UpdateDirection(shootingDirection);

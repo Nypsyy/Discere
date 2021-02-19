@@ -24,7 +24,7 @@ public class EntityResource : MonoBehaviour
     public float value { get; private set; }
     
     // Start is called before the first frame update
-    void Start()
+    protected void Start()
     {
         value = initialValue;
 
