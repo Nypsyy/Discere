@@ -367,7 +367,11 @@ MonoBehaviour:
   anim: {fileID: 6975449846129666976}
   sword: {fileID: 1712501339745964399}
   daggerPrefab: {fileID: 518262662827734034, guid: 4883094df5d4809448b9492580cf09a1, type: 3}
+  magicBallPrefab: {fileID: 6938095608467861966, guid: e277e1a20f90fd1479f9d544bccb1a81, type: 3}
+  magicLaserPrefab: {fileID: 6688090204435343887, guid: 3f794a2276338b84cbde9fbf6a01b1e8, type: 3}
   firingFrequency: 0
+  magicFiringFrequency: 0
+  magicManaCost: 10
 --- !u!114 &7733037757450647018
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -393,6 +397,7 @@ MonoBehaviour:
   transitionWaitingTime: 1
   transitionTime: 0.2
   recovering: 4
+  errorBlinkingSpeed: 1.5
 --- !u!114 &4289030029014302929
 MonoBehaviour:
   m_ObjectHideFlags: 0

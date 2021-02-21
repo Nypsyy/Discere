@@ -10,6 +10,7 @@ public class Hero : MonoBehaviour {
     public HeroSword sword;
     public GameObject daggerPrefab;
     public GameObject magicBallPrefab;
+    public GameObject magicLaserPrefab;
     public float firingFrequency;
     public float magicFiringFrequency;
     public float magicManaCost = 10f;
@@ -22,6 +23,8 @@ public class Hero : MonoBehaviour {
     private Rigidbody2D body;
     private float firingCooldown;
     private float magicFiringCooldown;
+    private Laser magicLaserInstance = null;
+    private Camera mainCamera;
 
     // Components
     private Health health;
@@ -43,6 +46,9 @@ public class Hero : MonoBehaviour {
         health = GetComponent<Health>();
         mana = GetComponent<Mana>();
         fightingStyle = GetComponent<FightingStyle>();
+
+        mainCamera = Camera.main;
+
         facing_vec = new Vector2(1.0f, 0);
         firingCooldown = -1;
         magicFiringCooldown = -1;
@@ -63,6 +69,11 @@ public class Hero : MonoBehaviour {
         }
         anim.UpdateDirection(input_vec);
 
+        if (magicLaserInstance != null && fightingStyle.currentStyle != FightingStyle.Style.Magic)
+        {
+            magicLaserInstance.Destroy();
+            magicLaserInstance = null;
+        }
 
         switch (fightingStyle.currentStyle)
         {
@@ -76,6 +87,7 @@ public class Hero : MonoBehaviour {
 
             case FightingStyle.Style.Magic:
                 UpdateAttackMagic();
+                UpdateAttackMagicHeavy();
                 break;
 
             default:
@@ -121,7 +133,10 @@ public class Hero : MonoBehaviour {
     
     void UpdateAttackRange() {
         if (firingCooldown >= 0) return; // ensures cooldown has expired
-        
+
+        Controller controller = player.controllers.GetLastActiveController();
+        if (controller == null || (controller.type != ControllerType.Joystick && !player.GetButton("Light Attack"))) return;
+
         Vector2 shootingDirection = getAimingDirection();
         if (shootingDirection.x == 0 && shootingDirection.y == 0) return;
         
@@ -146,6 +161,9 @@ public class Hero : MonoBehaviour {
         magicFiringCooldown -= Time.deltaTime;
         if (magicFiringCooldown >= 0) return; // ensures cooldown has expired
 
+        Controller controller = player.controllers.GetLastActiveController();
+        if (controller == null || (controller.type != ControllerType.Joystick && !player.GetButton("Light Attack"))) return;
+
         Vector2 shootingDirection = getAimingDirection();
         if (shootingDirection.x == 0 && shootingDirection.y == 0) return;
 
@@ -164,7 +182,25 @@ public class Hero : MonoBehaviour {
         anim.SwitchMode(HeroAnim.Mode.Slash);
         anim.SetModeSpeed(3); // Slash animation 3 times faster
     }
-    
+
+    void UpdateAttackMagicHeavy()
+    {
+        if (player.GetButtonDown("Heavy Attack") && magicLaserInstance == null)
+        {
+            magicLaserInstance = Instantiate(magicLaserPrefab, transform.position, Quaternion.identity, transform).GetComponent<Laser>();
+        }
+        if (player.GetButtonUp("Heavy Attack") && magicLaserInstance != null)
+        {
+            magicLaserInstance.Destroy();
+            magicLaserInstance = null;
+        }
+        if (magicLaserInstance != null)
+        {
+            Vector2 aimDir = getAimingDirection();
+            magicLaserInstance.SetDirection(aimDir);
+        }
+    }
+
     Vector2 getAimingDirection() {
         Controller controller = player.controllers.GetLastActiveController();
         if (controller == null) return Vector2.zero;
@@ -173,10 +209,8 @@ public class Hero : MonoBehaviour {
             return player.GetAxis2D("Aim Horizontal", "Aim Vertical");
         }
         else {
-            if (!player.GetButton("Light Attack")) return Vector2.zero;
-            
             Vector2 screenPosition = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
-            Vector2 worldPosition = Camera.main.ScreenToWorldPoint(screenPosition);
+            Vector2 worldPosition = mainCamera.ScreenToWorldPoint(screenPosition);
             return worldPosition - new Vector2(transform.position.x, transform.position.y);
         }
     }
