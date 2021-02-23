@@ -71,12 +71,12 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 7482667652216324306, guid: e6d6994c2d6cf4d40aaa385c7002f8b4, type: 3}
+  m_Sprite: {fileID: 21300000, guid: e6d6994c2d6cf4d40aaa385c7002f8b4, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 2, y: 2}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -248,8 +248,12 @@ MonoBehaviour:
   obstacleLayers:
     serializedVersion: 2
     m_Bits: 64
+  hurtingLayers:
+    serializedVersion: 2
+    m_Bits: 512
   chargingTime: 1
   beamSprite: {fileID: 7129170162166371386}
+  beamDuration: 0.5
 --- !u!1 &6688090205294161517
 GameObject:
   m_ObjectHideFlags: 0

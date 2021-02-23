@@ -11,6 +11,7 @@ public class Laser : MonoBehaviour
 
     public GameObject chargingCircle;
     public LayerMask obstacleLayers;
+    public LayerMask hurtingLayers;
 
     public float chargingTime = 1f;
     private float chargingTimer = 0f;
@@ -18,6 +19,7 @@ public class Laser : MonoBehaviour
 
     public SpriteRenderer beamSprite;
     public float beamDuration = 0.5f;
+    private float beamWidth;
 
     private Vector2 dir = Vector2.up;
     public bool isReady { get; private set; } = false;
@@ -44,6 +46,20 @@ public class Laser : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // Manage shooting
+        if (isShooting)
+        {
+            float angle = Vector2.SignedAngle(Vector2.up, dir);
+            RaycastHit2D[] hits = Physics2D.BoxCastAll(transform.position, Vector2.one * beamWidth, angle, dir, laserVector.magnitude, hurtingLayers);
+            if (hits.Length <= 0) return;
+
+            foreach (RaycastHit2D hit2D in hits)
+            {
+                // TODO : Apply damage. Warning : the ennemy should have invicibility time
+                Debug.Log(hit2D.collider.gameObject);
+            }
+        }
+
         // Update timer
         chargingTimer += Time.deltaTime;
 
@@ -84,10 +100,11 @@ public class Laser : MonoBehaviour
         if (!isReady) return;
 
         // Display beam
-        beamSprite.transform.localScale = new Vector3(beamSprite.transform.localScale.x, beamSprite.transform.localScale.y * laserVector.magnitude, 0f);
+        beamSprite.transform.localScale = new Vector3(beamSprite.transform.localScale.x, beamSprite.transform.localScale.y * laserVector.magnitude / 2f, 0f);
         beamSprite.transform.rotation = Quaternion.FromToRotation(Vector3.up, new Vector3(laserVector.x, laserVector.y, 0f));
         beamSprite.transform.Translate(Vector2.up * laserVector.magnitude / 2f);
         beamSprite.gameObject.SetActive(true);
+        beamWidth = beamSprite.transform.localScale.x;
 
         // Remove ray
         ray.gameObject.SetActive(false);
