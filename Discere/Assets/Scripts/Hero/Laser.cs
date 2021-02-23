@@ -16,8 +16,13 @@ public class Laser : MonoBehaviour
     private float chargingTimer = 0f;
     private Vector3 initialChargingCircleScale;
 
+    public SpriteRenderer beamSprite;
+    public float beamDuration = 0.5f;
+
     private Vector2 dir = Vector2.up;
-    private bool isReady = false;
+    public bool isReady { get; private set; } = false;
+    public bool isShooting { get; private set; } = false;
+    private Vector2 laserVector;
 
     // Start is called before the first frame update
     void Start()
@@ -70,6 +75,26 @@ public class Laser : MonoBehaviour
         points[0] = Vector3.zero;
         points[1] = new Vector3(hitCoords.x, hitCoords.y, 0f);
         ray.SetPositions(points);
+        laserVector.x = hitCoords.x;
+        laserVector.y = hitCoords.y;
+    }
+
+    public void Shoot()
+    {
+        if (!isReady) return;
+
+        // Display beam
+        beamSprite.transform.localScale = new Vector3(beamSprite.transform.localScale.x, beamSprite.transform.localScale.y * laserVector.magnitude, 0f);
+        beamSprite.transform.rotation = Quaternion.FromToRotation(Vector3.up, new Vector3(laserVector.x, laserVector.y, 0f));
+        beamSprite.transform.Translate(Vector2.up * laserVector.magnitude / 2f);
+        beamSprite.gameObject.SetActive(true);
+
+        // Remove ray
+        ray.gameObject.SetActive(false);
+
+        isShooting = true;
+
+        Invoke("Destroy", beamDuration);
     }
 
     IEnumerator ReadyRay()

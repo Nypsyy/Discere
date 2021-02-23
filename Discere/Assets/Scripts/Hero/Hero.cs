@@ -164,6 +164,8 @@ public class Hero : MonoBehaviour {
         Controller controller = player.controllers.GetLastActiveController();
         if (controller == null || (controller.type != ControllerType.Joystick && !player.GetButton("Light Attack"))) return;
 
+        if (player.GetButton("Heavy Attack")) return;
+
         Vector2 shootingDirection = getAimingDirection();
         if (shootingDirection.x == 0 && shootingDirection.y == 0) return;
 
@@ -191,13 +193,25 @@ public class Hero : MonoBehaviour {
         }
         if (player.GetButtonUp("Heavy Attack") && magicLaserInstance != null)
         {
-            magicLaserInstance.Destroy();
-            magicLaserInstance = null;
+            if (magicLaserInstance.isReady)
+            {
+                magicLaserInstance.Shoot();
+
+                anim.SwitchMode(HeroAnim.Mode.Slash);
+                anim.SetModeSpeed(3);
+            }
+            else
+            {
+                magicLaserInstance.Destroy();
+                magicLaserInstance = null;
+            }
         }
         if (magicLaserInstance != null)
         {
             Vector2 aimDir = getAimingDirection();
             magicLaserInstance.SetDirection(aimDir);
+            anim.UpdateDirection(aimDir);
+            anim.UpdateSlashDirection(aimDir);
         }
     }
 
@@ -229,6 +243,12 @@ public class Hero : MonoBehaviour {
             default:
                 body.velocity = Vector2.zero;
                 break;
+        }
+
+        // Managing move speed while shooting magic laser
+        if (fightingStyle.currentStyle == FightingStyle.Style.Magic && magicLaserInstance != null)
+        {
+            body.velocity = magicLaserInstance.isShooting ? Vector2.zero : input_vec * speed * 0.2f;
         }
     }
 
