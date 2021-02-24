@@ -18,6 +18,7 @@ public class Laser : MonoBehaviour
     private Vector3 initialChargingCircleScale;
 
     public SpriteRenderer beamSprite;
+    public SpriteRenderer beamStartSprite;
     public float beamDuration = 0.5f;
     private float beamWidth;
 
@@ -100,14 +101,25 @@ public class Laser : MonoBehaviour
         if (!isReady) return;
 
         // Display beam
-        beamSprite.transform.localScale = new Vector3(beamSprite.transform.localScale.x, beamSprite.transform.localScale.y * laserVector.magnitude / 2f, 0f);
-        beamSprite.transform.rotation = Quaternion.FromToRotation(Vector3.up, new Vector3(laserVector.x, laserVector.y, 0f));
-        beamSprite.transform.Translate(Vector2.up * laserVector.magnitude / 2f);
+        Quaternion rotation = Quaternion.FromToRotation(Vector3.up, new Vector3(laserVector.x, laserVector.y, 0f));
+        float startBeamLength = beamStartSprite.transform.localScale.y;
+
+        beamSprite.transform.localScale = new Vector3(beamSprite.transform.localScale.x, beamSprite.transform.localScale.y * (laserVector.magnitude - startBeamLength) / 2f, 0f);
+        beamSprite.transform.rotation = rotation;
+        beamSprite.transform.Translate(Vector2.up * (laserVector.magnitude / 2f + startBeamLength));
         beamSprite.gameObject.SetActive(true);
+
+        beamStartSprite.transform.rotation = rotation;
+        beamStartSprite.transform.Translate(Vector2.up * startBeamLength);
+        beamStartSprite.gameObject.SetActive(true);
+
         beamWidth = beamSprite.transform.localScale.x;
 
         // Remove ray
         ray.gameObject.SetActive(false);
+
+        // Screen shake
+        CinemachineShake.Instance?.Shake(6f, 0.5f);
 
         isShooting = true;
 

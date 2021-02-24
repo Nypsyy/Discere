@@ -5,15 +5,23 @@ using Rewired;
 
 public class Hero : MonoBehaviour {
 
+    [Header("General")]
     public float speed;
     public HeroAnim anim;
+
+    [Header("Melee")]
     public HeroSword sword;
+
+    [Header("Range")]
     public GameObject daggerPrefab;
+    public float firingFrequency;
+
+    [Header("Magic")]
     public GameObject magicBallPrefab;
     public GameObject magicLaserPrefab;
-    public float firingFrequency;
     public float magicFiringFrequency;
     public float magicManaCost = 10f;
+    public float magicHeavyManaCost = 50f;
 
     private Player player;
     private Vector2 input_vec;
@@ -189,12 +197,14 @@ public class Hero : MonoBehaviour {
     {
         if (player.GetButtonDown("Heavy Attack") && magicLaserInstance == null)
         {
+            if (!mana.HasEnough(magicHeavyManaCost)) return;
             magicLaserInstance = Instantiate(magicLaserPrefab, transform.position, Quaternion.identity, transform).GetComponent<Laser>();
         }
         if (player.GetButtonUp("Heavy Attack") && magicLaserInstance != null)
         {
             if (magicLaserInstance.isReady)
             {
+                mana.UseMana(magicHeavyManaCost);
                 magicLaserInstance.Shoot();
 
                 anim.SwitchMode(HeroAnim.Mode.Slash);

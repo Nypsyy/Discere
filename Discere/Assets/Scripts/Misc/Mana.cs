@@ -32,16 +32,21 @@ public class Mana : EntityResource
         }
     }
 
+    // If has enough mana, use it
     public bool UseMana(float amount)
     {
-        if (value < amount)
-        {
-            StartCoroutine(BlinkErrorFill());
-            return false; 
-        }
+        bool enough = HasEnough(amount);
+        if (enough) ChangeValue(-amount);
+        return enough;
+    }
 
-        ChangeValue(-amount);
-        return true;
+    // Returns if it has enough mana for the given amount
+    public bool HasEnough(float amount)
+    {
+        if (amount < value) return true;
+
+        StartCoroutine(BlinkErrorFill());
+        return false;
     }
 
     IEnumerator BlinkErrorFill()
