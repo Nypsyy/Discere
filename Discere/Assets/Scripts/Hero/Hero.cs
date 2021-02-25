@@ -8,7 +8,7 @@ public class Hero : MonoBehaviour
     public HeroSword sword;
     public GameObject daggerPrefab;
     public float firingFrequency;
-
+    
     private Player player;
     private Vector2 input_vec;
     private Vector2 facing_vec;

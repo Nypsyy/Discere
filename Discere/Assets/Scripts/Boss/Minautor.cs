@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class Minautor : MonoBehaviour
@@ -12,13 +13,17 @@ public class Minautor : MonoBehaviour
     public Rage rangedRage; // Ranged rage
     public Rage magicRage;  // Magic rage
 
-    private Animator _spriteAnimator; // Sprite animator
+    private Animator _spriteAnimator;       // Sprite animator
+    private MinautorSprite _minautorSprite; // Sprite manager
     private bool _isDead;
 
-    private void Start() {
+    private void Awake() {
         // Get the components
         _spriteAnimator = GetComponentInChildren<Animator>();
+        _minautorSprite = GetComponentInChildren<MinautorSprite>();
+    }
 
+    private void Start() {
         // Boss' rages are increasing constantly
         InvokeRepeating(nameof(UpdateRage), 0, 1);
     }
@@ -42,5 +47,16 @@ public class Minautor : MonoBehaviour
         meleeRage.IncreaseRage();
         rangedRage.IncreaseRage();
         magicRage.IncreaseRage();
+    }
+
+    private void OnCollisionEnter2D(Collision2D other) {
+        if (other.collider.gameObject.layer == LayerMask.NameToLayer("HeroProjectile")) {
+            TakeDamage(other.gameObject.GetComponent<Projectiles>().damage);
+        }
+    }
+
+    public void TakeDamage(float damage) {
+        health.TakeDamage(damage);
+        StartCoroutine(_minautorSprite.Blink());
     }
 }
