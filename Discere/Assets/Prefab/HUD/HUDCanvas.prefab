@@ -907,6 +907,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5853707964867782628}
+  - component: {fileID: 6961035490901647848}
   m_Layer: 5
   m_Name: Style
   m_TagString: Untagged
@@ -937,6 +938,22 @@ RectTransform:
   m_AnchoredPosition: {x: 60, y: -46}
   m_SizeDelta: {x: 64.8649, y: 63.3699}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &6961035490901647848
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5853707964867782631}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 38d85112185253648952d223c78fee4e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentStyle: 0
+  meleeImage: {fileID: 5853707964514901721}
+  rangedImage: {fileID: 5853707965067987333}
+  magicImage: {fileID: 5853707965858837689}
 --- !u!1 &5853707964909732316
 GameObject:
   m_ObjectHideFlags: 0

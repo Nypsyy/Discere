@@ -96,7 +96,7 @@ namespace Rewired.Demos
             Vector3 newPos = origWorldPosition + delta;
 
             transform.position = newPos; // set the position
-            UpdateValue(newPos); // update the output value
+            UpdateValue(newPos);         // update the output value
         }
 
         private static bool IsMousePointerId(int id) {

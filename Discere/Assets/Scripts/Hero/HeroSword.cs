@@ -8,10 +8,10 @@ public class HeroSword : MonoBehaviour
     private Animator animator;
     
     private Vector2[] position_corrections = {
-        new Vector2(0, 0.3f), // right slash
-        new Vector2(-0.5f, 0), // up slash
-        new Vector2(0, -0.3f), // left slash
-        new Vector2(0.5f, 0.2f)  // down slash
+        new Vector2(0, 0.0f), // right slash
+        new Vector2(-0.5f, -0.2f), // up slash
+        new Vector2(0, -0.55f), // left slash
+        new Vector2(0.5f, -0.1f)  // down slash
     };
     
     // Start is called before the first frame update
