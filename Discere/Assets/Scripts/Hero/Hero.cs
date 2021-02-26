@@ -126,13 +126,6 @@ public class Hero : MonoBehaviour {
         else if (switch_attack_style < 0)
             fightingStyle.PreviousStyle();
 
-
-        // DEBUG : hurt hero when dashing, and switch fighting style
-        if (player.GetButtonDown("Dash")) {
-            health.TakeDamage(30f);
-            // mana.UseMana(50f);
-            fightingStyle.SwitchStyle();
-        }
     }
 
     private void UpdateAttackMelee() {
