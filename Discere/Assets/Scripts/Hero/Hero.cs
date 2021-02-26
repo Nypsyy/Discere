@@ -69,6 +69,11 @@ public class Hero : MonoBehaviour
                     UpdateAttackRange();
                     break;
             }
+            
+        } else if (anim.mode == HeroAnim.Mode.BigSlash) {
+            if (!player.GetButton("Heavy Attack"))
+                if (sword.CancelBigSlash())
+                    anim.SwitchMode(HeroAnim.Mode.Move);
         }
 
         float switch_attack_style = player.GetAxis("Attack Style");
@@ -86,10 +91,15 @@ public class Hero : MonoBehaviour
     }
 
     private void UpdateAttackMelee() {
-        if (player.GetButtonDown("Light Attack") && anim.mode == HeroAnim.Mode.Move) {
+        if (anim.mode == HeroAnim.Mode.Move) {
+            bool is_light_attack = player.GetButtonDown("Light Attack");
+            bool is_heavy_attack = player.GetButtonDown("Heavy Attack");
+                
+            if (is_light_attack == is_heavy_attack) // either none or both selected
+                return;
             anim.UpdateSlashDirection(facing_vec);
-            anim.SwitchMode(HeroAnim.Mode.Slash);
-            sword.TriggerSlash(facing_vec);
+            anim.SwitchMode(is_heavy_attack ? HeroAnim.Mode.BigSlash : HeroAnim.Mode.Slash);
+            sword.TriggerSlash(facing_vec, is_heavy_attack);
         }
     }
 
