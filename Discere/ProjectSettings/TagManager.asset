@@ -53,3 +53,6 @@ TagManager:
   - name: Sword
     uniqueID: 3313729511
     locked: 0
+  - name: Effects
+    uniqueID: 1959039173
+    locked: 0
