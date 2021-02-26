@@ -12,6 +12,7 @@ public class Hero : MonoBehaviour {
 
     [Header("Range")]
     public GameObject daggerPrefab;
+    public GameObject bowPrefab;
     public float firingFrequency;
 
     [Header("Magic")]
@@ -30,6 +31,7 @@ public class Hero : MonoBehaviour {
     private float firingCooldown;
     private float magicFiringCooldown;
     private Laser magicLaserInstance = null;
+    private GameObject bowInstance = null;
     private Camera mainCamera;
 
     // Components
@@ -80,6 +82,12 @@ public class Hero : MonoBehaviour {
             magicLaserInstance = null;
         }
 
+        if (bowInstance != null && fightingStyle.currentStyle != FightingStyle.Style.Range)
+        {
+            Destroy(bowInstance);
+            bowInstance = null;
+        }
+
         switch (fightingStyle.currentStyle)
         {
             case FightingStyle.Style.Melee:
@@ -88,6 +96,7 @@ public class Hero : MonoBehaviour {
 
             case FightingStyle.Style.Range:
                 UpdateAttackRange();
+                UpdateAttackRangeHeavy();
                 break;
 
             case FightingStyle.Style.Magic:
@@ -164,6 +173,32 @@ public class Hero : MonoBehaviour {
         anim.UpdateSlashDirection(shootingDirection);
         anim.SwitchMode(HeroAnim.Mode.Slash);
         anim.SetModeSpeed(3); // Slash animation 3 times faster
+    }
+
+    void UpdateAttackRangeHeavy()
+    {
+        if (player.GetButtonDown("Heavy Attack") && bowInstance == null)
+        {
+            Vector2 aimDir = getAimingDirection();
+            bowInstance = Instantiate(bowPrefab, transform.position + new Vector3(0.60f, 0f), Quaternion.identity, transform);
+            anim.SwitchMode(HeroAnim.Mode.Aim);
+        }
+        if (player.GetButtonUp("Heavy Attack") && bowInstance != null)
+        {
+            
+            bowInstance.GetComponent<BowScript>().Shoot();
+            //anim.Fire();
+            
+        }
+        if (bowInstance != null)
+        {
+            Vector2 aimDir = getAimingDirection();
+            float angle = Vector3.Angle(bowInstance.transform.right, aimDir);
+            bowInstance.transform.position = transform.position + new Vector3(aimDir.normalized.x * 0.75f,aimDir.normalized.y * 0.75f);
+            bowInstance.transform.right = aimDir;
+            anim.UpdateDirection(aimDir);
+            anim.UpdateSlashDirection(aimDir);
+        }
     }
 
     void UpdateAttackMagic()
