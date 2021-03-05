@@ -3,14 +3,19 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using Rewired;
+using Rewired.Integration.UnityUI;
 
 public class Pause : MonoBehaviour
 {
     public Canvas ui;
 
+    public GameObject pauseMenu;
+    public GameObject optionsMenu;
+
     private Player input;
     private bool isPaused = false;
     private float timeScaleBackup;
+    private RewiredEventSystem eventSystem;
 
     private void Awake()
     {
@@ -56,11 +61,6 @@ public class Pause : MonoBehaviour
     public void OnResume()
     {
         SetPause(false);
-    }
-
-    public void OnOptions()
-    {
-        Debug.Log("Options not implemented yet !");
     }
 
     public void OnExit()
