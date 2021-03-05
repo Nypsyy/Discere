@@ -9,13 +9,15 @@ public class Pause : MonoBehaviour
 {
     public Canvas ui;
 
-    public GameObject pauseMenu;
-    public GameObject optionsMenu;
-
     private Player input;
     private bool isPaused = false;
     private float timeScaleBackup;
-    private RewiredEventSystem eventSystem;
+
+    private Button.ButtonClickedEvent onCancelPressed;
+    public Button optionsBackButton;
+    public Button pauseBackButton;
+
+    private bool canTogglePause = true;
 
     private void Awake()
     {
@@ -27,6 +29,7 @@ public class Pause : MonoBehaviour
     {
         timeScaleBackup = Time.timeScale;
         SetPause(false);
+        OnReturnToPauseMenu();
     }
 
     // Update is called once per frame
@@ -36,10 +39,16 @@ public class Pause : MonoBehaviour
         {
             SetPause(!isPaused);
         }
+        if (input.GetButtonDown("UI Cancel"))
+        {
+            onCancelPressed.Invoke();
+        }
     }
 
     private void SetPause(bool pause)
     {
+        if (!canTogglePause) return;
+
         // Set time scale
         if (pause && !isPaused) timeScaleBackup = Time.timeScale;
         Time.timeScale = pause ? 0f : timeScaleBackup;
@@ -63,8 +72,20 @@ public class Pause : MonoBehaviour
         SetPause(false);
     }
 
+    public void OnOptions()
+    {
+        onCancelPressed = optionsBackButton.onClick;
+        canTogglePause = false;
+    }
+
     public void OnExit()
     {
         Debug.Log("Exit not implemented yet !");
+    }
+
+    public void OnReturnToPauseMenu()
+    {
+        onCancelPressed = pauseBackButton.onClick;
+        canTogglePause = true;
     }
 }

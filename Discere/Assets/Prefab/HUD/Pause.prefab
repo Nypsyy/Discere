@@ -773,6 +773,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
+      - m_Target: {fileID: 8860616583134455660}
+        m_TargetAssemblyTypeName: Pause, Assembly-CSharp
+        m_MethodName: OnReturnToPauseMenu
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
 --- !u!1 &5950827899568624941
 GameObject:
   m_ObjectHideFlags: 0
@@ -925,6 +937,18 @@ MonoBehaviour:
         m_Arguments:
           m_ObjectArgument: {fileID: 5627074722334571157}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+      - m_Target: {fileID: 8860616583134455660}
+        m_TargetAssemblyTypeName: Pause, Assembly-CSharp
+        m_MethodName: OnOptions
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -1732,8 +1756,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ui: {fileID: 8796448289225714203}
-  pauseMenu: {fileID: 7147810986169932299}
-  optionsMenu: {fileID: 5593768348921007154}
+  optionsBackButton: {fileID: 3009584409704230104}
+  pauseBackButton: {fileID: 6238105612487454515}
 --- !u!1 &8898363044367462323
 GameObject:
   m_ObjectHideFlags: 0
