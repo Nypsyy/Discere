@@ -12,13 +12,16 @@ public class Projectiles : MonoBehaviour
     private bool destructing;
     private int destructionTimer;
 
-    private void Start() {
+    protected void Start()
+    {
         destructing = false;
         destructionTimer = destructionTime;
     }
 
-    private void Update() {
-        if (destructing) {
+    protected void Update()
+    {
+        if (destructing)
+        {
             destructionTimer--;
         }
 

@@ -1,14 +1,27 @@
 using UnityEngine;
 using Rewired;
 
-public class Hero : MonoBehaviour
-{
+public class Hero : MonoBehaviour {
+
+    [Header("General")]
     public float speed;
     public HeroAnim anim;
+
+    [Header("Melee")]
     public HeroSword sword;
+
+    [Header("Range")]
     public GameObject daggerPrefab;
+    public GameObject bowPrefab;
     public float firingFrequency;
-    
+
+    [Header("Magic")]
+    public GameObject magicBallPrefab;
+    public GameObject magicLaserPrefab;
+    public float magicFiringFrequency;
+    public float magicManaCost = 10f;
+    public float magicHeavyManaCost = 50f;
+
     private Player player;
     private Vector2 input_vec;
     private Vector2 facing_vec;
@@ -16,6 +29,10 @@ public class Hero : MonoBehaviour
     private Vector2 aiming_vec_Mouse;
     private Rigidbody2D body;
     private float firingCooldown;
+    private float magicFiringCooldown;
+    private Laser magicLaserInstance = null;
+    private GameObject bowInstance = null;
+    private Camera mainCamera;
 
     // Components
     private Health health;
@@ -37,8 +54,12 @@ public class Hero : MonoBehaviour
         health = GetComponent<Health>();
         mana = GetComponent<Mana>();
         fightingStyle = GetComponent<FightingStyle>();
+
+        mainCamera = Camera.main;
+
         facing_vec = new Vector2(1.0f, 0);
         firingCooldown = -1;
+        magicFiringCooldown = -1;
     }
 
 
@@ -55,6 +76,38 @@ public class Hero : MonoBehaviour
 
         anim.UpdateDirection(input_vec);
 
+        if (magicLaserInstance != null && fightingStyle.currentStyle != FightingStyle.Style.Magic)
+        {
+            magicLaserInstance.Destroy();
+            magicLaserInstance = null;
+        }
+
+        if (bowInstance != null && fightingStyle.currentStyle != FightingStyle.Style.Range)
+        {
+            Destroy(bowInstance);
+            bowInstance = null;
+        }
+
+        switch (fightingStyle.currentStyle)
+        {
+            case FightingStyle.Style.Melee:
+                UpdateAttackMelee();
+                break;
+
+            case FightingStyle.Style.Range:
+                UpdateAttackRange();
+                UpdateAttackRangeHeavy();
+                break;
+
+            case FightingStyle.Style.Magic:
+                UpdateAttackMagic();
+                UpdateAttackMagicHeavy();
+                break;
+
+            default:
+                break;
+        }
+
         if (player.GetButtonDown("Jump")) {
             anim.SwitchMode(HeroAnim.Mode.Jump);
         }
@@ -69,31 +122,39 @@ public class Hero : MonoBehaviour
                     UpdateAttackRange();
                     break;
             }
+            
+        } else if (anim.mode == HeroAnim.Mode.BigSlash) {
+            if (!player.GetButton("Heavy Attack"))
+                if (sword.CancelBigSlash())
+                    anim.SwitchMode(HeroAnim.Mode.Move);
         }
 
-        if (player.GetButtonDown("Attack Style +"))
+        float switch_attack_style = player.GetAxis("Attack Style");
+        if (switch_attack_style > 0)
             fightingStyle.NextStyle();
-        else if (player.GetButtonDown("Attack Style -"))
+        else if (switch_attack_style < 0)
             fightingStyle.PreviousStyle();
 
-
-        // DEBUG : hurt hero when dashing, and switch fighting style
-        if (player.GetButtonDown("Dash")) {
-            health.TakeDamage(30f);
-            mana.UseMana(50f);
-        }
     }
 
     private void UpdateAttackMelee() {
-        if (player.GetButtonDown("Light Attack") && anim.mode == HeroAnim.Mode.Move) {
+        if (anim.mode == HeroAnim.Mode.Move) {
+            bool is_light_attack = player.GetButtonDown("Light Attack");
+            bool is_heavy_attack = player.GetButtonDown("Heavy Attack");
+                
+            if (is_light_attack == is_heavy_attack) // either none or both selected
+                return;
             anim.UpdateSlashDirection(facing_vec);
-            anim.SwitchMode(HeroAnim.Mode.Slash);
-            sword.TriggerSlash(facing_vec);
+            anim.SwitchMode(is_heavy_attack ? HeroAnim.Mode.BigSlash : HeroAnim.Mode.Slash);
+            sword.TriggerSlash(facing_vec, is_heavy_attack);
         }
     }
 
     private void UpdateAttackRange() {
         if (firingCooldown >= 0) return; // ensures cooldown has expired
+
+        Controller controller = player.controllers.GetLastActiveController();
+        if (controller == null || (controller.type != ControllerType.Joystick && !player.GetButton("Light Attack"))) return;
 
         Vector2 shootingDirection = getAimingDirection();
         if (shootingDirection.x == 0 && shootingDirection.y == 0) return;
@@ -114,6 +175,93 @@ public class Hero : MonoBehaviour
         anim.SetModeSpeed(3); // Slash animation 3 times faster
     }
 
+    void UpdateAttackRangeHeavy()
+    {
+        if (player.GetButtonDown("Heavy Attack") && bowInstance == null)
+        {
+            Vector2 aimDir = getAimingDirection();
+            bowInstance = Instantiate(bowPrefab, transform.position + new Vector3(0.60f, 0f), Quaternion.identity, transform);
+            anim.SwitchMode(HeroAnim.Mode.Aim);
+        }
+        if (player.GetButtonUp("Heavy Attack") && bowInstance != null)
+        {
+            
+            bowInstance.GetComponent<BowScript>().Shoot();
+            //anim.Fire();
+            
+        }
+        if (bowInstance != null)
+        {
+            Vector2 aimDir = getAimingDirection();
+            float angle = Vector3.Angle(bowInstance.transform.right, aimDir);
+            bowInstance.transform.position = transform.position + new Vector3(aimDir.normalized.x * 0.75f,aimDir.normalized.y * 0.75f);
+            bowInstance.transform.right = aimDir;
+            anim.UpdateDirection(aimDir);
+            anim.UpdateSlashDirection(aimDir);
+        }
+    }
+
+    void UpdateAttackMagic()
+    {
+        magicFiringCooldown -= Time.deltaTime;
+        if (magicFiringCooldown >= 0) return; // ensures cooldown has expired
+
+        Controller controller = player.controllers.GetLastActiveController();
+        if (controller == null || (controller.type != ControllerType.Joystick && !player.GetButton("Light Attack"))) return;
+
+        if (player.GetButton("Heavy Attack")) return;
+
+        Vector2 shootingDirection = getAimingDirection();
+        if (shootingDirection.x == 0 && shootingDirection.y == 0) return;
+
+        shootingDirection = shootingDirection.normalized;
+
+        if (!mana.UseMana(magicManaCost)) return; // ensure enough mana is available, and use mana
+
+        // shooting the magic ball
+        GameObject magicBall = Instantiate(magicBallPrefab, transform.position, Quaternion.identity);
+        magicBall.GetComponent<MagicProjectile>().SetDirection(shootingDirection);
+        magicFiringCooldown = (1 / magicFiringFrequency);
+
+        // triggering the animation
+        anim.UpdateDirection(shootingDirection);
+        anim.UpdateSlashDirection(shootingDirection);
+        anim.SwitchMode(HeroAnim.Mode.Slash);
+        anim.SetModeSpeed(3); // Slash animation 3 times faster
+    }
+
+    void UpdateAttackMagicHeavy()
+    {
+        if (player.GetButtonDown("Heavy Attack") && magicLaserInstance == null)
+        {
+            if (!mana.HasEnough(magicHeavyManaCost)) return;
+            magicLaserInstance = Instantiate(magicLaserPrefab, transform.position, Quaternion.identity, transform).GetComponent<Laser>();
+        }
+        if (player.GetButtonUp("Heavy Attack") && magicLaserInstance != null)
+        {
+            if (magicLaserInstance.isReady)
+            {
+                mana.UseMana(magicHeavyManaCost);
+                magicLaserInstance.Shoot();
+
+                anim.SwitchMode(HeroAnim.Mode.Slash);
+                anim.SetModeSpeed(3);
+            }
+            else
+            {
+                magicLaserInstance.Destroy();
+                magicLaserInstance = null;
+            }
+        }
+        if (magicLaserInstance != null)
+        {
+            Vector2 aimDir = getAimingDirection();
+            magicLaserInstance.SetDirection(aimDir);
+            anim.UpdateDirection(aimDir);
+            anim.UpdateSlashDirection(aimDir);
+        }
+    }
+
     Vector2 getAimingDirection() {
         Controller controller = player.controllers.GetLastActiveController();
         if (controller == null) return Vector2.zero;
@@ -122,10 +270,8 @@ public class Hero : MonoBehaviour
             return player.GetAxis2D("Aim Horizontal", "Aim Vertical");
         }
         else {
-            if (!player.GetButton("Light Attack")) return Vector2.zero;
-
             Vector2 screenPosition = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
-            Vector2 worldPosition = Camera.main.ScreenToWorldPoint(screenPosition);
+            Vector2 worldPosition = mainCamera.ScreenToWorldPoint(screenPosition);
             return worldPosition - new Vector2(transform.position.x, transform.position.y);
         }
     }
@@ -144,6 +290,12 @@ public class Hero : MonoBehaviour
             default:
                 body.velocity = Vector2.zero;
                 break;
+        }
+
+        // Managing move speed while shooting magic laser
+        if (fightingStyle.currentStyle == FightingStyle.Style.Magic && magicLaserInstance != null)
+        {
+            body.velocity = magicLaserInstance.isShooting ? Vector2.zero : input_vec * speed * 0.2f;
         }
     }
 
