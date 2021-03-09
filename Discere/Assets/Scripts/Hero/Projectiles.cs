@@ -17,7 +17,7 @@ public class Projectiles : MonoBehaviour
         destructionTimer = destructionTime;
     }
 
-    protected void Update()
+    protected void FixedUpdate()
     {
         if (destructing)
         {
