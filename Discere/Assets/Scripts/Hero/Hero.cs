@@ -329,6 +329,16 @@ public class Hero : MonoBehaviour {
             }
         }
 
+        // Managing move speed while charging arrows
+        if (fightingStyle.currentStyle == FightingStyle.Style.Range && bowInstance != null)
+        {
+            body.velocity = Vector2.zero;
+        }
+        if (wantsToDash) {
+            body.AddForce(facing_vec * body.mass * dashImpulseCoef, ForceMode2D.Impulse);
+            wantsToDash = false;
+        }
+
         // Managing move speed while shooting magic laser
         if (fightingStyle.currentStyle == FightingStyle.Style.Magic && magicLaserInstance != null)
         {
