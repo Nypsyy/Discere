@@ -10,6 +10,7 @@ public class HeroAnim : MonoBehaviour
         Slash = 1,
         Jump = 2,
         BigSlash = 3,
+        Aim = 4,
     }
     
     public Mode mode { get; private set; }
@@ -59,7 +60,10 @@ public class HeroAnim : MonoBehaviour
         animator.SetInteger("Mode", (int)m);
         animator.SetTrigger("SwitchMode");
     }
-    
+    public void Fire()
+    {
+        animator.SetTrigger("Fire");
+    }
 
     // Specify a speed for the animation that is kept until we switch modes
     public void SetModeSpeed(float speed) {

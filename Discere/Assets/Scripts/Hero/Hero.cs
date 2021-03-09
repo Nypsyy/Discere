@@ -212,7 +212,6 @@ public class Hero : MonoBehaviour {
         {
             
             bowInstance.GetComponent<BowScript>().Shoot();
-            //anim.Fire();
             
         }
         if (bowInstance != null)
