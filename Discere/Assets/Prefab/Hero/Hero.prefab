@@ -72,7 +72,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 16faf891b7883a237b009a9c9b4387b4, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -365,6 +365,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 5
   anim: {fileID: 6975449846129666976}
+  heroMaterial: {fileID: 2100000, guid: 16faf891b7883a237b009a9c9b4387b4, type: 2}
   sword: {fileID: 1712501339745964399}
   daggerPrefab: {fileID: 518262662827734034, guid: 4883094df5d4809448b9492580cf09a1, type: 3}
   bowPrefab: {fileID: 0}
@@ -374,6 +375,9 @@ MonoBehaviour:
   magicFiringFrequency: 4
   magicManaCost: 10
   magicHeavyManaCost: 50
+  dashDuration: 0.2
+  dashCooldown: 1
+  dashImpulseCoef: 20
 --- !u!114 &7733037757450647018
 MonoBehaviour:
   m_ObjectHideFlags: 0

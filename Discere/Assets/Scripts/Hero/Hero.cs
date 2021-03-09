@@ -6,6 +6,7 @@ public class Hero : MonoBehaviour {
     [Header("General")]
     public float speed;
     public HeroAnim anim;
+    public Material heroMaterial;
 
     [Header("Melee")]
     public HeroSword sword;
@@ -32,7 +33,6 @@ public class Hero : MonoBehaviour {
     private Vector2 facing_vec;
     private Vector2 aiming_vec_Joystick;
     private Vector2 aiming_vec_Mouse;
-    private Rigidbody2D body;
     private bool wantsToDash = false;
     private float dashTiming = 0;
     private float firingCooldown;
@@ -42,6 +42,7 @@ public class Hero : MonoBehaviour {
     private Camera mainCamera;
 
     // Components
+    private Rigidbody2D body;
     private Health health;
     private Mana mana;
     private FightingStyle fightingStyle;
@@ -81,7 +82,8 @@ public class Hero : MonoBehaviour {
             }
         }
 
-        anim.UpdateDirection(input_vec);
+        if (dashTiming <= dashCooldown - dashDuration) // not update during dash
+            anim.UpdateDirection(input_vec);
 
         if (magicLaserInstance != null && fightingStyle.currentStyle != FightingStyle.Style.Magic)
         {
@@ -121,9 +123,12 @@ public class Hero : MonoBehaviour {
         
         if (dashTiming > 0) {
             dashTiming -= Time.deltaTime;
+            float progress = 1 - dashTiming / dashCooldown;
+            heroMaterial.SetFloat("_Progress", 1-progress*progress);
         } else if (player.GetButtonDown("Dash")) {
             dashTiming = dashCooldown;
             wantsToDash = true;
+            anim.UpdateDirection(facing_vec);
         }
 
         if (anim.mode == HeroAnim.Mode.Move) {
