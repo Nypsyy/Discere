@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Rewired;
 using Rewired.Integration.UnityUI;
+using UnityEngine.SceneManagement;
 
 public class Pause : MonoBehaviour
 {
@@ -80,7 +81,7 @@ public class Pause : MonoBehaviour
 
     public void OnExit()
     {
-        Debug.Log("Exit not implemented yet !");
+        SceneManager.LoadScene("MainMenu");
     }
 
     public void OnReturnToPauseMenu()
