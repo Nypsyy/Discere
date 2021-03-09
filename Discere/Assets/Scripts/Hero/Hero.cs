@@ -127,6 +127,7 @@ public class Hero : MonoBehaviour {
             if (!player.GetButton("Heavy Attack"))
                 if (sword.CancelBigSlash())
                     anim.SwitchMode(HeroAnim.Mode.Move);
+            anim.SetModeSpeed(sword.GetSpeedForHeroAnimator());
         }
 
         float switch_attack_style = player.GetAxis("Attack Style");
