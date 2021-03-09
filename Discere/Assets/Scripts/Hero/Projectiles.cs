@@ -43,7 +43,6 @@ public class Projectiles : MonoBehaviour
             rb.velocity = Vector2.zero;
             Vector3 direction = Quaternion.AngleAxis(45, transform.forward) * new Vector2(transform.right.x, transform.right.y);
             Vector2 forceDirection = new Vector2(-1* direction.x * 2, 1);
-            Debug.Log(Quaternion.AngleAxis(45, transform.forward) * new Vector2(transform.right.x, transform.right.y));
             rb.AddForce(forceDirection ,ForceMode2D.Impulse);
         }
         if(other.collider.gameObject.layer == LayerMask.NameToLayer("HeroProjectile"))
