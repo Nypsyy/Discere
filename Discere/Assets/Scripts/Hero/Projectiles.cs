@@ -18,7 +18,7 @@ public class Projectiles : MonoBehaviour
         destructionTimer = destructionTime;
     }
 
-    protected void Update()
+    protected void FixedUpdate()
     {
         if (destructing)
         {
@@ -37,9 +37,8 @@ public class Projectiles : MonoBehaviour
             rb.gravityScale = 0.25f;
             rb.velocity = Vector2.zero;
             Vector3 direction = Quaternion.AngleAxis(45, transform.forward) * new Vector2(transform.right.x, transform.right.y);
-            Vector2 forceDirection = new Vector2(-1 * direction.x * 2, 1);
-            Debug.Log(Quaternion.AngleAxis(45, transform.forward) * new Vector2(transform.right.x, transform.right.y));
-            rb.AddForce(forceDirection, ForceMode2D.Impulse);
+            Vector2 forceDirection = new Vector2(-1* direction.x * 2, 1);
+            rb.AddForce(forceDirection ,ForceMode2D.Impulse);
         }
 
         if (other.collider.gameObject.layer == LayerMask.NameToLayer("HeroProjectile")) {

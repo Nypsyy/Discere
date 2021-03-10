@@ -24,6 +24,11 @@ public class HeroSword : MonoBehaviour
         animator = GetComponent<Animator>();
     }
     
+    // Hero will call GetSpeedForHeroAnimator() and apply its value to HeroAnim.SetModeSpeed
+    public float GetSpeedForHeroAnimator() {
+        return (charging_time <= 0) ? 1 : 0;
+    }
+    
     public void TriggerSlash(Vector2 direction, bool is_big) {
         is_big_slash = is_big;
         

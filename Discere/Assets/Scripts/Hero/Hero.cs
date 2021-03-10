@@ -6,6 +6,7 @@ public class Hero : MonoBehaviour {
     [Header("General")]
     public float speed;
     public HeroAnim anim;
+    public Material heroMaterial;
 
     [Header("Melee")]
     public HeroSword sword;
@@ -22,12 +23,18 @@ public class Hero : MonoBehaviour {
     public float magicManaCost = 10f;
     public float magicHeavyManaCost = 50f;
 
+    [Header("Dash")]
+    public float dashDuration = 0.2f;
+    public float dashCooldown = 1.0f;
+    public float dashImpulseCoef = 20;
+
     private Player player;
     private Vector2 input_vec;
     private Vector2 facing_vec;
     private Vector2 aiming_vec_Joystick;
     private Vector2 aiming_vec_Mouse;
-    private Rigidbody2D body;
+    private bool wantsToDash = false;
+    private float dashTiming = 0;
     private float firingCooldown;
     private float magicFiringCooldown;
     private Laser magicLaserInstance = null;
@@ -35,6 +42,7 @@ public class Hero : MonoBehaviour {
     private Camera mainCamera;
 
     // Components
+    private Rigidbody2D body;
     private Health health;
     private Mana mana;
     private FightingStyle fightingStyle;
@@ -65,7 +73,7 @@ public class Hero : MonoBehaviour {
 
     // Update is called once per frame
     private void Update() {
-        input_vec = player.GetAxis2D("Move Horizontal", "Move Vertical");
+        input_vec = player.GetAxis2D("Move Horizontal", "Move Vertical").normalized;
 
         if (!(input_vec.x == 0 && input_vec.y == 0)) {
             if (anim.mode == HeroAnim.Mode.Move || anim.mode == HeroAnim.Mode.Jump) {
@@ -74,7 +82,8 @@ public class Hero : MonoBehaviour {
             }
         }
 
-        anim.UpdateDirection(input_vec);
+        if (dashTiming <= dashCooldown - dashDuration) // not update during dash
+            anim.UpdateDirection(input_vec);
 
         if (magicLaserInstance != null && fightingStyle.currentStyle != FightingStyle.Style.Magic)
         {
@@ -111,6 +120,16 @@ public class Hero : MonoBehaviour {
         if (player.GetButtonDown("Jump")) {
             anim.SwitchMode(HeroAnim.Mode.Jump);
         }
+        
+        if (dashTiming > 0) {
+            dashTiming -= Time.deltaTime;
+            float progress = 1 - dashTiming / dashCooldown;
+            heroMaterial.SetFloat("_Progress", 1-progress*progress);
+        } else if (player.GetButtonDown("Dash")) {
+            dashTiming = dashCooldown;
+            wantsToDash = true;
+            anim.UpdateDirection(facing_vec);
+        }
 
         if (anim.mode == HeroAnim.Mode.Move) {
             switch (fightingStyle.currentStyle) {
@@ -127,6 +146,7 @@ public class Hero : MonoBehaviour {
             if (!player.GetButton("Heavy Attack"))
                 if (sword.CancelBigSlash())
                     anim.SwitchMode(HeroAnim.Mode.Move);
+            anim.SetModeSpeed(sword.GetSpeedForHeroAnimator());
         }
 
         float switch_attack_style = player.GetAxis("Attack Style");
@@ -136,6 +156,11 @@ public class Hero : MonoBehaviour {
             fightingStyle.PreviousStyle();
 
     }
+
+
+
+
+
 
     private void UpdateAttackMelee() {
         if (anim.mode == HeroAnim.Mode.Move) {
@@ -187,7 +212,6 @@ public class Hero : MonoBehaviour {
         {
             
             bowInstance.GetComponent<BowScript>().Shoot();
-            //anim.Fire();
             
         }
         if (bowInstance != null)
@@ -262,6 +286,10 @@ public class Hero : MonoBehaviour {
         }
     }
 
+
+
+
+
     Vector2 getAimingDirection() {
         Controller controller = player.controllers.GetLastActiveController();
         if (controller == null) return Vector2.zero;
@@ -276,20 +304,38 @@ public class Hero : MonoBehaviour {
         }
     }
 
+
+
+
+
     private void FixedUpdate() {
         if (firingCooldown >= 0)
             firingCooldown--;
-        switch (anim.mode) {
-            case HeroAnim.Mode.Jump:
-            case HeroAnim.Mode.Move:
-                body.velocity = input_vec * speed;
-                break;
-            case HeroAnim.Mode.Slash:
-                body.velocity = input_vec * (speed * 0.2f);
-                break;
-            default:
-                body.velocity = Vector2.zero;
-                break;
+        
+        if (dashTiming <= dashCooldown - dashDuration) {
+            // if doing dash, do not modify velocity by hand
+            switch (anim.mode) {
+                case HeroAnim.Mode.Jump:
+                case HeroAnim.Mode.Move:
+                    body.velocity = input_vec * speed;
+                    break;
+                case HeroAnim.Mode.Slash:
+                    body.velocity = input_vec * (speed * 0.2f);
+                    break;
+                default:
+                    body.velocity = Vector2.zero;
+                    break;
+            }
+        }
+
+        // Managing move speed while charging arrows
+        if (fightingStyle.currentStyle == FightingStyle.Style.Range && bowInstance != null)
+        {
+            body.velocity = Vector2.zero;
+        }
+        if (wantsToDash) {
+            body.AddForce(facing_vec * body.mass * dashImpulseCoef, ForceMode2D.Impulse);
+            wantsToDash = false;
         }
 
         // Managing move speed while shooting magic laser
@@ -297,7 +343,15 @@ public class Hero : MonoBehaviour {
         {
             body.velocity = magicLaserInstance.isShooting ? Vector2.zero : input_vec * speed * 0.2f;
         }
+        if (wantsToDash) {
+            body.AddForce(facing_vec * body.mass * dashImpulseCoef, ForceMode2D.Impulse);
+            wantsToDash = false;
+        }
     }
+
+
+
+
 
     public void OnHealthEmpty() {
         Debug.Log("Should die");
