@@ -81,6 +81,7 @@ public class Pause : MonoBehaviour
 
     public void OnExit()
     {
+        Time.timeScale = timeScaleBackup;
         SceneManager.LoadScene("MainMenu");
     }
 

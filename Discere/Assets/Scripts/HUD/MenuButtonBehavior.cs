@@ -5,7 +5,7 @@ public class MenuButtonBehavior : MonoBehaviour
 {
     public void NewGame()
     {
-        SceneManager.LoadScene("LevelDesign");
+        SceneManager.LoadScene("Boss");
     }
 
     public void Options()
