@@ -1,10 +1,11 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class MenuButtonBehavior : MonoBehaviour
 {
     public void NewGame()
     {
-        Debug.Log("NEW GAME");
+        SceneManager.LoadScene("Boss");
     }
 
     public void Options()
