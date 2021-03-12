@@ -28,11 +28,13 @@ public class Projectiles : MonoBehaviour
             transform.Rotate(0.0f, 0.0f, -45.0f);
 
         _rb.velocity = direction * Velocity;
+
+        StartCoroutine(Destroying(15f));
     }
 
     private void OnCollisionEnter2D(Collision2D other) {
         if (other.collider.gameObject.layer == LayerMask.NameToLayer("Obstacle")) {
-            StartCoroutine(Destroying());
+            StartCoroutine(Destroying(DestructionTimer));
 
             Rigidbody2D rb = GetComponent<Rigidbody2D>();
             rb.gravityScale = 0.25f;
@@ -44,12 +46,12 @@ public class Projectiles : MonoBehaviour
         }
 
         if (other.collider.gameObject.layer == LayerMask.NameToLayer("HeroProjectile")) {
-            StartCoroutine(Destroying());
+            StartCoroutine(Destroying(DestructionTimer));
         }
     }
 
-    private IEnumerator Destroying() {
-        yield return new WaitForSeconds(DestructionTimer);
+    private IEnumerator Destroying(float timer) {
+        yield return new WaitForSeconds(timer);
         Destroy(gameObject);
         yield return null;
     }

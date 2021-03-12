@@ -5,9 +5,8 @@ using static Utils;
 
 public class Hero : MonoBehaviour
 {
-    /**
-     * EDITOR VARIABLES
-     */
+    #region EDITOR
+    
     [Header("General")]
     public float speed;
 
@@ -20,6 +19,8 @@ public class Hero : MonoBehaviour
 
     [Header("Range")]
     public GameObject daggerPrefab;
+
+    public float attackAnimSpeedFactor;
 
     [Header("Magic")]
     public GameObject magicBallPrefab;
@@ -35,45 +36,44 @@ public class Hero : MonoBehaviour
     public float dashImpulseFactor = 20f;
 
     public UnityEvent OnHitEvent;
+    
+    #endregion
 
-    /**
-     * PRIVATE VARIABLES
-     */
+    #region PRIVATE VARIABLES
+    
     private Vector2 _facingVec;
-
     private bool _wantsToDash;
     private float _dashTiming;
     private Laser _magicLaserInstance;
     private Camera _mainCamera;
+    
+    #endregion
 
-    /**
-     * COMPONENTS
-     */
+    #region COMPONENTS
+
     private Player _player;
-
     private Rigidbody2D _body;
     private Health _health;
     private Mana _mana;
     private FightingStyle _fightingStyle;
     private BowScript _bowScript;
 
-    /**
-     * INPUTS
-     */
-    public bool heavyAttack;
+    #endregion
 
-    public bool heavyAttackRelease;
-
+    #region INPUT VARIABLES
+    
     private Vector2 _movement;
     private Vector2 _joystickAim;
     private float _attackStyleChange;
     private bool _jump;
     private bool _dash;
     private bool _lightAttack;
+    private bool _heavyAttack;
+    private bool _heavyAttackRelease;
+    
+    #endregion
 
-    /**
-     * PROPERTIES
-     */
+    #region PROPERTIES
 
     // Shooting direction (both mouse / joystick support)
     public Vector2 ShootingDirection => CurrentController != null
@@ -82,6 +82,8 @@ public class Hero : MonoBehaviour
 
     // Current active controller
     private Controller CurrentController => _player.controllers.GetLastActiveController();
+    
+    #endregion
 
     private void Awake() {
         _player = ReInput.players.GetPlayer(0);
@@ -126,6 +128,12 @@ public class Hero : MonoBehaviour
             _bowScript.gameObject.SetActive(false);
         }
 
+        Dash();
+
+        if (_jump) {
+            anim.SwitchMode(HeroAnim.Mode.Jump);
+        }
+
         switch (_fightingStyle.currentStyle) {
             case FightingStyle.Style.Melee:
                 UpdateAttackMelee();
@@ -142,14 +150,8 @@ public class Hero : MonoBehaviour
                 break;
         }
 
-        Dash();
-
-        if (_jump) {
-            anim.SwitchMode(HeroAnim.Mode.Jump);
-        }
-
         if (anim.CurrentMode == HeroAnim.Mode.BigSlash) {
-            if (!heavyAttack)
+            if (!_heavyAttack)
                 if (sword.CancelBigSlash())
                     anim.SwitchMode(HeroAnim.Mode.Move);
             anim.SetModeSpeed(sword.GetSpeedForHeroAnimator());
@@ -163,12 +165,12 @@ public class Hero : MonoBehaviour
 
 
     private void UpdateAttackMelee() {
-        if (_lightAttack == heavyAttack || anim.IsAttacking() || anim.CurrentMode != HeroAnim.Mode.Move)
+        if (_lightAttack == _heavyAttack || anim.IsAttacking() || anim.CurrentMode != HeroAnim.Mode.Move)
             return;
 
         anim.UpdateSlashDirection(_facingVec);
-        anim.SwitchMode(heavyAttack ? HeroAnim.Mode.BigSlash : HeroAnim.Mode.Slash);
-        sword.TriggerSlash(_facingVec, heavyAttack);
+        anim.SwitchMode(_heavyAttack ? HeroAnim.Mode.BigSlash : HeroAnim.Mode.Slash);
+        sword.TriggerSlash(_facingVec, _heavyAttack);
     }
 
     private void UpdateAttackRange() {
@@ -186,17 +188,17 @@ public class Hero : MonoBehaviour
         anim.UpdateDirection(ShootingDirection);
         anim.UpdateSlashDirection(ShootingDirection);
         anim.SwitchMode(HeroAnim.Mode.Slash);
-        anim.SetModeSpeed(3); // Slash animation x3 faster
+        // Increase attack animation's speed
+        anim.SetModeSpeed(attackAnimSpeedFactor);
     }
 
     private void UpdateAttackRangeHeavy() {
-        if (heavyAttack) {
+        if (_heavyAttack) {
             _bowScript.gameObject.SetActive(true);
             _bowScript.ChargeShot();
             anim.SwitchMode(HeroAnim.Mode.Aim);
         }
-
-        if (heavyAttackRelease) {
+        else if (_heavyAttackRelease) {
             _bowScript.Shoot();
             _bowScript.gameObject.SetActive(false);
         }
@@ -210,7 +212,7 @@ public class Hero : MonoBehaviour
 
         if (CurrentController.type != ControllerType.Joystick && ShootingDirection.magnitude == 0 || !_lightAttack) return;
 
-        if (heavyAttack) return;
+        if (_heavyAttack) return;
 
         if (!_mana.UseMana(magicManaCost)) return; // ensure enough mana is available, and use mana
 
@@ -225,12 +227,12 @@ public class Hero : MonoBehaviour
     }
 
     private void UpdateAttackMagicHeavy() {
-        if (heavyAttack && _magicLaserInstance == null) {
+        if (_heavyAttack && _magicLaserInstance == null) {
             if (!_mana.HasEnough(magicHeavyManaCost)) return;
             _magicLaserInstance = Instantiate(magicLaserPrefab, transform.position, Quaternion.identity, transform).GetComponent<Laser>();
         }
 
-        if (heavyAttackRelease && _magicLaserInstance != null) {
+        if (_heavyAttackRelease && _magicLaserInstance != null) {
             if (_magicLaserInstance.isReady) {
                 _mana.UseMana(magicHeavyManaCost);
                 _magicLaserInstance.Shoot();
@@ -297,7 +299,6 @@ public class Hero : MonoBehaviour
             heroMaterial.SetFloat(Progress, 1 - progress * progress);
         }
         else if (_dash) {
-            Debug.Log("Dash");
             _dashTiming = dashCooldown;
             _wantsToDash = true;
             anim.UpdateDirection(_facingVec);
@@ -311,8 +312,8 @@ public class Hero : MonoBehaviour
         _jump = _player.GetButtonDown("Jump");
         _dash = _player.GetButtonDown("Dash");
         _lightAttack = _player.GetButtonDown("Light Attack");
-        heavyAttack = _player.GetButtonDown("Heavy Attack");
-        heavyAttackRelease = _player.GetButtonUp("Heavy Attack");
+        _heavyAttack = _player.GetButtonDown("Heavy Attack");
+        _heavyAttackRelease = _player.GetButtonUp("Heavy Attack");
     }
 
     public void OnHealthEmpty() {

@@ -42,7 +42,8 @@ public class BowScript : MonoBehaviour
         transform.position = transform.parent.position + new Vector3(Mathf.Cos(CurrentAngle), Mathf.Sin(CurrentAngle)) * posRadius;
         transform.right = _hero.ShootingDirection;
     }
-
+    
+    
     // Used by the animation
     public void UpgradeArrow() {
         if (_arrowIndex < arrows.Length)
