@@ -1,44 +1,54 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using static Utils;
 
 public class BowScript : MonoBehaviour
 {
+    public GameObject[] arrows;
+    public Sprite[] arrowSprites;
+    public SpriteRenderer arrowSprite;
+    public float posRadius;
 
-    public GameObject[] Arrows;
-    public GameObject[] VisualArrows;
-    public float timeBetweenArrows;
+    private Hero _hero;
+    private Animator _animator;
+    private int _arrowIndex;
+    private float CurrentAngle => Vector2.SignedAngle(Vector2.right, _hero.ShootingDirection) * Mathf.Deg2Rad;
 
-    private GameObject arrow;
-    private GameObject firedArrow;
-    private float creationTimer;
-    private int arrowNumber = 1;
-    private bool firing = false;
+    private void Awake() {
+        _hero = GetComponentInParent<Hero>();
+        _animator = GetComponent<Animator>();
+    }
 
+    private void Start() {
+        arrowSprite.sprite = arrowSprites[0];
+        gameObject.SetActive(false);
+    }
+
+    private void Update() {
+        UpdatePosition();
+    }
+
+    public void ChargeShot() {
+        _arrowIndex = -1;
+        _animator.SetTrigger(AnimationVariables.ChargingShot);
+    }
+
+    public void Shoot() {
+        _animator.SetTrigger(AnimationVariables.FiringShot);
+        Instantiate(arrows[_arrowIndex], transform.position, Quaternion.identity);
+    }
+
+    private void UpdatePosition() {
+        transform.position = transform.parent.position + new Vector3(Mathf.Cos(CurrentAngle), Mathf.Sin(CurrentAngle)) * posRadius;
+        transform.right = _hero.ShootingDirection;
+    }
     
-    // Start is called before the first frame update
-    void Start()
-    {
-        arrow = Instantiate(VisualArrows[arrowNumber - 1], transform.position, transform.rotation, transform);
-        creationTimer = Time.time;
-    }
+    
+    // Used by the animation
+    public void UpgradeArrow() {
+        if (_arrowIndex < arrows.Length)
+            _arrowIndex++;
 
-    // Update is called once per frame
-    void Update()
-    {
-        if(arrowNumber < VisualArrows.Length && !firing && Time.time> creationTimer + timeBetweenArrows * arrowNumber)
-        {
-            Destroy(arrow);
-            arrowNumber++;
-            arrow = Instantiate(VisualArrows[arrowNumber - 1], transform.position, transform.rotation, transform);
-        }
-    }
-
-    public void Shoot()
-    {
-        firedArrow = Instantiate(Arrows[arrowNumber - 1], transform.position, transform.rotation);
-        firing = true;
-        firedArrow.GetComponent<Rigidbody2D>().velocity = transform.right * firedArrow.GetComponent<Projectiles>().velocity;
-        Destroy(gameObject);
+        arrowSprite.sprite = arrowSprites[_arrowIndex];
     }
 }

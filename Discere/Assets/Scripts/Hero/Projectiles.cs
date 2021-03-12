@@ -1,53 +1,58 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Projectiles : MonoBehaviour
 {
-    public float velocity;
-    public float damage;
-    public int destructionTime;
-    private bool destructing;
-    private int destructionTimer;
+    public Projectile projectile;
 
-    protected void Start()
-    {
-        destructing = false;
-        destructionTimer = destructionTime;
+    public float Damage => projectile.damage;
+    public float Velocity => projectile.velocity;
+
+    private float DestructionTimer => projectile.destructionTime;
+    private Rigidbody2D _rb;
+    private SpriteRenderer _spriteRenderer;
+
+    private void Awake() {
+        _rb = GetComponent<Rigidbody2D>();
+        _spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
-    protected void FixedUpdate()
-    {
-        if (destructing)
-        {
-            destructionTimer--;
+    protected void Start() {
+        _spriteRenderer.sprite = projectile.sprite;
 
-        }
+        var direction = FindObjectOfType<Hero>().GetComponent<Hero>().ShootingDirection;
+        transform.right = direction;
 
-        if (destructionTimer <= 0)
-        {
-            Destroy(gameObject);
-        }
+        if (_spriteRenderer.sprite.name == "Dagger")
+            transform.Rotate(0.0f, 0.0f, -45.0f);
+
+        _rb.velocity = direction * Velocity;
+
+        StartCoroutine(Destroying(15f));
     }
 
     private void OnCollisionEnter2D(Collision2D other) {
-        if (other.collider.gameObject.layer == LayerMask.NameToLayer("Boss")) {
-            Debug.Log("HIT");
-        }
-        if (other.collider.gameObject.layer == LayerMask.NameToLayer("Obstacle"))
-        {
-            destructing = true;
+        if (other.collider.gameObject.layer == LayerMask.NameToLayer("Obstacle")) {
+            StartCoroutine(Destroying(DestructionTimer));
+
             Rigidbody2D rb = GetComponent<Rigidbody2D>();
             rb.gravityScale = 0.25f;
             rb.velocity = Vector2.zero;
             Vector3 direction = Quaternion.AngleAxis(45, transform.forward) * new Vector2(transform.right.x, transform.right.y);
-            Vector2 forceDirection = new Vector2(-1* direction.x * 2, 1);
-            rb.AddForce(forceDirection ,ForceMode2D.Impulse);
+            Vector2 forceDirection = new Vector2(-1 * direction.x * 2, 1);
+
+            rb.AddForce(forceDirection, ForceMode2D.Impulse);
         }
-        if(other.collider.gameObject.layer == LayerMask.NameToLayer("HeroProjectile"))
-        {
-            destructing = true;
+
+        if (other.collider.gameObject.layer == LayerMask.NameToLayer("HeroProjectile")) {
+            StartCoroutine(Destroying(DestructionTimer));
         }
+    }
+
+    private IEnumerator Destroying(float timer) {
+        yield return new WaitForSeconds(timer);
+        Destroy(gameObject);
+        yield return null;
     }
 }

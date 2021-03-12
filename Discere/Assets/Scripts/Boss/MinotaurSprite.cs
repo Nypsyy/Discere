@@ -1,15 +1,12 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Pathfinding;
+using static Utils;
 
 // Responsible for displaying the Minautor / changing its aspect
+[RequireComponent(typeof(SpriteRenderer))]
 public class MinotaurSprite : MonoBehaviour
 {
-    // String hashes
-    private static readonly int Speed = Animator.StringToHash("Speed");
-
     private Animator _animator;                       // Sprite animator
     private SpriteRenderer _sprite;                   // Sprite renderer
     private AIPath _aiPath;                           // Pathfinding script
@@ -26,7 +23,7 @@ public class MinotaurSprite : MonoBehaviour
 
     private void Update() {
         // Update the running animation
-        _animator.SetFloat(Speed, Mathf.Abs(_aiPath.desiredVelocity.x));
+        _animator.SetFloat(AnimationVariables.Speed, Mathf.Abs(_aiPath.desiredVelocity.x));
 
         Flip(); // Flip sprite
     }
@@ -42,5 +39,11 @@ public class MinotaurSprite : MonoBehaviour
 
         // FLip based on the boolean
         _sprite.flipX = !_isLookingRight;
+    }
+
+    public IEnumerator Blink() {
+        _sprite.material.SetColor(ShaderColor, Color.white);
+        yield return new WaitForSeconds(.1f);
+        _sprite.material.SetColor(ShaderColor, Color.clear);
     }
 }
