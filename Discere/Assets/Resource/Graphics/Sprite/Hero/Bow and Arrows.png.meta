@@ -4,31 +4,31 @@ TextureImporter:
   internalIDToNameTable:
   - first:
       213: -2572660309348051032
-    second: Bow and Arrows_0
+    second: Bow_0
   - first:
       213: 3298862418328315149
-    second: Bow and Arrows_1
+    second: Bow_1
   - first:
       213: -3696291076358396005
-    second: Bow and Arrows_2
+    second: Arrow_0
   - first:
       213: 4948774720719412629
-    second: Bow and Arrows_3
+    second: Bow_1
   - first:
       213: 3216016198144983771
-    second: Bow and Arrows_4
+    second: Bow_3
   - first:
       213: 2254611560755617221
-    second: Bow and Arrows_5
+    second: Arrow_1
   - first:
       213: 6491743886043847780
-    second: Bow and Arrows_6
+    second: Arrow_2
   - first:
       213: 8884036787792595883
-    second: Bow and Arrows_7
+    second: Arrow_3
   - first:
       213: -295400773606513899
-    second: Bow and Arrows_8
+    second: Bow_Arrow_Text
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -118,7 +118,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Bow and Arrows_0
+      name: Bow_0
       rect:
         serializedVersion: 2
         x: 0
@@ -126,7 +126,7 @@ TextureImporter:
         width: 16
         height: 16
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -139,7 +139,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Bow and Arrows_1
+      name: Bow_2
       rect:
         serializedVersion: 2
         x: 16
@@ -147,7 +147,7 @@ TextureImporter:
         width: 16
         height: 16
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -160,7 +160,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Bow and Arrows_2
+      name: Arrow_0
       rect:
         serializedVersion: 2
         x: 32
@@ -168,7 +168,7 @@ TextureImporter:
         width: 16
         height: 16
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -181,7 +181,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Bow and Arrows_3
+      name: Bow_1
       rect:
         serializedVersion: 2
         x: 0
@@ -189,7 +189,7 @@ TextureImporter:
         width: 16
         height: 16
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -202,7 +202,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Bow and Arrows_4
+      name: Bow_3
       rect:
         serializedVersion: 2
         x: 16
@@ -210,7 +210,7 @@ TextureImporter:
         width: 16
         height: 16
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -223,7 +223,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Bow and Arrows_5
+      name: Arrow_1
       rect:
         serializedVersion: 2
         x: 32
@@ -231,7 +231,7 @@ TextureImporter:
         width: 16
         height: 16
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -244,7 +244,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Bow and Arrows_6
+      name: Arrow_2
       rect:
         serializedVersion: 2
         x: 0
@@ -252,7 +252,7 @@ TextureImporter:
         width: 16
         height: 16
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -265,7 +265,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Bow and Arrows_7
+      name: Arrow_3
       rect:
         serializedVersion: 2
         x: 16
@@ -273,7 +273,7 @@ TextureImporter:
         width: 16
         height: 16
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -281,27 +281,6 @@ TextureImporter:
       bones: []
       spriteID: bab41eb83607a4b70800000000000000
       internalID: 8884036787792595883
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Bow and Arrows_8
-      rect:
-        serializedVersion: 2
-        x: 32
-        y: 0
-        width: 16
-        height: 16
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 513eecebf8686ebf0800000000000000
-      internalID: -295400773606513899
       vertices: []
       indices: 
       edges: []

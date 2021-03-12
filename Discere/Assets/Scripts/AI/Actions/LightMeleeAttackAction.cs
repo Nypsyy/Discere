@@ -1,21 +1,22 @@
 using SGoap;
-using UnityEngine;
+using static Utils.AnimationVariables;
 
-public class LightMeleeAttackAction : Action
+public class LightMeleeAttackAction : BasicAction
 {
+    private bool AttackDone => !AgentData.Animator.GetBool(Attacking) && !Cooldown.Active;
+
     public override bool PrePerform() {
-        throw new System.NotImplementedException();
+        AgentData.Animator.SetTrigger(LightMeleeAttack);
+
+        return base.PrePerform();
     }
 
     public override EActionStatus Perform() {
-        throw new System.NotImplementedException();
+        return AttackDone ? EActionStatus.Success : EActionStatus.Running;
     }
 
     public override bool PostPerform() {
-        throw new System.NotImplementedException();
-    }
-
-    public override void DynamicallyEvaluateCost() {
-        Cost = Random.value;
+        Cost++;
+        return base.PostPerform();
     }
 }

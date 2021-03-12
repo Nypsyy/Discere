@@ -1,33 +1,37 @@
 using SGoap;
+using UnityEngine;
 
 public class RangeSensor : Sensor
 {
-    public TargetSensor targetSensor;
-
-    public float rangedRange = 10f;
+    [Header("Values")]
+    public float rangedRange = 30f;
     public float meleeRange = 5f;
 
-    public bool InMeleeRange => targetSensor.HasTarget &&
-                                targetSensor.DistanceToTarget <= meleeRange;
+    [Header("References")]
+    public StringReference inMeleeRangeState;
+    public StringReference inRangedRangeState;
 
-    public bool InRangedRange => targetSensor.HasTarget &&
-                                 targetSensor.DistanceToTarget <= rangedRange &&
-                                 targetSensor.DistanceToTarget > meleeRange;
+    public bool InMeleeRange => AgentData.DistanceToTarget <= meleeRange;
+
+    private bool InRangedRange => AgentData.DistanceToTarget <= rangedRange &&
+                                  AgentData.DistanceToTarget > meleeRange;
+
+    public bool OutOfRange => AgentData.DistanceToTarget > rangedRange;
 
     public override void OnAwake() {
     }
 
     private void Update() {
-        if (!targetSensor.HasTarget) return;
+        if (!Agent.States.HasState("HasTarget")) return;
 
         if (InRangedRange)
-            Agent.States.SetState("InRangedRange", 1);
+            Agent.States.SetState(inRangedRangeState.Value, 1);
         else
-            Agent.States.RemoveState("InRangedRange");
-        
+            Agent.States.RemoveState(inRangedRangeState.Value);
+
         if (InMeleeRange)
-            Agent.States.SetState("InMeleeRange", 1);
+            Agent.States.SetState(inMeleeRangeState.Value, 1);
         else
-            Agent.States.RemoveState("InMeleeRange");
+            Agent.States.RemoveState(inMeleeRangeState.Value);
     }
 }
