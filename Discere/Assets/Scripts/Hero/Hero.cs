@@ -40,6 +40,7 @@ public class Hero : MonoBehaviour {
     private Laser magicLaserInstance = null;
     private GameObject bowInstance = null;
     private Camera mainCamera;
+    private AudioManager audio;
 
     // Components
     private Rigidbody2D body;
@@ -62,6 +63,8 @@ public class Hero : MonoBehaviour {
         health = GetComponent<Health>();
         mana = GetComponent<Mana>();
         fightingStyle = GetComponent<FightingStyle>();
+
+        audio = FindObjectOfType<AudioManager>();
 
         mainCamera = Camera.main;
 
@@ -172,6 +175,7 @@ public class Hero : MonoBehaviour {
             anim.UpdateSlashDirection(facing_vec);
             anim.SwitchMode(is_heavy_attack ? HeroAnim.Mode.BigSlash : HeroAnim.Mode.Slash);
             sword.TriggerSlash(facing_vec, is_heavy_attack);
+            audio.Play(is_heavy_attack ? "HeavySlash" : "Slash");
         }
     }
 
