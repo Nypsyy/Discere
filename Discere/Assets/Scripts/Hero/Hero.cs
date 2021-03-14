@@ -40,7 +40,8 @@ public class Hero : MonoBehaviour {
     private Laser magicLaserInstance = null;
     private GameObject bowInstance = null;
     private Camera mainCamera;
-    private AudioManager audio;
+
+    private new AudioManager audio;
 
     // Components
     private Rigidbody2D body;
@@ -132,6 +133,7 @@ public class Hero : MonoBehaviour {
             dashTiming = dashCooldown;
             wantsToDash = true;
             anim.UpdateDirection(facing_vec);
+            audio.Play("Dash");
         }
 
         if (anim.mode == HeroAnim.Mode.Move) {
@@ -175,7 +177,6 @@ public class Hero : MonoBehaviour {
             anim.UpdateSlashDirection(facing_vec);
             anim.SwitchMode(is_heavy_attack ? HeroAnim.Mode.BigSlash : HeroAnim.Mode.Slash);
             sword.TriggerSlash(facing_vec, is_heavy_attack);
-            audio.Play(is_heavy_attack ? "HeavySlash" : "Slash");
         }
     }
 
@@ -202,6 +203,9 @@ public class Hero : MonoBehaviour {
         anim.UpdateSlashDirection(shootingDirection);
         anim.SwitchMode(HeroAnim.Mode.Slash);
         anim.SetModeSpeed(3); // Slash animation 3 times faster
+
+        // Play audio
+        audio.Play("Throw");
     }
 
     void UpdateAttackRangeHeavy()

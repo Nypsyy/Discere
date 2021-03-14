@@ -15,12 +15,16 @@ public class BowScript : MonoBehaviour
     private int arrowNumber = 1;
     private bool firing = false;
 
+    private new AudioManager audio;
+
     
     // Start is called before the first frame update
     void Start()
     {
         arrow = Instantiate(VisualArrows[arrowNumber - 1], transform.position, transform.rotation, transform);
         creationTimer = Time.time;
+        audio = FindObjectOfType<AudioManager>();
+        audio.Play("BowCharge");
     }
 
     // Update is called once per frame
@@ -31,6 +35,7 @@ public class BowScript : MonoBehaviour
             Destroy(arrow);
             arrowNumber++;
             arrow = Instantiate(VisualArrows[arrowNumber - 1], transform.position, transform.rotation, transform);
+            audio.Play("BowChange", pitchMultiplier: 0.5f * arrowNumber);
         }
     }
 
@@ -39,6 +44,7 @@ public class BowScript : MonoBehaviour
         firedArrow = Instantiate(Arrows[arrowNumber - 1], transform.position, transform.rotation);
         firing = true;
         firedArrow.GetComponent<Rigidbody2D>().velocity = transform.right * firedArrow.GetComponent<Projectiles>().velocity;
+        audio.Play("BowShoot" + arrowNumber.ToString());
         Destroy(gameObject);
     }
 }

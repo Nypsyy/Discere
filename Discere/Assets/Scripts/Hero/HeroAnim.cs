@@ -22,6 +22,10 @@ public class HeroAnim : MonoBehaviour
     private bool is_idle;
     private bool was_idle;
     private int previous_current_direction;
+
+    private Mode previousMode;
+
+    private new AudioManager audio;
     
     public void UpdateDirection(Vector2 dir) {
         if (mode != Mode.Move && mode != Mode.Jump) return; // allowing direction changing only when moving/jumping
@@ -55,10 +59,40 @@ public class HeroAnim : MonoBehaviour
         animator.speed = 1;
         was_idle = false;
         is_idle = false;
-        
+
+        previousMode = mode;
+
         mode = m;
         animator.SetInteger("Mode", (int)m);
         animator.SetTrigger("SwitchMode");
+
+        switch (m)
+        {
+            case Mode.Jump when previousMode != Mode.Jump:
+                audio.Play("Jump");
+                break;
+
+            case Mode.Slash:
+                audio.Play("Slash");
+                break;
+
+            case Mode.BigSlash:
+                audio.Play("HeavySlash");
+                break;
+
+            default:
+                switch(previousMode)
+                {
+                    case Mode.Jump:
+                        audio.Play("Land");
+                        break;
+
+                    case Mode.BigSlash:
+                        audio.Stop("HeavySlash");
+                        break;
+                }
+                break;
+        }
     }
     public void Fire()
     {
@@ -79,6 +113,8 @@ public class HeroAnim : MonoBehaviour
         was_idle = false;
         is_idle = false;
         mode = Mode.Move;
+
+        audio = FindObjectOfType<AudioManager>();
     }
     
     // Update is called once per frame
@@ -104,6 +140,7 @@ public class HeroAnim : MonoBehaviour
                 animator.speed = 0;
                 int current_animation = animator.GetCurrentAnimatorStateInfo(0).fullPathHash;
                 animator.Play(current_animation, 0, 0); // going to the first frame
+
             } else {
                 // is_idle && was_idle: do nothing in particular, animation is already stopped
             }
@@ -114,6 +151,7 @@ public class HeroAnim : MonoBehaviour
                 // because the animation sample rate is 6 per second,
                 // we need to advance by 1/6 ~= 0.16 seconds to skip a frame
                 animator.Update(0.16f);
+
             } else {
                 // if we changed direction, let's advance the move animation so the hero does not look static.
                 if (previous_current_direction != current_direction)
