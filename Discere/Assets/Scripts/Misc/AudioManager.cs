@@ -9,16 +9,25 @@ public class AudioManager : MonoBehaviour
 	public float globalVolumeMultiplier = 1f;
 
 	public Sound[] sounds;
+	private Dictionary<string, Sound> soundsDict;
 
 	void Awake()
 	{
+		soundsDict = new Dictionary<string, Sound>(sounds.Length);
+
 		foreach (Sound s in sounds)
 		{
-			s.source = gameObject.AddComponent<AudioSource>();
-			s.source.clip = s.clip;
-			s.source.loop = s.loop;
+			s.sources = new List<AudioSource>();
+			for (int i = 0; i < s.nbSources; i++)
+			{
+				s.sources.Add(gameObject.AddComponent<AudioSource>());
+				s.sources[i].clip = s.clip;
+				s.sources[i].loop = s.loop;
 
-			s.source.outputAudioMixerGroup = mixerGroup;
+				s.sources[i].outputAudioMixerGroup = mixerGroup;
+			}
+
+			soundsDict.Add(s.name, s);
 		}
 
 	}
@@ -29,28 +38,43 @@ public class AudioManager : MonoBehaviour
 
 	public void Play(string sound, float volumeMultiplier = 1f, float pitchMultiplier = 1f)
 	{
-		Sound s = Array.Find(sounds, item => item.name == sound);
-		if (s == null)
+		if (!soundsDict.ContainsKey(sound))
 		{
 			Debug.LogWarning("Sound: " + name + " not found!");
 			return;
 		}
+		Sound s = soundsDict[sound];
 
-		s.source.volume = s.volume * (1f + UnityEngine.Random.Range(-s.volumeVariance / 2f, s.volumeVariance / 2f)) * globalVolumeMultiplier * volumeMultiplier;
-		s.source.pitch = s.pitch * (1f + UnityEngine.Random.Range(-s.pitchVariance / 2f, s.pitchVariance / 2f)) * pitchMultiplier;
-		s.source.Play();
+		s.lastSource = (s.lastSource + 1) % s.nbSources;
+
+		s.sources[s.lastSource].volume = s.volume * (1f + UnityEngine.Random.Range(-s.volumeVariance / 2f, s.volumeVariance / 2f)) * globalVolumeMultiplier * volumeMultiplier;
+		s.sources[s.lastSource].pitch = s.pitch * (1f + UnityEngine.Random.Range(-s.pitchVariance / 2f, s.pitchVariance / 2f)) * pitchMultiplier;
+		s.sources[s.lastSource].Play();
 	}
 
-	public void Stop(string sound)
+	/**
+	 * Stop a sound. An index corresponding to the audio source to stop can be specified.
+	 * A negative index means "all sources"
+	 */
+	public void Stop(string sound, int index = -1)
     {
-		Sound s = Array.Find(sounds, item => item.name == sound);
-		if (s == null)
+		if (!soundsDict.ContainsKey(sound))
 		{
 			Debug.LogWarning("Sound: " + name + " not found!");
 			return;
 		}
+		Sound s = soundsDict[sound];
+		if (index >= s.nbSources)
+        {
+			Debug.LogWarning("Sound: " + name + " : source " + index.ToString() + " not found!");
+			return;
+		}
 
-		s.source.Stop();
+		if (index < 0)
+			for (int i = 0; i < s.nbSources; i++)
+				s.sources[i].Stop();
+		else
+			s.sources[index].Stop();
 	}
 
 }

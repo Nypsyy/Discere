@@ -260,6 +260,9 @@ public class Hero : MonoBehaviour {
         anim.UpdateSlashDirection(shootingDirection);
         anim.SwitchMode(HeroAnim.Mode.Slash);
         anim.SetModeSpeed(3); // Slash animation 3 times faster
+
+        // playing sound
+        audio.Play("CastSpell");
     }
 
     void UpdateAttackMagicHeavy()
@@ -268,6 +271,7 @@ public class Hero : MonoBehaviour {
         {
             if (!mana.HasEnough(magicHeavyManaCost)) return;
             magicLaserInstance = Instantiate(magicLaserPrefab, transform.position, Quaternion.identity, transform).GetComponent<Laser>();
+            audio.Play("LaserBuildup");
         }
         if (player.GetButtonUp("Heavy Attack") && magicLaserInstance != null)
         {
@@ -278,12 +282,15 @@ public class Hero : MonoBehaviour {
 
                 anim.SwitchMode(HeroAnim.Mode.Slash);
                 anim.SetModeSpeed(3);
+
+                audio.Play("LaserShoot");
             }
             else
             {
                 magicLaserInstance.Destroy();
                 magicLaserInstance = null;
             }
+            audio.Stop("LaserBuildup");
         }
         if (magicLaserInstance != null)
         {

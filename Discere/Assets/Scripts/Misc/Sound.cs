@@ -1,4 +1,5 @@
 ﻿using UnityEngine.Audio;
+using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
@@ -20,9 +21,16 @@ public class Sound {
 
 	public bool loop = false;
 
+	// Number of sources in use for this sound.
+	[Range(1, 5)]
+	public int nbSources = 1;
+
 	public AudioMixerGroup mixerGroup;
 
 	[HideInInspector]
-	public AudioSource source;
+	public List<AudioSource> sources;
+
+	[HideInInspector]
+	public int lastSource = 0;
 
 }
