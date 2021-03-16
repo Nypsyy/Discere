@@ -67,8 +67,11 @@ public class Minotaur : MonoBehaviour
     }
 
     public void TakeDamage(float damage, FightingStyle.Style style) {
+        if (_minotaurSprite.isBlinking)
+            return; // do not apply damage when blinking = invulnerability time
+            
         health.TakeDamage(damage);
-        StartCoroutine(_minotaurSprite.Blink());
+        
         switch (style) {
             case FightingStyle.Style.Melee:
                 meleeRage.IncreaseRage(damage);
@@ -82,5 +85,7 @@ public class Minotaur : MonoBehaviour
                 magicRage.IncreaseRage(damage);
                 break;
         }
+        
+        StartCoroutine(_minotaurSprite.Blink());
     }
 }

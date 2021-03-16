@@ -7,6 +7,9 @@ using static Utils;
 [RequireComponent(typeof(SpriteRenderer))]
 public class MinotaurSprite : MonoBehaviour
 {
+    
+    public bool isBlinking { get; private set; }
+    
     private Animator _animator;                       // Sprite animator
     private SpriteRenderer _sprite;                   // Sprite renderer
     private AIPath _aiPath;                           // Pathfinding script
@@ -19,6 +22,7 @@ public class MinotaurSprite : MonoBehaviour
         _sprite = GetComponent<SpriteRenderer>();
         _aiPath = GetComponentInParent<AIPath>();
         _aiDestinationSetter = GetComponentInParent<AIDestinationSetter>();
+        isBlinking = false;
     }
 
     private void Update() {
@@ -42,8 +46,13 @@ public class MinotaurSprite : MonoBehaviour
     }
 
     public IEnumerator Blink() {
-        _sprite.material.SetColor(ShaderColor, Color.white);
-        yield return new WaitForSeconds(.1f);
-        _sprite.material.SetColor(ShaderColor, Color.clear);
+        isBlinking = true;
+        for (int i = 0; i < 3; ++i) {
+            _sprite.material.SetColor(ShaderColor, Color.white);
+            yield return new WaitForSeconds(0.1f);
+            _sprite.material.SetColor(ShaderColor, Color.clear);
+            yield return new WaitForSeconds(0.1f);
+        }
+        isBlinking = false;
     }
 }
