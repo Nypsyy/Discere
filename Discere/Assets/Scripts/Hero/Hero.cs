@@ -307,6 +307,7 @@ public class Hero : MonoBehaviour
         // Dashing
         if (!_wantsToDash) return;
         _body.AddForce(_facingVec * (_body.mass * dashImpulseFactor), ForceMode2D.Impulse);
+        audio.Play("Dash");
         _wantsToDash = false;
     }
 
