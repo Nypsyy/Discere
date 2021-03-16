@@ -60,7 +60,7 @@ public class HeroAnim : MonoBehaviour
         _wasIdle = false;
         _isIdle = false;
 
-        previousMode = mode;
+        previousMode = CurrentMode;
 
         CurrentMode = m;
         

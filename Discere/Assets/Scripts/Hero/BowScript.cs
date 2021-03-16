@@ -42,7 +42,7 @@ public class BowScript : MonoBehaviour
     public void Shoot() {
         _animator.SetTrigger(AnimationVariables.FiringShot);
         Instantiate(arrows[_arrowIndex], transform.position, Quaternion.identity);
-        audio.Play("BowShoot" + arrowNumber.ToString());
+        audio.Play("BowShoot" + (_arrowIndex + 1).ToString());
     }
 
     private void UpdatePosition() {
