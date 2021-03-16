@@ -54,7 +54,7 @@ MonoBehaviour:
   AchievableEvaluationType: 0
   AbortEvaluatorType: 0
   dashSpeed: 0
-  rangeSensor: {fileID: 0}
+  rangeSensor: {fileID: 8531273426517633445}
 --- !u!1 &8531273426212469664
 GameObject:
   m_ObjectHideFlags: 0
