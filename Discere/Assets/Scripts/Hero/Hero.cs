@@ -134,24 +134,26 @@ public class Hero : MonoBehaviour
             anim.SwitchMode(HeroAnim.Mode.Jump);
         }
 
-        switch (_fightingStyle.currentStyle) {
-            case FightingStyle.Style.Melee:
-                UpdateAttackMelee();
-                break;
+        if (anim.CurrentMode != HeroAnim.Mode.Jump) {
+            switch (_fightingStyle.currentStyle) {
+                case FightingStyle.Style.Melee:
+                    UpdateAttackMelee();
+                    break;
 
-            case FightingStyle.Style.Range:
-                UpdateAttackRange();
-                UpdateAttackRangeHeavy();
-                break;
+                case FightingStyle.Style.Range:
+                    UpdateAttackRange();
+                    UpdateAttackRangeHeavy();
+                    break;
 
-            case FightingStyle.Style.Magic:
-                UpdateAttackMagic();
-                UpdateAttackMagicHeavy();
-                break;
+                case FightingStyle.Style.Magic:
+                    UpdateAttackMagic();
+                    UpdateAttackMagicHeavy();
+                    break;
+            }
         }
 
         if (anim.CurrentMode == HeroAnim.Mode.BigSlash) {
-            if (!_heavyAttack)
+            if (_heavyAttackRelease)
                 if (sword.CancelBigSlash())
                     anim.SwitchMode(HeroAnim.Mode.Move);
             anim.SetModeSpeed(sword.GetSpeedForHeroAnimator());
@@ -273,18 +275,23 @@ public class Hero : MonoBehaviour
                 case HeroAnim.Mode.Slash:
                     _body.velocity = _movement * (speed * slowFactor);
                     break;
+                case HeroAnim.Mode.BigSlash:
+                    _body.velocity = Vector2.zero;
+                    break;
             }
-        }
+            
+            // Managing move speed while charging arrows / shooting laser
+            switch (_fightingStyle.currentStyle) {
+                case FightingStyle.Style.Range when _bowScript.gameObject.activeSelf:
+                    _body.velocity = Vector2.zero;
+                    break;
+                case FightingStyle.Style.Magic when _magicLaserInstance != null:
+                    _body.velocity = _magicLaserInstance.isShooting ? Vector2.zero : _movement * (speed * slowFactor);
+                    break;
+            }
 
-        // Managing move speed while charging arrows / shooting laser
-        switch (_fightingStyle.currentStyle) {
-            case FightingStyle.Style.Range when _bowScript.gameObject.activeSelf:
-                _body.velocity = Vector2.zero;
-                break;
-            case FightingStyle.Style.Magic when _magicLaserInstance != null:
-                _body.velocity = _magicLaserInstance.isShooting ? Vector2.zero : _movement * (speed * slowFactor);
-                break;
         }
+        
 
         // Dashing
         if (!_wantsToDash) return;
