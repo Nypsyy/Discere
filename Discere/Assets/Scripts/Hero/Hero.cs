@@ -259,7 +259,7 @@ public class Hero : MonoBehaviour
             audio.Stop("LaserBuildup");
         }
 
-        if (_magicLaserInstance != null) {
+        if (_magicLaserInstance != null && !_magicLaserInstance.isShooting) {
             Vector2 aimDir = GetAimingMouseDirection();
             _magicLaserInstance.SetDirection(aimDir);
             anim.UpdateDirection(aimDir);
