@@ -40,9 +40,9 @@ public class Minotaur : MonoBehaviour
 
     // Increases the boss' rages
     public void UpdateRage() {
-        meleeRage.IncreaseRage();
-        rangedRage.IncreaseRage();
-        magicRage.IncreaseRage();
+        meleeRage.IncreaseRage(0.5f);
+        rangedRage.IncreaseRage(0.5f);
+        magicRage.IncreaseRage(0.5f);
     }
 
     private void OnCollisionEnter2D(Collision2D other) {
@@ -56,15 +56,31 @@ public class Minotaur : MonoBehaviour
     private void HandleCollidingObject(GameObject gameObject) {
         if (gameObject.layer != LayerMask.NameToLayer("HeroProjectile")) return;
         
-        float dmg = gameObject.GetComponent<Projectiles>()?.Damage
-                    ?? gameObject.GetComponent<MagicProjectile>()?.Damage
-                    ?? 0.0f; 
+        Projectile proj = gameObject.GetComponent<Projectiles>()?.projectile
+                          ?? gameObject.GetComponent<MagicProjectile>()?.projectile;
+        
+        if (proj == null) return;
+        
+        
 
-        TakeDamage(dmg);
+        TakeDamage(proj.damage, proj.style);
     }
 
-    public void TakeDamage(float damage) {
+    public void TakeDamage(float damage, FightingStyle.Style style) {
         health.TakeDamage(damage);
         StartCoroutine(_minotaurSprite.Blink());
+        switch (style) {
+            case FightingStyle.Style.Melee:
+                meleeRage.IncreaseRage(damage);
+                break;
+
+            case FightingStyle.Style.Range:
+                rangedRage.IncreaseRage(damage);
+                break;
+
+            case FightingStyle.Style.Magic:
+                magicRage.IncreaseRage(damage);
+                break;
+        }
     }
 }

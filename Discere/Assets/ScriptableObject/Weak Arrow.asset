@@ -17,3 +17,4 @@ MonoBehaviour:
   damage: 2
   velocity: 10
   destructionTime: 0.5
+  style: 1
