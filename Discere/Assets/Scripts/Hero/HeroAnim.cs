@@ -22,6 +22,10 @@ public class HeroAnim : MonoBehaviour
     private bool _isIdle;
     private bool _wasIdle;
     private int _previousCurrentDirection;
+
+    private Mode previousMode;
+
+    private new AudioManager audio;
     
     public void UpdateDirection(Vector2 dir) {
         if (CurrentMode != Mode.Move && CurrentMode != Mode.Jump) return; // allowing direction changing only when moving/jumping
@@ -55,10 +59,41 @@ public class HeroAnim : MonoBehaviour
         _animator.speed = 1;
         _wasIdle = false;
         _isIdle = false;
-        
+
+        previousMode = mode;
+
         CurrentMode = m;
+        
         _animator.SetInteger("Mode", (int)m);
         _animator.SetTrigger("SwitchMode");
+
+        switch (m)
+        {
+            case Mode.Jump when previousMode != Mode.Jump:
+                audio.Play("Jump");
+                break;
+
+            case Mode.Slash:
+                audio.Play("Slash");
+                break;
+
+            case Mode.BigSlash:
+                audio.Play("HeavySlash");
+                break;
+
+            default:
+                switch(previousMode)
+                {
+                    case Mode.Jump:
+                        audio.Play("Land");
+                        break;
+
+                    case Mode.BigSlash:
+                        audio.Stop("HeavySlash");
+                        break;
+                }
+                break;
+        }
     }
     public void Fire()
     {
@@ -79,6 +114,8 @@ public class HeroAnim : MonoBehaviour
         _wasIdle = false;
         _isIdle = false;
         CurrentMode = Mode.Move;
+
+        audio = FindObjectOfType<AudioManager>();
     }
     
     // Update is called once per frame

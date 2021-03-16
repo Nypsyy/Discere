@@ -14,6 +14,8 @@ public class BowScript : MonoBehaviour
     private int _arrowIndex;
     private float CurrentAngle => Vector2.SignedAngle(Vector2.right, _hero.ShootingDirection) * Mathf.Deg2Rad;
 
+    private new AudioManager audio;
+
     private void Awake() {
         _hero = GetComponentInParent<Hero>();
         _animator = GetComponent<Animator>();
@@ -22,6 +24,8 @@ public class BowScript : MonoBehaviour
     private void Start() {
         arrowSprite.sprite = arrowSprites[0];
         gameObject.SetActive(false);
+
+        audio = FindObjectOfType<AudioManager>();
     }
 
     private void Update() {
@@ -31,11 +35,14 @@ public class BowScript : MonoBehaviour
     public void ChargeShot() {
         _arrowIndex = -1;
         _animator.SetTrigger(AnimationVariables.ChargingShot);
+
+        audio.Play("BowCharge");
     }
 
     public void Shoot() {
         _animator.SetTrigger(AnimationVariables.FiringShot);
         Instantiate(arrows[_arrowIndex], transform.position, Quaternion.identity);
+        audio.Play("BowShoot" + arrowNumber.ToString());
     }
 
     private void UpdatePosition() {

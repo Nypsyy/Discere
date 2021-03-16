@@ -46,6 +46,7 @@ public class Hero : MonoBehaviour
     private float _dashTiming;
     private Laser _magicLaserInstance;
     private Camera _mainCamera;
+    private new AudioManager audio;
     
     #endregion
 
@@ -103,6 +104,7 @@ public class Hero : MonoBehaviour
         _mainCamera = Camera.main;
 
         _facingVec = new Vector2(1.0f, 0);
+        audio = FindObjectOfType<AudioManager>();
     }
 
 
@@ -192,6 +194,8 @@ public class Hero : MonoBehaviour
         anim.SwitchMode(HeroAnim.Mode.Slash);
         // Increase attack animation's speed
         anim.SetModeSpeed(attackAnimSpeedFactor);
+
+        audio.Play("Throw");
     }
 
     private void UpdateAttackRangeHeavy() {
@@ -226,12 +230,16 @@ public class Hero : MonoBehaviour
         anim.UpdateSlashDirection(ShootingDirection);
         anim.SwitchMode(HeroAnim.Mode.Slash);
         anim.SetModeSpeed(3); // Slash animation 3 times faster
+
+        // playing sound
+        audio.Play("CastSpell");
     }
 
     private void UpdateAttackMagicHeavy() {
         if (_heavyAttack && _magicLaserInstance == null) {
             if (!_mana.HasEnough(magicHeavyManaCost)) return;
             _magicLaserInstance = Instantiate(magicLaserPrefab, transform.position, Quaternion.identity, transform).GetComponent<Laser>();
+            audio.Play("LaserBuildup");
         }
 
         if (_heavyAttackRelease && _magicLaserInstance != null) {
@@ -241,11 +249,14 @@ public class Hero : MonoBehaviour
 
                 anim.SwitchMode(HeroAnim.Mode.Slash);
                 anim.SetModeSpeed(3);
+
+                audio.Play("LaserShoot");
             }
             else {
                 _magicLaserInstance.Destroy();
                 _magicLaserInstance = null;
             }
+            audio.Stop("LaserBuildup");
         }
 
         if (_magicLaserInstance != null) {
