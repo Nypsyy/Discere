@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: MagicBall
   m_EditorClassIdentifier: 
   projectileName: Magic Ball
-  render: {fileID: -2256524004051076624, guid: de355c9e597651e4085a426c545bb31d, type: 3}
+  sprite: {fileID: 0}
   damage: 2
   velocity: 10
   destructionTime: 10

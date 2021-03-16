@@ -46,15 +46,21 @@ public class Minotaur : MonoBehaviour
     }
 
     private void OnCollisionEnter2D(Collision2D other) {
-        var dmgAmount = 0f;
-        if (other.gameObject.layer != LayerMask.NameToLayer("HeroProjectile")) return;
+        HandleCollidingObject(other.gameObject);
+    }
 
-        if (other.gameObject.CompareTag("Dagger"))
-            dmgAmount = other.gameObject.GetComponent<Projectiles>().Damage;
-        else if (other.gameObject.CompareTag("MagicBall"))
-            dmgAmount = other.gameObject.GetComponent<MagicProjectile>().Damage;
+    private void OnTriggerEnter2D(Collider2D other) {
+        HandleCollidingObject(other.gameObject);
+    }
+    
+    private void HandleCollidingObject(GameObject gameObject) {
+        if (gameObject.layer != LayerMask.NameToLayer("HeroProjectile")) return;
+        
+        float dmg = gameObject.GetComponent<Projectiles>()?.Damage
+                    ?? gameObject.GetComponent<MagicProjectile>()?.Damage
+                    ?? 0.0f; 
 
-        TakeDamage(dmgAmount);
+        TakeDamage(dmg);
     }
 
     public void TakeDamage(float damage) {

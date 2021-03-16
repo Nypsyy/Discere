@@ -325,7 +325,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ui: {fileID: 0}
   minValue: 0
-  maxValue: 500
+  maxValue: 100
   initialValue: 100
   emptyEvt:
     m_PersistentCalls:
