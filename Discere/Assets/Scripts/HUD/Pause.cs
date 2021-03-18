@@ -40,7 +40,7 @@ public class Pause : MonoBehaviour
         {
             SetPause(!isPaused);
         }
-        if (input.GetButtonDown("UI Cancel"))
+        if (input.GetButtonDown("UI Cancel") && isPaused)
         {
             onCancelPressed.Invoke();
         }
