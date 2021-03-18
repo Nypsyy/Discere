@@ -1,15 +1,15 @@
 using SGoap;
 using UnityEngine;
 
-public class DashInMeleeAction : BasicAction
+public class DashToMeleeAction : BasicAction
 {
     public float dashSpeed;
     public RangeSensor rangeSensor;
-    
+
     private Rigidbody2D _rb;
 
     public override bool IsUsable() => !rangeSensor.OutOfRange;
-    
+
     public override bool PrePerform() {
         _rb = AgentData.Agent.gameObject.GetComponent<Rigidbody2D>();
         _rb.isKinematic = false;

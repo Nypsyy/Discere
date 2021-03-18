@@ -1,13 +1,15 @@
 using Pathfinding;
 using SGoap;
 
-public class WalkInMeleeAction : BasicAction
+public class WalkToMeleeAction : BasicAction
 {
     public AIPath aiPath;
     public RangeSensor rangeSensor;
+    public float abortTime;
+
     private float _startTime;
 
-    private bool TookToolong => TimeElapsed - _startTime > 10;
+    private bool TookToolong => TimeElapsed - _startTime > abortTime;
 
     public override bool PrePerform() {
         aiPath.canMove = true;
@@ -16,8 +18,9 @@ public class WalkInMeleeAction : BasicAction
     }
 
     public override EActionStatus Perform() {
-        if (TookToolong) return EActionStatus.Failed;
-        
+        if (TookToolong)
+            return EActionStatus.Failed;
+
         return rangeSensor.InMeleeRange ? EActionStatus.Success : EActionStatus.Running;
     }
 

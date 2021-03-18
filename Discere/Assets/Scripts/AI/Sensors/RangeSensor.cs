@@ -3,20 +3,24 @@ using UnityEngine;
 
 public class RangeSensor : Sensor
 {
-    [Header("Values")]
-    public float rangedRange = 30f;
-    public float meleeRange = 5f;
+    [Header("Values")] [SerializeField]
+    private float distanceRange = 30f;
 
-    [Header("References")]
-    public StringReference inMeleeRangeState;
-    public StringReference inRangedRangeState;
+    [SerializeField]
+    private float meleeRange = 5f;
+
+    [Header("References")] [SerializeField]
+    private StringReference inMeleeRangeState;
+
+    [SerializeField]
+    private StringReference inDistanceRangeState;
 
     public bool InMeleeRange => AgentData.DistanceToTarget <= meleeRange;
 
-    private bool InRangedRange => AgentData.DistanceToTarget <= rangedRange &&
-                                  AgentData.DistanceToTarget > meleeRange;
+    public bool InDistanceRange => AgentData.DistanceToTarget <= distanceRange &&
+                                   AgentData.DistanceToTarget > meleeRange;
 
-    public bool OutOfRange => AgentData.DistanceToTarget > rangedRange;
+    public bool OutOfRange => AgentData.DistanceToTarget > distanceRange;
 
     public override void OnAwake() {
     }
@@ -24,10 +28,10 @@ public class RangeSensor : Sensor
     private void Update() {
         if (!Agent.States.HasState("HasTarget")) return;
 
-        if (InRangedRange)
-            Agent.States.SetState(inRangedRangeState.Value, 1);
+        if (InDistanceRange)
+            Agent.States.SetState(inDistanceRangeState.Value, 1);
         else
-            Agent.States.RemoveState(inRangedRangeState.Value);
+            Agent.States.RemoveState(inDistanceRangeState.Value);
 
         if (InMeleeRange)
             Agent.States.SetState(inMeleeRangeState.Value, 1);
