@@ -46,6 +46,7 @@ public class Hero : MonoBehaviour
     private float _dashTiming;
     private Laser _magicLaserInstance;
     private Camera _mainCamera;
+    private new AudioManager audio;
     
     #endregion
 
@@ -103,6 +104,7 @@ public class Hero : MonoBehaviour
         _mainCamera = Camera.main;
 
         _facingVec = new Vector2(1.0f, 0);
+        audio = FindObjectOfType<AudioManager>();
     }
 
 
@@ -134,24 +136,26 @@ public class Hero : MonoBehaviour
             anim.SwitchMode(HeroAnim.Mode.Jump);
         }
 
-        switch (_fightingStyle.currentStyle) {
-            case FightingStyle.Style.Melee:
-                UpdateAttackMelee();
-                break;
+        if (anim.CurrentMode != HeroAnim.Mode.Jump) {
+            switch (_fightingStyle.currentStyle) {
+                case FightingStyle.Style.Melee:
+                    UpdateAttackMelee();
+                    break;
 
-            case FightingStyle.Style.Range:
-                UpdateAttackRange();
-                UpdateAttackRangeHeavy();
-                break;
+                case FightingStyle.Style.Range:
+                    UpdateAttackRange();
+                    UpdateAttackRangeHeavy();
+                    break;
 
-            case FightingStyle.Style.Magic:
-                UpdateAttackMagic();
-                UpdateAttackMagicHeavy();
-                break;
+                case FightingStyle.Style.Magic:
+                    UpdateAttackMagic();
+                    UpdateAttackMagicHeavy();
+                    break;
+            }
         }
 
         if (anim.CurrentMode == HeroAnim.Mode.BigSlash) {
-            if (!_heavyAttack)
+            if (_heavyAttackRelease)
                 if (sword.CancelBigSlash())
                     anim.SwitchMode(HeroAnim.Mode.Move);
             anim.SetModeSpeed(sword.GetSpeedForHeroAnimator());
@@ -190,6 +194,8 @@ public class Hero : MonoBehaviour
         anim.SwitchMode(HeroAnim.Mode.Slash);
         // Increase attack animation's speed
         anim.SetModeSpeed(attackAnimSpeedFactor);
+
+        audio.Play("Throw");
     }
 
     private void UpdateAttackRangeHeavy() {
@@ -224,12 +230,16 @@ public class Hero : MonoBehaviour
         anim.UpdateSlashDirection(ShootingDirection);
         anim.SwitchMode(HeroAnim.Mode.Slash);
         anim.SetModeSpeed(3); // Slash animation 3 times faster
+
+        // playing sound
+        audio.Play("CastSpell");
     }
 
     private void UpdateAttackMagicHeavy() {
         if (_heavyAttack && _magicLaserInstance == null) {
             if (!_mana.HasEnough(magicHeavyManaCost)) return;
             _magicLaserInstance = Instantiate(magicLaserPrefab, transform.position, Quaternion.identity, transform).GetComponent<Laser>();
+            audio.Play("LaserBuildup");
         }
 
         if (_heavyAttackRelease && _magicLaserInstance != null) {
@@ -239,14 +249,17 @@ public class Hero : MonoBehaviour
 
                 anim.SwitchMode(HeroAnim.Mode.Slash);
                 anim.SetModeSpeed(3);
+
+                audio.Play("LaserShoot");
             }
             else {
                 _magicLaserInstance.Destroy();
                 _magicLaserInstance = null;
             }
+            audio.Stop("LaserBuildup");
         }
 
-        if (_magicLaserInstance != null) {
+        if (_magicLaserInstance != null && !_magicLaserInstance.isShooting) {
             Vector2 aimDir = GetAimingMouseDirection();
             _magicLaserInstance.SetDirection(aimDir);
             anim.UpdateDirection(aimDir);
@@ -273,22 +286,28 @@ public class Hero : MonoBehaviour
                 case HeroAnim.Mode.Slash:
                     _body.velocity = _movement * (speed * slowFactor);
                     break;
+                case HeroAnim.Mode.BigSlash:
+                    _body.velocity = Vector2.zero;
+                    break;
             }
-        }
+            
+            // Managing move speed while charging arrows / shooting laser
+            switch (_fightingStyle.currentStyle) {
+                case FightingStyle.Style.Range when _bowScript.gameObject.activeSelf:
+                    _body.velocity = Vector2.zero;
+                    break;
+                case FightingStyle.Style.Magic when _magicLaserInstance != null:
+                    _body.velocity = _magicLaserInstance.isShooting ? Vector2.zero : _movement * (speed * slowFactor);
+                    break;
+            }
 
-        // Managing move speed while charging arrows / shooting laser
-        switch (_fightingStyle.currentStyle) {
-            case FightingStyle.Style.Range when _bowScript.gameObject.activeSelf:
-                _body.velocity = Vector2.zero;
-                break;
-            case FightingStyle.Style.Magic when _magicLaserInstance != null:
-                _body.velocity = _magicLaserInstance.isShooting ? Vector2.zero : _movement * (speed * slowFactor);
-                break;
         }
+        
 
         // Dashing
         if (!_wantsToDash) return;
         _body.AddForce(_facingVec * (_body.mass * dashImpulseFactor), ForceMode2D.Impulse);
+        audio.Play("Dash");
         _wantsToDash = false;
     }
 

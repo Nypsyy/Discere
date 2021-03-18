@@ -18,6 +18,7 @@ public class MagicProjectile : MonoBehaviour
     private Vector2 _heading;
     private Animator _anim;
 
+
     private void Awake() {
         _spriteRenderer = GetComponent<SpriteRenderer>();
         _rb = GetComponent<Rigidbody2D>();
@@ -56,7 +57,6 @@ public class MagicProjectile : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D collision) {
         if (collision.gameObject.layer != LayerMask.NameToLayer("Obstacle") &&
             collision.gameObject.layer != LayerMask.NameToLayer("Boss")) return;
-
         StopCoroutine(Destroying());
         Vanish();
     }

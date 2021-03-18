@@ -8,4 +8,5 @@ public class Projectile : ScriptableObject
     public float damage;
     public float velocity;
     public float destructionTime;
+    public FightingStyle.Style style;
 }

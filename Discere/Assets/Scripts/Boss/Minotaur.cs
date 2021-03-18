@@ -40,25 +40,52 @@ public class Minotaur : MonoBehaviour
 
     // Increases the boss' rages
     public void UpdateRage() {
-        meleeRage.IncreaseRage();
-        rangedRage.IncreaseRage();
-        magicRage.IncreaseRage();
+        meleeRage.IncreaseRage(0.5f);
+        rangedRage.IncreaseRage(0.5f);
+        magicRage.IncreaseRage(0.5f);
     }
 
     private void OnCollisionEnter2D(Collision2D other) {
-        var dmgAmount = 0f;
-        if (other.gameObject.layer != LayerMask.NameToLayer("HeroProjectile")) return;
-
-        if (other.gameObject.CompareTag("Dagger"))
-            dmgAmount = other.gameObject.GetComponent<Projectiles>().Damage;
-        else if (other.gameObject.CompareTag("MagicBall"))
-            dmgAmount = other.gameObject.GetComponent<MagicProjectile>().Damage;
-
-        TakeDamage(dmgAmount);
+        HandleCollidingObject(other.gameObject);
     }
 
-    public void TakeDamage(float damage) {
+    private void OnTriggerEnter2D(Collider2D other) {
+        HandleCollidingObject(other.gameObject);
+    }
+    
+    private void HandleCollidingObject(GameObject gameObject) {
+        if (gameObject.layer != LayerMask.NameToLayer("HeroProjectile")) return;
+        
+        Projectile proj = gameObject.GetComponent<Projectiles>()?.projectile
+                          ?? gameObject.GetComponent<MagicProjectile>()?.projectile;
+        
+        if (proj == null) return;
+        
+        
+
+        TakeDamage(proj.damage, proj.style);
+    }
+
+    public void TakeDamage(float damage, FightingStyle.Style style) {
+        if (_minotaurSprite.isBlinking)
+            return; // do not apply damage when blinking = invulnerability time
+            
         health.TakeDamage(damage);
+        
+        switch (style) {
+            case FightingStyle.Style.Melee:
+                meleeRage.IncreaseRage(damage);
+                break;
+
+            case FightingStyle.Style.Range:
+                rangedRage.IncreaseRage(damage);
+                break;
+
+            case FightingStyle.Style.Magic:
+                magicRage.IncreaseRage(damage);
+                break;
+        }
+        
         StartCoroutine(_minotaurSprite.Blink());
     }
 }

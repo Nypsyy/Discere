@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   projectileName: Strong Arrow
   sprite: {fileID: 8884036787792595883, guid: 1a77ce25a66da7c459ff73dad6ceb287, type: 3}
-  damage: 4
+  damage: 10
   velocity: 25
   destructionTime: 0.5
+  style: 1

@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Laser : MonoBehaviour
 {
+    public float damage = 20.0f;
+
     public LineRenderer ray;
     public Color readyRayColor;
     public float readyRayWidth = 0.1f;
@@ -58,6 +60,8 @@ public class Laser : MonoBehaviour
             {
                 // TODO : Apply damage. Warning : the ennemy should have invicibility time
                 Debug.Log(hit2D.collider.gameObject);
+                var gameObject = hit2D.collider.gameObject;
+                gameObject.GetComponent<Minotaur>()?.TakeDamage(damage, FightingStyle.Style.Magic);
             }
         }
 
