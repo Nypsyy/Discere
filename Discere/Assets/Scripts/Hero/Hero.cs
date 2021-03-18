@@ -136,7 +136,6 @@ public class Hero : MonoBehaviour
 
         if (_jump) {
             anim.SwitchMode(HeroAnim.Mode.Jump);
-            _health.TakeDamage(1000f);
         }
 
         if (anim.CurrentMode != HeroAnim.Mode.Jump) {
