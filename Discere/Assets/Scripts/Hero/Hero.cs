@@ -35,8 +35,10 @@ public class Hero : MonoBehaviour
     public float dashCooldown = 1.0f;
     public float dashImpulseFactor = 20f;
 
+    [Header("Hit")]
     public UnityEvent OnHitEvent;
-    
+    public GameObject gameOverUI;
+
     #endregion
 
     #region PRIVATE VARIABLES
@@ -336,6 +338,6 @@ public class Hero : MonoBehaviour
     }
 
     public void OnHealthEmpty() {
-        Debug.Log("Should die");
+        gameOverUI.SetActive(true);
     }
 }
