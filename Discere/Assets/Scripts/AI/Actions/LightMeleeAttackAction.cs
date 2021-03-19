@@ -1,12 +1,12 @@
 using SGoap;
-using static Utils.AnimationVariables;
+using static Utils;
 
 public class LightMeleeAttackAction : BasicAction
 {
-    private bool AttackDone => !AgentData.Animator.GetBool(Attacking) && !Cooldown.Active;
+    private bool AttackDone => !AgentData.Animator.GetBool(AnimationVariables.BossAttacking) && !Cooldown.Active;
 
     public override bool PrePerform() {
-        AgentData.Animator.SetTrigger(LightMeleeAttack);
+        AgentData.Animator.SetTrigger(AnimationVariables.LightMeleeAttack);
 
         return base.PrePerform();
     }
@@ -16,7 +16,11 @@ public class LightMeleeAttackAction : BasicAction
     }
 
     public override bool PostPerform() {
-        Cost++;
+        Cost += 0.1f;
         return base.PostPerform();
+    }
+
+    public override void OnFailed() {
+        Cooldown.Run(2);
     }
 }

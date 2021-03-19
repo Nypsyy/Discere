@@ -12,6 +12,7 @@ public class Minotaur : MonoBehaviour
     public Rage rangedRage; // Ranged rage
     public Rage magicRage;  // Magic rage
 
+    private LightMeleeAttackAction _lightMeleeAttackAction;
     private Animator _spriteAnimator;       // Sprite animator
     private MinotaurSprite _minotaurSprite; // Sprite manager
     private bool _isDead;
@@ -20,6 +21,7 @@ public class Minotaur : MonoBehaviour
         // Get the components
         _spriteAnimator = GetComponentInChildren<Animator>();
         _minotaurSprite = GetComponentInChildren<MinotaurSprite>();
+        _lightMeleeAttackAction = GetComponentInChildren<LightMeleeAttackAction>();
     }
 
     private void Start() {
@@ -52,16 +54,16 @@ public class Minotaur : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D other) {
         HandleCollidingObject(other.gameObject);
     }
-    
+
     private void HandleCollidingObject(GameObject gameObject) {
         if (gameObject.layer != LayerMask.NameToLayer("HeroProjectile")) return;
-        
+
         Projectile proj = gameObject.GetComponent<Projectiles>()?.projectile
                           ?? gameObject.GetComponent<MagicProjectile>()?.projectile;
-        
+
         if (proj == null) return;
-        
-        
+
+        _lightMeleeAttackAction.Cost += 0.05f;
 
         TakeDamage(proj.damage, proj.style);
     }
@@ -69,9 +71,9 @@ public class Minotaur : MonoBehaviour
     public void TakeDamage(float damage, FightingStyle.Style style) {
         if (_minotaurSprite.isBlinking)
             return; // do not apply damage when blinking = invulnerability time
-            
+
         health.TakeDamage(damage);
-        
+
         switch (style) {
             case FightingStyle.Style.Melee:
                 meleeRage.IncreaseRage(damage);
@@ -85,7 +87,7 @@ public class Minotaur : MonoBehaviour
                 magicRage.IncreaseRage(damage);
                 break;
         }
-        
+
         StartCoroutine(_minotaurSprite.Blink());
     }
 }

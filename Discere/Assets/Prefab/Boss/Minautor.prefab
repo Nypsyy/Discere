@@ -1,5 +1,138 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &713301046838583600
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2472472460979689151}
+  - component: {fileID: 4162332113938007784}
+  m_Layer: 0
+  m_Name: ProjectileWallAttack
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2472472460979689151
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 713301046838583600}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 8531273427602457608}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4162332113938007784
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 713301046838583600}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a6089ffef154356940cc2bd7fb7b3e8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Name: Projectile Wall Attack
+  Cost: 1
+  CostEvaluator: {fileID: 0}
+  UsableEvaluator: {fileID: 0}
+  AbortEvaluator: {fileID: 0}
+  PreConditions:
+  - KeyReference: {fileID: 11400000, guid: f2e509c9946a7a94cbc6feadc4078618, type: 2}
+    Concatenator: {fileID: 0}
+    StateType: 0
+    Value: 0
+    StringValue: 
+    Operator: 0
+  AfterEffects:
+  - KeyReference: {fileID: 11400000, guid: 6a9613eab7ecd8d4aa2737f487adeba1, type: 2}
+    Concatenator: {fileID: 0}
+    StateType: 0
+    Value: 0
+    StringValue: 
+    Operator: 0
+  CostEvaluationType: 0
+  AchievableEvaluationType: 0
+  AbortEvaluatorType: 0
+--- !u!1 &2265069238787418452
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6643137088989437265}
+  - component: {fileID: 3015929762569419845}
+  m_Layer: 0
+  m_Name: DashToMelee
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6643137088989437265
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2265069238787418452}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 5497194268834538584}
+  - {fileID: 5543302802670350560}
+  m_Father: {fileID: 8531273427602457608}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3015929762569419845
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2265069238787418452}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d34c2935038c07e4289a931eb85a1916, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Name: Dash To Melee
+  Cost: 1
+  CostEvaluator: {fileID: 4690111994816041398}
+  UsableEvaluator: {fileID: 8929530515798619121}
+  AbortEvaluator: {fileID: 0}
+  PreConditions:
+  - KeyReference: {fileID: 11400000, guid: fdcc9f89e641f0e4a86aa21f0acadd06, type: 2}
+    Concatenator: {fileID: 0}
+    StateType: 0
+    Value: 0
+    StringValue: 
+    Operator: 0
+  AfterEffects:
+  - KeyReference: {fileID: 11400000, guid: 6a9613eab7ecd8d4aa2737f487adeba1, type: 2}
+    Concatenator: {fileID: 0}
+    StateType: 0
+    Value: 0
+    StringValue: 
+    Operator: 0
+  CostEvaluationType: 1
+  AchievableEvaluationType: 1
+  AbortEvaluatorType: 0
+  rb: {fileID: 8531273426247194773}
 --- !u!1 &3441930516825031073
 GameObject:
   m_ObjectHideFlags: 0
@@ -24,12 +157,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3441930516825031073}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 8531273427602457608}
-  m_RootOrder: 3
+  m_Children:
+  - {fileID: 4387156816769538444}
+  m_Father: {fileID: 2765315367474042478}
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1680570864304691100
 MonoBehaviour:
@@ -46,7 +180,7 @@ MonoBehaviour:
   Name: Walk To Distance
   Cost: 1
   CostEvaluator: {fileID: 0}
-  UsableEvaluator: {fileID: 0}
+  UsableEvaluator: {fileID: 1334897882435061806}
   AbortEvaluator: {fileID: 0}
   PreConditions:
   - KeyReference: {fileID: 11400000, guid: f2e509c9946a7a94cbc6feadc4078618, type: 2}
@@ -67,8 +201,8 @@ MonoBehaviour:
   AbortEvaluatorType: 0
   aiPath: {fileID: 8531273426247194770}
   rangeSensor: {fileID: 8531273426517633445}
-  abortTime: 10
---- !u!1 &4148531270953226397
+  abortTime: 3
+--- !u!1 &3826162511696624095
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -76,52 +210,131 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 6417844051108162006}
-  - component: {fileID: 7476275132800689218}
+  - component: {fileID: 3076282521397287202}
+  - component: {fileID: 8886382978287440264}
   m_Layer: 0
-  m_Name: DashToMelee
+  m_Name: WalkToMeleeCost
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &6417844051108162006
+--- !u!4 &3076282521397287202
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4148531270953226397}
+  m_GameObject: {fileID: 3826162511696624095}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 8531273427602457608}
-  m_RootOrder: 2
+  m_Father: {fileID: 8531273426358156842}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7476275132800689218
+--- !u!114 &8886382978287440264
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4148531270953226397}
+  m_GameObject: {fileID: 3826162511696624095}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d34c2935038c07e4289a931eb85a1916, type: 3}
+  m_Script: {fileID: 11500000, guid: 92946d57cf9f47a187619cea3bb43278, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Name: Dash To Melee
-  Cost: 1
-  CostEvaluator: {fileID: 0}
-  UsableEvaluator: {fileID: 0}
-  AbortEvaluator: {fileID: 0}
-  PreConditions: []
-  AfterEffects: []
-  CostEvaluationType: 0
-  AchievableEvaluationType: 0
-  AbortEvaluatorType: 0
-  dashSpeed: 0
+  Notes: Random(1, 2)
+--- !u!1 &3970472073233609196
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5543302802670350560}
+  - component: {fileID: 8929530515798619121}
+  m_Layer: 0
+  m_Name: DashToMeleeUsable
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5543302802670350560
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3970472073233609196}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 6643137088989437265}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8929530515798619121
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3970472073233609196}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bb2cee95ee2a4d27a87b13c1d7e2656e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Notes: "Si d\xE9j\xE0 en m\xE9l\xE9e, inutile de dash"
+  rangeSensor: {fileID: 8531273426517633445}
+--- !u!1 &4274947553056947880
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5497194268834538584}
+  - component: {fileID: 4690111994816041398}
+  m_Layer: 0
+  m_Name: DashToMeleeCost
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5497194268834538584
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4274947553056947880}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 6643137088989437265}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4690111994816041398
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4274947553056947880}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4424210d8fc2ae4bb3516a7693b0232, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Notes: "A plus de chance d'\xEAtre choisi si DistanceToTarget augmente"
   rangeSensor: {fileID: 8531273426517633445}
 --- !u!1 &8531273426212469664
 GameObject:
@@ -151,6 +364,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 8531273427602457608}
+  - {fileID: 2765315367474042478}
   m_Father: {fileID: 8531273426247195502}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -212,9 +426,9 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 1
   m_UseAutoMass: 0
-  m_Mass: 5
-  m_LinearDrag: 1
-  m_AngularDrag: 0.05
+  m_Mass: 10
+  m_LinearDrag: 3
+  m_AngularDrag: 0.01
   m_GravityScale: 0
   m_Material: {fileID: 0}
   m_Interpolate: 0
@@ -496,6 +710,14 @@ MonoBehaviour:
     Operator: 0
     Priority: 5
     Once: 0
+  - KeyReference: {fileID: 11400000, guid: 904a124258f87354ebc723c41310bd9e, type: 2}
+    Concatenator: {fileID: 0}
+    StateType: 0
+    Value: 0
+    StringValue: 
+    Operator: 0
+    Priority: 3
+    Once: 0
   PlannerSettings:
     PlanRate: 1
     CanAbortPlans: 1
@@ -621,6 +843,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d5773a2f5448b54e8f754ac5323d9bb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  dashInFactor: 40
 --- !u!1 &8531273426358156843
 GameObject:
   m_ObjectHideFlags: 0
@@ -630,7 +853,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8531273426358156842}
-  - component: {fileID: 8531273426358156845}
+  - component: {fileID: 4098891371689779866}
   m_Layer: 0
   m_Name: WalkToMelee
   m_TagString: Untagged
@@ -645,14 +868,15 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8531273426358156843}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 8531273427602457608}
-  m_RootOrder: 1
+  m_Children:
+  - {fileID: 3076282521397287202}
+  m_Father: {fileID: 2765315367474042478}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8531273426358156845
+--- !u!114 &4098891371689779866
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -661,12 +885,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 8531273426358156843}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b80e13f6ed6b31f4d85d9993da3dbc49, type: 3}
+  m_Script: {fileID: 11500000, guid: bee8df66a4e3bbc43b772d658823de6f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   Name: Walk To Melee
   Cost: 1
-  CostEvaluator: {fileID: 0}
+  CostEvaluator: {fileID: 8886382978287440264}
   UsableEvaluator: {fileID: 0}
   AbortEvaluator: {fileID: 0}
   PreConditions:
@@ -686,9 +910,10 @@ MonoBehaviour:
   CostEvaluationType: 0
   AchievableEvaluationType: 0
   AbortEvaluatorType: 0
+  heroKeepingDistanceState: {fileID: 11400000, guid: fdcc9f89e641f0e4a86aa21f0acadd06, type: 2}
   aiPath: {fileID: 8531273426247194770}
   rangeSensor: {fileID: 8531273426517633445}
-  abortTime: 10
+  abortTime: 2
 --- !u!1 &8531273426517633440
 GameObject:
   m_ObjectHideFlags: 0
@@ -746,10 +971,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eafb7e0dbb04a5c4ba7e6a96080dd6eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  distanceRange: 30
-  meleeRange: 3
   inMeleeRangeState: {fileID: 11400000, guid: 966e2f3f594ee7d40b4b39783194c030, type: 2}
   inDistanceRangeState: {fileID: 11400000, guid: f2e509c9946a7a94cbc6feadc4078618, type: 2}
+  outOfRangeState: {fileID: 11400000, guid: 9f61c0a88fa1eca41a7bfd9786918934, type: 2}
 --- !u!1 &8531273427602457609
 GameObject:
   m_ObjectHideFlags: 0
@@ -778,9 +1002,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 8531273427996012151}
-  - {fileID: 8531273426358156842}
-  - {fileID: 6417844051108162006}
-  - {fileID: 3979712453932588044}
+  - {fileID: 2472472460979689151}
+  - {fileID: 6643137088989437265}
   m_Father: {fileID: 8531273426212469667}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -849,3 +1072,80 @@ MonoBehaviour:
   CostEvaluationType: 0
   AchievableEvaluationType: 0
   AbortEvaluatorType: 0
+--- !u!1 &8739147347433565592
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2765315367474042478}
+  m_Layer: 0
+  m_Name: Movement
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2765315367474042478
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8739147347433565592}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 8531273426358156842}
+  - {fileID: 3979712453932588044}
+  m_Father: {fileID: 8531273426212469667}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &9192668049362934529
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4387156816769538444}
+  - component: {fileID: 1334897882435061806}
+  m_Layer: 0
+  m_Name: WalToDistanceUsable
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4387156816769538444
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9192668049362934529}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 3979712453932588044}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1334897882435061806
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9192668049362934529}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bc207beea00d4c59a49e95ce3f410daf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Notes: If already in distance range, no uses to go in range
+  rangeSensor: {fileID: 8531273426517633445}
