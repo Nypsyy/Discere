@@ -3,11 +3,9 @@ using UnityEngine;
 
 public class RangeSensor : Sensor
 {
-    [Header("Values")] [SerializeField]
-    private float distanceRange = 30f;
+    public float DistanceRange => 13f;
 
-    [SerializeField]
-    private float meleeRange = 5f;
+    public float MeleeRange => 3f;
 
     [Header("References")] [SerializeField]
     private StringReference inMeleeRangeState;
@@ -15,12 +13,15 @@ public class RangeSensor : Sensor
     [SerializeField]
     private StringReference inDistanceRangeState;
 
-    public bool InMeleeRange => AgentData.DistanceToTarget <= meleeRange;
+    [SerializeField]
+    private StringReference outOfRangeState;
 
-    public bool InDistanceRange => AgentData.DistanceToTarget <= distanceRange &&
-                                   AgentData.DistanceToTarget > meleeRange;
+    public bool InMeleeRange => AgentData.DistanceToTarget <= MeleeRange;
 
-    public bool OutOfRange => AgentData.DistanceToTarget > distanceRange;
+    public bool InDistanceRange => AgentData.DistanceToTarget <= DistanceRange &&
+                                   AgentData.DistanceToTarget > MeleeRange;
+
+    public bool OutOfRange => AgentData.DistanceToTarget > DistanceRange;
 
     public override void OnAwake() {
     }
@@ -37,5 +38,10 @@ public class RangeSensor : Sensor
             Agent.States.SetState(inMeleeRangeState.Value, 1);
         else
             Agent.States.RemoveState(inMeleeRangeState.Value);
+
+        if (OutOfRange)
+            Agent.States.SetState(outOfRangeState.Value, 1);
+        else
+            Agent.States.RemoveState(outOfRangeState.Value);
     }
 }

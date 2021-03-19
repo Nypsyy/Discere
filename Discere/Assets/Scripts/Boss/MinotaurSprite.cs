@@ -7,9 +7,9 @@ using static Utils;
 [RequireComponent(typeof(SpriteRenderer))]
 public class MinotaurSprite : MonoBehaviour
 {
-    
+    public float dashInFactor;
     public bool isBlinking { get; private set; }
-    
+
     private Animator _animator;                       // Sprite animator
     private SpriteRenderer _sprite;                   // Sprite renderer
     private AIPath _aiPath;                           // Pathfinding script
@@ -53,6 +53,17 @@ public class MinotaurSprite : MonoBehaviour
             _sprite.material.SetColor(ShaderColor, Color.clear);
             yield return new WaitForSeconds(0.1f);
         }
+
         isBlinking = false;
+    }
+
+    // Method used by the animator
+    public void DashIn() {
+        var rb = GetComponentInParent<Rigidbody2D>();
+
+        rb.isKinematic = false;
+        Vector2 toTarget = GetComponentInParent<AIDestinationSetter>().target.position - transform.position;
+        rb.AddForce(toTarget * dashInFactor, ForceMode2D.Impulse);
+        _animator.SetBool(AnimationVariables.PrepareDash, false);
     }
 }

@@ -162,6 +162,6 @@ public class HeroAnim : MonoBehaviour
     }
 
     public bool IsAttacking() {
-        return _animator.GetBool(Utils.AnimationVariables.IsAttacking);
+        return _animator.GetBool(Utils.AnimationVariables.HeroAttacking);
     }
 }
