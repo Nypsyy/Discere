@@ -128,6 +128,7 @@ GameObject:
   - component: {fileID: 8627978615459049863}
   - component: {fileID: 5928946817422529364}
   - component: {fileID: 1712501339745964399}
+  - component: {fileID: 7064810768041964338}
   m_Layer: 8
   m_Name: Sword
   m_TagString: Untagged
@@ -231,6 +232,40 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 274e1579d35f619c8b7c027e8e8e1b1e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!60 &7064810768041964338
+PolygonCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4562356490060413779}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 4, y: 4}
+    newSize: {x: 4, y: 4}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Points:
+    m_Paths:
+    - - {x: -0.19479275, y: -1.4563206}
+      - {x: -0.011087418, y: -1.4643269}
+      - {x: 0.22930622, y: -1.4624307}
+      - {x: 0.6100702, y: -1.4286805}
+      - {x: 1.1004887, y: -1.1993746}
+      - {x: 1.3562517, y: -0.7346524}
+      - {x: 1.4436822, y: 0.116598606}
+      - {x: 0.4881258, y: 0.04757023}
+      - {x: -0.19479084, y: -0.77416706}
 --- !u!1 &4981200463797543589
 GameObject:
   m_ObjectHideFlags: 0
@@ -592,8 +627,7 @@ MonoBehaviour:
   OnHitEvent:
     m_PersistentCalls:
       m_Calls: []
-  heavyAttack: 0
-  heavyAttackRelease: 0
+  gameOverUI: {fileID: 0}
 --- !u!114 &7733037757450647018
 MonoBehaviour:
   m_ObjectHideFlags: 0
