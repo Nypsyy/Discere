@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 
 public class Minotaur : MonoBehaviour
 {
@@ -6,6 +7,8 @@ public class Minotaur : MonoBehaviour
     private static readonly int IsDead = Animator.StringToHash("IsDead");
 
     public Health health; // Minotaur's health
+    public GameObject hero;
+    public Familier familierModel;
 
     // Minotaur's rages
     public Rage meleeRage;  // Melee rage
@@ -27,6 +30,8 @@ public class Minotaur : MonoBehaviour
     private void Start() {
         // Boss' rages are increasing constantly
         InvokeRepeating(nameof(UpdateRage), 0, 1);
+        
+        StartCoroutine(_SpawnFamiliers(5, 1, 2, 8));
     }
 
     private void Update() {
@@ -89,5 +94,13 @@ public class Minotaur : MonoBehaviour
         }
 
         StartCoroutine(_minotaurSprite.Blink());
+    }
+    
+    private IEnumerator _SpawnFamiliers(int n, float delay_between, float bullet_delay, float lifetime) {
+        for (int i = 0; i < n; ++i) {
+            familierModel.Create(hero, transform.position, bullet_delay, lifetime);
+            yield return new WaitForSeconds(delay_between);
+        }
+        yield return null;
     }
 }

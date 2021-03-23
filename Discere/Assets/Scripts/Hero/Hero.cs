@@ -87,6 +87,12 @@ public class Hero : MonoBehaviour
     private Controller CurrentController => _player.controllers.GetLastActiveController();
     
     #endregion
+    
+    public void TakeDamage(float damage) {
+        _health.TakeDamage(damage);
+    
+    }
+    
 
     private void Awake() {
         _player = ReInput.players.GetPlayer(0);
