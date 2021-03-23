@@ -15,6 +15,7 @@ public class Minotaur : MonoBehaviour
     private LightMeleeAttackAction _lightMeleeAttackAction;
     private Animator _spriteAnimator;       // Sprite animator
     private MinotaurSprite _minotaurSprite; // Sprite manager
+    private new AudioManager audio;
     private bool _isDead;
 
     private void Awake() {
@@ -22,6 +23,7 @@ public class Minotaur : MonoBehaviour
         _spriteAnimator = GetComponentInChildren<Animator>();
         _minotaurSprite = GetComponentInChildren<MinotaurSprite>();
         _lightMeleeAttackAction = GetComponentInChildren<LightMeleeAttackAction>();
+        audio = FindObjectOfType<AudioManager>();
     }
 
     private void Start() {
@@ -73,6 +75,7 @@ public class Minotaur : MonoBehaviour
             return; // do not apply damage when blinking = invulnerability time
 
         health.TakeDamage(damage);
+        audio.Play("MinautorHurt");
 
         switch (style) {
             case FightingStyle.Style.Melee:
