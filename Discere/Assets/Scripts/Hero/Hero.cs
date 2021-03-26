@@ -1,4 +1,5 @@
 using Rewired;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 using static Utils;
@@ -37,6 +38,7 @@ public class Hero : MonoBehaviour
 
     [Header("Hit")]
     public float iframeTime = 0.5f;
+    public float iframeBlinkPeriod = 0.2f;
     public UnityEvent OnHitEvent;
     public GameObject gameOverUI;
 
@@ -63,6 +65,7 @@ public class Hero : MonoBehaviour
     private Mana _mana;
     private FightingStyle _fightingStyle;
     private BowScript _bowScript;
+    private SpriteRenderer _spriteRenderer;
 
     #endregion
 
@@ -98,8 +101,19 @@ public class Hero : MonoBehaviour
         _health.TakeDamage(damage);
         audio.Play("HeroHurt");
         _iframeTiming = iframeTime;
+
+        StartCoroutine(BlinkSprite(iframeBlinkPeriod));
     }
     
+    private IEnumerator BlinkSprite(float period)
+    {
+        while (_iframeTiming > 0f)
+        {
+            _spriteRenderer.enabled = !_spriteRenderer.enabled;
+            yield return new WaitForSeconds(period / 2f);
+        }
+        _spriteRenderer.enabled = true;
+    }
 
     private void Awake() {
         _player = ReInput.players.GetPlayer(0);
@@ -108,6 +122,7 @@ public class Hero : MonoBehaviour
         _mana = GetComponent<Mana>();
         _fightingStyle = GetComponent<FightingStyle>();
         _bowScript = GetComponentInChildren<BowScript>();
+        _spriteRenderer = anim.GetComponent<SpriteRenderer>();
 
         // Controller map in gameplay mode
         _player.controllers.maps.mapEnabler.ruleSets.Find(rs => rs.tag == "Gameplay").enabled = true;
