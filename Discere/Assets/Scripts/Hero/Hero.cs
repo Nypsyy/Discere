@@ -1,4 +1,5 @@
 using Rewired;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 using static Utils;
@@ -36,6 +37,8 @@ public class Hero : MonoBehaviour
     public float dashImpulseFactor = 20f;
 
     [Header("Hit")]
+    public float iframeTime = 0.5f;
+    public float iframeBlinkPeriod = 0.2f;
     public UnityEvent OnHitEvent;
     public GameObject gameOverUI;
 
@@ -49,6 +52,8 @@ public class Hero : MonoBehaviour
     private Laser _magicLaserInstance;
     private Camera _mainCamera;
     private new AudioManager audio;
+    private float _iframeTiming = 0f;
+    private bool _isDead;
     
     #endregion
 
@@ -60,6 +65,7 @@ public class Hero : MonoBehaviour
     private Mana _mana;
     private FightingStyle _fightingStyle;
     private BowScript _bowScript;
+    private SpriteRenderer _spriteRenderer;
 
     #endregion
 
@@ -89,10 +95,25 @@ public class Hero : MonoBehaviour
     #endregion
     
     public void TakeDamage(float damage) {
+        if (_isDead) return;
+        if (_iframeTiming > 0f) return;
+
         _health.TakeDamage(damage);
-    
+        audio.Play("HeroHurt");
+        _iframeTiming = iframeTime;
+
+        StartCoroutine(BlinkSprite(iframeBlinkPeriod));
     }
     
+    private IEnumerator BlinkSprite(float period)
+    {
+        while (_iframeTiming > 0f)
+        {
+            _spriteRenderer.enabled = !_spriteRenderer.enabled;
+            yield return new WaitForSeconds(period / 2f);
+        }
+        _spriteRenderer.enabled = true;
+    }
 
     private void Awake() {
         _player = ReInput.players.GetPlayer(0);
@@ -101,6 +122,7 @@ public class Hero : MonoBehaviour
         _mana = GetComponent<Mana>();
         _fightingStyle = GetComponent<FightingStyle>();
         _bowScript = GetComponentInChildren<BowScript>();
+        _spriteRenderer = anim.GetComponent<SpriteRenderer>();
 
         // Controller map in gameplay mode
         _player.controllers.maps.mapEnabler.ruleSets.Find(rs => rs.tag == "Gameplay").enabled = true;
@@ -113,6 +135,7 @@ public class Hero : MonoBehaviour
 
         _facingVec = new Vector2(1.0f, 0);
         audio = FindObjectOfType<AudioManager>();
+        _isDead = false;
     }
 
 
@@ -124,6 +147,11 @@ public class Hero : MonoBehaviour
                 // only updating facing_vec when actually moving
                 _facingVec = _movement;
             }
+        }
+
+        if (_iframeTiming > 0f)
+        {
+            _iframeTiming = Mathf.Clamp(_iframeTiming - Time.deltaTime, 0f, iframeTime);
         }
 
         if (_dashTiming <= dashCooldown - dashDuration) // not update during dash
@@ -344,6 +372,7 @@ public class Hero : MonoBehaviour
     }
 
     public void OnHealthEmpty() {
+        _isDead = true;
         gameOverUI.SetActive(true);
     }
 }
