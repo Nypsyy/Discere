@@ -2,6 +2,7 @@ using Rewired;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Rendering.PostProcessing;
 using static Utils;
 
 public class Hero : MonoBehaviour
@@ -54,6 +55,10 @@ public class Hero : MonoBehaviour
     private new AudioManager audio;
     private float _iframeTiming = 0f;
     private bool _isDead;
+
+    // Post Procesing
+    private PostProcessVolume _postProcess;
+    private Vignette _ppVignette;
     
     #endregion
 
@@ -103,6 +108,10 @@ public class Hero : MonoBehaviour
         _iframeTiming = iframeTime;
 
         StartCoroutine(BlinkSprite(iframeBlinkPeriod));
+        if (_ppVignette)
+        {
+            StartCoroutine(BlinkScreen(_ppVignette, _ppVignette.intensity.value, 0.5f, 0.4f));
+        }
     }
     
     private IEnumerator BlinkSprite(float period)
@@ -115,6 +124,28 @@ public class Hero : MonoBehaviour
         _spriteRenderer.enabled = true;
     }
 
+    private IEnumerator BlinkScreen(Vignette vignette, float initialIntensity, float maxIntensity, float duration)
+    {
+        float timeElapsed = 0f;
+        while (timeElapsed < duration)
+        {
+            if (Time.timeScale > 0f)
+            {
+                if (timeElapsed < duration / 2f)
+                {
+                    vignette.intensity.Interp(initialIntensity, maxIntensity, 2 * timeElapsed / duration);
+                }
+                else
+                {
+                    vignette.intensity.Interp(maxIntensity, initialIntensity, (duration / 2f + (timeElapsed - duration / 2f)) / duration);
+                }
+
+                timeElapsed += Time.deltaTime;
+            }
+            yield return null;
+        }
+    }
+
     private void Awake() {
         _player = ReInput.players.GetPlayer(0);
         _body = GetComponent<Rigidbody2D>();
@@ -123,6 +154,10 @@ public class Hero : MonoBehaviour
         _fightingStyle = GetComponent<FightingStyle>();
         _bowScript = GetComponentInChildren<BowScript>();
         _spriteRenderer = anim.GetComponent<SpriteRenderer>();
+
+        _postProcess = GameObject.FindGameObjectWithTag("Post Processing")?.GetComponent<PostProcessVolume>();
+        _ppVignette = _postProcess?.profile.GetSetting<Vignette>();
+        if (_ppVignette) _ppVignette.intensity.value = 0f;
 
         // Controller map in gameplay mode
         _player.controllers.maps.mapEnabler.ruleSets.Find(rs => rs.tag == "Gameplay").enabled = true;
