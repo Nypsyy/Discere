@@ -110,7 +110,8 @@ public class Hero : MonoBehaviour
         StartCoroutine(BlinkSprite(iframeBlinkPeriod));
         if (_ppVignette)
         {
-            StartCoroutine(BlinkScreen(_ppVignette, _ppVignette.intensity.value, 0.5f, 0.4f));
+            _ppVignette.intensity.Interp(0f, 0.6f, 1f - _health.value / _health.maxValue);
+            StartCoroutine(BlinkScreen(_ppVignette, _ppVignette.intensity.value, 0.7f, 0.4f));
         }
     }
     
