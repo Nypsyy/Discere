@@ -2,6 +2,11 @@ using UnityEngine;
 
 public static class Utils
 {
+    public struct DamageVariables
+    {
+        public static readonly float BossLightMelee = 5f;
+    }
+    
     // Animation IDs
     public struct AnimationVariables
     {

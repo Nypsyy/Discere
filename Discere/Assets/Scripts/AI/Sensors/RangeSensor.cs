@@ -1,3 +1,4 @@
+using System;
 using SGoap;
 using UnityEngine;
 
@@ -5,7 +6,7 @@ public class RangeSensor : Sensor
 {
     public float DistanceRange => 13f;
 
-    public float MeleeRange => 3f;
+    public float MeleeRange => 2.3f;
 
     [Header("References")] [SerializeField]
     private StringReference inMeleeRangeState;
@@ -16,12 +17,14 @@ public class RangeSensor : Sensor
     [SerializeField]
     private StringReference outOfRangeState;
 
-    public bool InMeleeRange => AgentData.DistanceToTarget <= MeleeRange;
+    private float DistanceToTarget => Vector2.Distance(AgentData.Target.position, transform.position);
 
-    public bool InDistanceRange => AgentData.DistanceToTarget <= DistanceRange &&
-                                   AgentData.DistanceToTarget > MeleeRange;
+    public bool InMeleeRange => DistanceToTarget <= MeleeRange;
 
-    public bool OutOfRange => AgentData.DistanceToTarget > DistanceRange;
+    public bool InDistanceRange => DistanceToTarget <= DistanceRange &&
+                                   DistanceToTarget > MeleeRange;
+
+    public bool OutOfRange => DistanceToTarget > DistanceRange;
 
     public override void OnAwake() {
     }
@@ -43,5 +46,9 @@ public class RangeSensor : Sensor
             Agent.States.SetState(outOfRangeState.Value, 1);
         else
             Agent.States.RemoveState(outOfRangeState.Value);
+    }
+
+    private void OnDrawGizmos() {
+           Gizmos.DrawSphere(transform.position,MeleeRange);
     }
 }

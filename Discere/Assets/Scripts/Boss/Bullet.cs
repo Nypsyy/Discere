@@ -40,14 +40,13 @@ public class Bullet : MonoBehaviour
     
     private void OnTriggerEnter2D(Collider2D collision) {
         if (collision.gameObject.layer == LayerMask.NameToLayer("Obstacle")) {
-            Destroy(this.gameObject);
+            Destroy(gameObject);
             return;
         }
         Hero hero = collision.gameObject.GetComponent<Hero>();
         if (hero != null && hero.anim.CurrentMode != HeroAnim.Mode.Jump) {
             hero.TakeDamage(data.damage);
-            Destroy(this.gameObject);
-            return;
+            Destroy(gameObject);
         }
     }
 }
