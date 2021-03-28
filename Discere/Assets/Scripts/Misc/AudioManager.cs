@@ -47,6 +47,13 @@ public class AudioManager : MonoBehaviour
 
 		s.lastSource = (s.lastSource + 1) % s.nbSources;
 
+		// Pick a clip variation if relevant
+		if (s.variations.Length > 0)
+        {
+			int randIdx = UnityEngine.Random.Range(0, s.variations.Length + 1);
+			s.sources[s.lastSource].clip = (randIdx < s.variations.Length ? s.variations[randIdx] : s.clip);
+        }
+
 		s.sources[s.lastSource].volume = s.volume * (1f + UnityEngine.Random.Range(-s.volumeVariance / 2f, s.volumeVariance / 2f)) * globalVolumeMultiplier * volumeMultiplier;
 		s.sources[s.lastSource].pitch = s.pitch * (1f + UnityEngine.Random.Range(-s.pitchVariance / 2f, s.pitchVariance / 2f)) * pitchMultiplier;
 		s.sources[s.lastSource].Play();

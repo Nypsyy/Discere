@@ -1654,7 +1654,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
-      - m_Target: {fileID: 2690389139853371816}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: UnityEngine.EventSystems.EventSystem, UnityEngine.UI
         m_MethodName: SetSelectedGameObject
         m_Mode: 2
@@ -1925,7 +1925,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
-      - m_Target: {fileID: 2690389139853371816}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: UnityEngine.EventSystems.EventSystem, UnityEngine.UI
         m_MethodName: SetSelectedGameObject
         m_Mode: 2
@@ -2477,104 +2477,6 @@ RectTransform:
   m_AnchoredPosition: {x: -5, y: 0}
   m_SizeDelta: {x: -20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!1 &7342341561789236098
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 3800515400164470118}
-  - component: {fileID: 1943500995047225301}
-  m_Layer: 0
-  m_Name: Player Mouse
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &3800515400164470118
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7342341561789236098}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 575.41223, y: 279.88504, z: -111.98869}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 4682312805316511251}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1943500995047225301
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7342341561789236098}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1202160222, guid: 09c9b883b79ef864a99683bb36c5776d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _rewiredInputManager: {fileID: 6920106635686759700, guid: e7b60579717f65a4d9cbb4f1a37e6b32, type: 3}
-  _playerId: 0
-  _elements:
-  - _name: Movement
-    _elementType: 101
-    _enabled: 1
-    _elements:
-    - _name: Horizontal
-      _elementType: 2
-      _enabled: 1
-      _actionId: 2
-      _coordinateMode: 1
-      _absoluteToRelativeSensitivity: 600
-      _repeatRate: 4
-    - _name: Vertical
-      _elementType: 2
-      _enabled: 1
-      _actionId: 3
-      _coordinateMode: 1
-      _absoluteToRelativeSensitivity: 600
-      _repeatRate: 4
-  - _name: 
-    _elementType: 0
-    _enabled: 1
-    _elements:
-    - _name: Left Button
-      _elementType: 0
-      _enabled: 1
-      _actionId: 4
-      _coordinateMode: 0
-      _absoluteToRelativeSensitivity: 1
-      _repeatRate: 4
-  _onButtonStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  _onAxisValueChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  _onEnabledStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  _defaultToCenter: 1
-  _pointerSpeed: 1
-  _useHardwarePointerPosition: 1
-  _clampToMovementArea: 1
-  _movementArea:
-    serializedVersion: 2
-    x: 0
-    y: 0
-    width: 1
-    height: 1
-  _movementAreaUnit: 0
-  _onScreenPositionChanged:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!1 &7652802496582679953
 GameObject:
   m_ObjectHideFlags: 0
@@ -2917,92 +2819,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!1 &8408841491009551106
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 4682312805316511251}
-  - component: {fileID: 2690389139853371816}
-  - component: {fileID: 810559845048674120}
-  m_Layer: 0
-  m_Name: Rewired Event System
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &4682312805316511251
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8408841491009551106}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children:
-  - {fileID: 3800515400164470118}
-  m_Father: {fileID: 8860616583134455661}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2690389139853371816
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8408841491009551106}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6b991181f58043ec814f0900013f8cac, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_FirstSelected: {fileID: 1705717381669234186}
-  m_sendNavigationEvents: 1
-  m_DragThreshold: 5
-  _alwaysUpdate: 1
---- !u!114 &810559845048674120
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8408841491009551106}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 10efa70eea88e69459c632aac286892d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  rewiredInputManager: {fileID: 6920106635686759700, guid: e7b60579717f65a4d9cbb4f1a37e6b32, type: 3}
-  useAllRewiredGamePlayers: 0
-  useRewiredSystemPlayer: 1
-  rewiredPlayerIds: 00000000
-  usePlayingPlayersOnly: 0
-  playerMice:
-  - {fileID: 1943500995047225301}
-  moveOneElementPerAxisPress: 1
-  setActionsById: 1
-  horizontalActionId: 2
-  verticalActionId: 3
-  submitActionId: 4
-  cancelActionId: 5
-  m_HorizontalAxis: UI Horizontal
-  m_VerticalAxis: UI Vertical
-  m_SubmitButton: UI Submit
-  m_CancelButton: UI Cancel
-  m_InputActionsPerSecond: 4.5
-  m_RepeatDelay: 0
-  m_allowMouseInput: 1
-  m_allowMouseInputIfTouchSupported: 1
-  m_allowTouchInput: 1
-  m_deselectIfBackgroundClicked: 0
-  m_deselectBeforeSelecting: 0
-  m_ForceModuleActive: 0
 --- !u!1 &8412287776188859323
 GameObject:
   m_ObjectHideFlags: 0
@@ -3240,7 +3056,6 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 4682312805316511251}
   - {fileID: 1301092975422446945}
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -3369,7 +3184,7 @@ RectTransform:
   - {fileID: 239410025215617373}
   - {fileID: 7466665508279016280}
   m_Father: {fileID: 8860616583134455661}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}

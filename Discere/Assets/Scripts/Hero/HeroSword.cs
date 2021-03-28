@@ -5,7 +5,11 @@ using UnityEngine;
 public class HeroSword : MonoBehaviour
 {
     
+    public float small_damage = 5;
+    public float big_damage = 15;
+    
     private Animator animator;
+    private PolygonCollider2D collider;
     
     private Vector2[] position_corrections = {
         new Vector2(0, 0.0f), // right slash
@@ -17,11 +21,16 @@ public class HeroSword : MonoBehaviour
     private float charging_time = 0; // if positive, remaining time before big slash is fully charged
     private int current_dir = 0;
     private bool is_big_slash = false;
+    private bool actually_slashing = false;
+    
+    
     
     // Start is called before the first frame update
     void Start()
     {
         animator = GetComponent<Animator>();
+        collider = GetComponent<PolygonCollider2D>();
+        collider.enabled = false;
     }
     
     // Hero will call GetSpeedForHeroAnimator() and apply its value to HeroAnim.SetModeSpeed
@@ -51,6 +60,7 @@ public class HeroSword : MonoBehaviour
             animator.SetTrigger("Slash");
             charging_time = 0;
         }
+        actually_slashing = false; // will be true after 'charging_time'
     }
     
     public bool CancelBigSlash() {
@@ -69,7 +79,10 @@ public class HeroSword : MonoBehaviour
     
     void Update()
     {
-            
+        if (animator.GetCurrentAnimatorStateInfo(0).IsName("HeroSword_NoSlash")) {
+            collider.enabled = false;
+        }
+        //collider.enabled = true;
         if (charging_time > 0) {
             float new_charging_time = charging_time - Time.deltaTime;
             float progress = Mathf.InverseLerp(0.5f, 0, new_charging_time);
@@ -80,9 +93,15 @@ public class HeroSword : MonoBehaviour
             charging_time = new_charging_time;
         } else {
             transform.parent.localPosition = Vector3.zero;
-             if (is_big_slash) {
-                // slash has begun
+            if (!actually_slashing) {
+                actually_slashing = true;
+                collider.enabled = true;
             }
         }
+    }
+    
+    void OnTriggerStay2D(Collider2D collider) {
+        collider.gameObject.GetComponent<Minotaur>()?.TakeDamage(
+            is_big_slash ? big_damage : small_damage, FightingStyle.Style.Melee);
     }
 }

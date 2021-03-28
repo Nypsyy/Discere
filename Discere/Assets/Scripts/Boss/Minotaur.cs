@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 
 public class Minotaur : MonoBehaviour
 {
@@ -6,6 +7,10 @@ public class Minotaur : MonoBehaviour
     private static readonly int IsDead = Animator.StringToHash("IsDead");
 
     public Health health; // Minotaur's health
+    public GameObject hero;
+    
+    public Familier familierModel;
+    public Bullet bulletModel;
 
     // Minotaur's rages
     public Rage meleeRage;  // Melee rage
@@ -15,6 +20,7 @@ public class Minotaur : MonoBehaviour
     private LightMeleeAttackAction _lightMeleeAttackAction;
     private Animator _spriteAnimator;       // Sprite animator
     private MinotaurSprite _minotaurSprite; // Sprite manager
+    private new AudioManager audio;
     private bool _isDead;
 
     private void Awake() {
@@ -22,11 +28,14 @@ public class Minotaur : MonoBehaviour
         _spriteAnimator = GetComponentInChildren<Animator>();
         _minotaurSprite = GetComponentInChildren<MinotaurSprite>();
         _lightMeleeAttackAction = GetComponentInChildren<LightMeleeAttackAction>();
+        audio = FindObjectOfType<AudioManager>();
     }
 
     private void Start() {
         // Boss' rages are increasing constantly
         InvokeRepeating(nameof(UpdateRage), 0, 1);
+        
+        // For testing BulletWall only: StartCoroutine(_test_BulletWall());
     }
 
     private void Update() {
@@ -73,6 +82,7 @@ public class Minotaur : MonoBehaviour
             return; // do not apply damage when blinking = invulnerability time
 
         health.TakeDamage(damage);
+        audio.Play("MinautorHurt");
 
         switch (style) {
             case FightingStyle.Style.Melee:
@@ -89,5 +99,44 @@ public class Minotaur : MonoBehaviour
         }
 
         StartCoroutine(_minotaurSprite.Blink());
+    }
+    
+    private IEnumerator _SpawnFamiliers(int n, float delay_between, float bullet_delay, float lifetime) {
+        for (int i = 0; i < n; ++i) {
+            familierModel.Create(hero, transform.position, bullet_delay, lifetime);
+            yield return new WaitForSeconds(delay_between);
+        }
+        yield return null;
+    }
+    
+    // angle_width & angle_offset are in degrees
+    private void _SpawnBulletWall(int nb_bullets, float speed, float angle_width, float angle_offset = 0) {
+        angle_width *= Mathf.Deg2Rad;
+        angle_offset *= Mathf.Deg2Rad;
+        // bullets are launched in [-angle_width/2, +angle_width/2] in direction of the player
+        Vector2 dir = hero.transform.position - transform.position;
+        float base_angle = Mathf.Atan2(dir.y, dir.x) + angle_offset - angle_width / 2;
+        for (int i = 0; i < nb_bullets; ++i) {
+            float angle = base_angle + i * angle_width / (nb_bullets-1);
+            bulletModel.Create(transform.position, 0.6f, new Vector2(Mathf.Cos(angle), Mathf.Sin(angle)), speed);
+        }
+    }
+    
+    private IEnumerator _test_BulletWall() {
+        yield return new WaitForSeconds(3);
+        for (float t = 0; t < 20; t += 0.5f) {
+            _SpawnBulletWall(15, 3, 60, 10*Mathf.Sin(t));
+            yield return new WaitForSeconds(0.5f);
+        }
+        yield return new WaitForSeconds(3f);
+        for (int i = 0; i < 20; ++i) {
+            _SpawnBulletWall(30, 10, 90);
+            yield return new WaitForSeconds(1f);
+        }
+        yield return new WaitForSeconds(3f);
+        for (float a = 0; a < 360*5; a += 30) {
+            _SpawnBulletWall(60, 6, 120, a);
+            yield return new WaitForSeconds(0.5f);
+        }
     }
 }
