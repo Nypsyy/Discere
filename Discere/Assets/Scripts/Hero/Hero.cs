@@ -236,9 +236,19 @@ public class Hero : MonoBehaviour
         }
 
         if (_attackStyleChange > 0)
+        {
             _fightingStyle.NextStyle();
+        }
         else if (_attackStyleChange < 0)
+        {
             _fightingStyle.PreviousStyle();
+        }
+
+        // On fighting style change
+        if (_attackStyleChange != 0)
+        {
+            _mana.SetEnabled(_fightingStyle.currentStyle == FightingStyle.Style.Magic);
+        }
     }
 
 
