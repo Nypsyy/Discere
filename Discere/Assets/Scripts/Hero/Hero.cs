@@ -103,6 +103,8 @@ public class Hero : MonoBehaviour
         if (_isDead) return;
         if (_iframeTiming > 0f) return;
 
+        FreezeFrame.Instance.Freeze();
+
         _health.TakeDamage(damage);
         audio.Play("HeroHurt");
         _iframeTiming = iframeTime;
