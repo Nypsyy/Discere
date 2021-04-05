@@ -4,6 +4,7 @@ using UnityEngine;
 using Rewired;
 using Rewired.Integration.UnityUI;
 using UnityEngine.SceneManagement;
+using SGoap.Services;
 
 public class GameOverScreen : MonoBehaviour
 {
@@ -29,11 +30,13 @@ public class GameOverScreen : MonoBehaviour
 
     public void Retry()
     {
+        TargetManager.Clear();
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
     public void Exit()
     {
+        TargetManager.Clear();
         SceneManager.LoadScene("MainMenu");
     }
 }
