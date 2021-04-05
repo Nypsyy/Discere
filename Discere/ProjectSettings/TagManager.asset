@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Dagger
   - MagicBall
+  - Post Processing
   layers:
   - Default
   - TransparentFX
@@ -17,7 +18,7 @@ TagManager:
   - HeroProjectile
   - Hero
   - Boss
-  - 
+  - Post Processing
   - 
   - 
   - 
