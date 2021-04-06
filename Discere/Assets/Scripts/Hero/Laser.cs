@@ -58,10 +58,10 @@ public class Laser : MonoBehaviour
 
             foreach (RaycastHit2D hit2D in hits)
             {
-                // TODO : Apply damage. Warning : the ennemy should have invicibility time
-                Debug.Log(hit2D.collider.gameObject);
                 var gameObject = hit2D.collider.gameObject;
                 gameObject.GetComponent<Minotaur>()?.TakeDamage(damage, FightingStyle.Style.Magic);
+                
+                gameObject.GetComponent<Rock>()?.DestroyMe();
             }
         }
 
@@ -103,6 +103,8 @@ public class Laser : MonoBehaviour
     public void Shoot()
     {
         if (!isReady) return;
+
+        FreezeFrame.Instance.Freeze(0.15f);
 
         // Display beam
         Quaternion rotation = Quaternion.FromToRotation(Vector3.up, new Vector3(laserVector.x, laserVector.y, 0f));

@@ -103,5 +103,7 @@ public class HeroSword : MonoBehaviour
     void OnTriggerStay2D(Collider2D collider) {
         collider.gameObject.GetComponent<Minotaur>()?.TakeDamage(
             is_big_slash ? big_damage : small_damage, FightingStyle.Style.Melee);
+        
+        if (is_big_slash) collider.gameObject.GetComponent<Rock>()?.DestroyMe();
     }
 }

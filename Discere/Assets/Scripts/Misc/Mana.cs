@@ -7,6 +7,9 @@ public class Mana : EntityResource
 {
     public float recovering = 4f;
     public float errorBlinkingSpeed = 1.5f;
+
+    private bool isEnabled = false;
+
     private Image errorFill;
     private Color baseErrorFillColor;
     private bool isErrorFillBlinking = false;
@@ -14,6 +17,8 @@ public class Mana : EntityResource
     private new void Start()
     {
         base.Start();
+
+        SetEnabled(isEnabled);
 
         Transform errorFillObject = ui.transform.Find("ErrorFill");
         if (errorFillObject)
@@ -26,6 +31,7 @@ public class Mana : EntityResource
     // Update is called once per frame
     void Update()
     {
+        if (!isEnabled) return;
         if (value < maxValue)
         {
             ChangeValue(recovering * Time.deltaTime, false);
@@ -47,6 +53,12 @@ public class Mana : EntityResource
 
         StartCoroutine(BlinkErrorFill());
         return false;
+    }
+
+    public void SetEnabled(bool enabled)
+    {
+        isEnabled = enabled;
+        ui.gameObject.SetActive(enabled);
     }
 
     IEnumerator BlinkErrorFill()

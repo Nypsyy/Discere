@@ -12,17 +12,22 @@ public class Minotaur : MonoBehaviour
     public Familier familierModel;
     public Bullet bulletModel;
     public GameObject shockwave;
+    public Rock rockModel;
 
     // Minotaur's rages
     public Rage meleeRage;    // Melee rage
     public Rage distanceRage; // Ranged rage
     public Rage magicRage;    // Magic rage
 
+    public GameObject winScreen;
+
     private LightMeleeAttackAction _lightMeleeAttackAction;
     private Animator _spriteAnimator;       // Sprite animator
     private MinotaurSprite _minotaurSprite; // Sprite manager
+    private Rigidbody2D _rigidbody;
     private new AudioManager audio;
     private bool _isDead;
+    private bool _isDashing;
 
     private void Awake() {
         // Get the components
@@ -30,24 +35,27 @@ public class Minotaur : MonoBehaviour
         _minotaurSprite = GetComponentInChildren<MinotaurSprite>();
         _lightMeleeAttackAction = GetComponentInChildren<LightMeleeAttackAction>();
         audio = FindObjectOfType<AudioManager>();
+        _rigidbody = GetComponent<Rigidbody2D>();
+        _isDashing = false;
     }
 
     private void Start() {
         // Boss' rages are increasing constantly
         InvokeRepeating(nameof(UpdateRage), 0, 1);
-
+        StartCoroutine(_SpawnRocks(30, 0.2f));
         // For testing BulletWall only: StartCoroutine(_test_BulletWall());
     }
 
     private void Update() {
         // If the boss is dead then do nothing
         if (_isDead) return;
-
         // If the boss' health reaches 0
         if (health.value <= 0f) {
             _spriteAnimator.SetTrigger(IsDead); // Trigger death animation
             _isDead = true;
         }
+        
+        _isDashing = _rigidbody.velocity.sqrMagnitude > 10;
     }
 
     // Increases the boss' rages
@@ -66,6 +74,13 @@ public class Minotaur : MonoBehaviour
     }
 
     private void HandleCollidingObject(GameObject gameObject) {
+        Rock rock = gameObject.GetComponent<Rock>();
+        if (rock) {
+            if (_isDashing)
+                Destroy(gameObject);
+            return;
+        }
+    
         if (gameObject.layer != LayerMask.NameToLayer("HeroProjectile")) return;
 
         Projectile proj = gameObject.GetComponent<Projectiles>()?.projectile
@@ -104,6 +119,22 @@ public class Minotaur : MonoBehaviour
         StartCoroutine(_minotaurSprite.Blink());
     }
 
+    public void onHealthEmpty()
+    {
+        _spriteAnimator.SetBool(IsDead, true); // Trigger death animation
+        _isDead = true;
+        Invoke(nameof(_DisplayWinScreen), 1f);
+    }
+
+    private void _DisplayWinScreen()
+    {
+        if (winScreen != null)
+        {
+            winScreen.SetActive(true);
+        }
+    }
+    
+
     public IEnumerator SpawnFamiliers(int n, float delay) {
         for (var i = 0; i < n; i++) {
             Instantiate(familierModel, transform.position, Quaternion.identity);
@@ -126,6 +157,32 @@ public class Minotaur : MonoBehaviour
             Instantiate(bulletModel, transform.position,
                         Quaternion.FromToRotation(Vector3.right,
                                                   dir.normalized + new Vector3(Mathf.Cos(angle), Mathf.Sin(angle), 0).normalized));
+        }
+    }
+    
+    private IEnumerator _SpawnRocks(int n, float delay_between) {
+        for (int i = 0; i < n; ++i) {
+            rockModel.Create((Vector2)hero.transform.position + 15 * Random.insideUnitCircle);
+            yield return new WaitForSeconds(delay_between);
+        }
+        yield return null;
+    }
+    
+    private IEnumerator _test_BulletWall() {
+        yield return new WaitForSeconds(3);
+        for (float t = 0; t < 20; t += 0.5f) {
+            _SpawnBulletWall(15, 3, 60, 10*Mathf.Sin(t));
+            yield return new WaitForSeconds(0.5f);
+        }
+        yield return new WaitForSeconds(3f);
+        for (int i = 0; i < 20; ++i) {
+            _SpawnBulletWall(30, 10, 90);
+            yield return new WaitForSeconds(1f);
+        }
+        yield return new WaitForSeconds(3f);
+        for (float a = 0; a < 360*5; a += 30) {
+            _SpawnBulletWall(60, 6, 120, a);
+            yield return new WaitForSeconds(0.5f);
         }
     }
 }
