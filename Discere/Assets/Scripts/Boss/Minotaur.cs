@@ -11,6 +11,7 @@ public class Minotaur : MonoBehaviour
     
     public Familier familierModel;
     public Bullet bulletModel;
+    public Rock rockModel;
 
     // Minotaur's rages
     public Rage meleeRage;  // Melee rage
@@ -20,8 +21,10 @@ public class Minotaur : MonoBehaviour
     private LightMeleeAttackAction _lightMeleeAttackAction;
     private Animator _spriteAnimator;       // Sprite animator
     private MinotaurSprite _minotaurSprite; // Sprite manager
+    private Rigidbody2D _rigidbody;
     private new AudioManager audio;
     private bool _isDead;
+    private bool _isDashing;
 
     private void Awake() {
         // Get the components
@@ -29,12 +32,14 @@ public class Minotaur : MonoBehaviour
         _minotaurSprite = GetComponentInChildren<MinotaurSprite>();
         _lightMeleeAttackAction = GetComponentInChildren<LightMeleeAttackAction>();
         audio = FindObjectOfType<AudioManager>();
+        _rigidbody = GetComponent<Rigidbody2D>();
+        _isDashing = false;
     }
 
     private void Start() {
         // Boss' rages are increasing constantly
         InvokeRepeating(nameof(UpdateRage), 0, 1);
-        
+        StartCoroutine(_SpawnRocks(30, 0.2f));
         // For testing BulletWall only: StartCoroutine(_test_BulletWall());
     }
 
@@ -47,6 +52,8 @@ public class Minotaur : MonoBehaviour
             _spriteAnimator.SetTrigger(IsDead); // Trigger death animation
             _isDead = true;
         }
+        
+        _isDashing = _rigidbody.velocity.sqrMagnitude > 10;
     }
 
     // Increases the boss' rages
@@ -65,6 +72,13 @@ public class Minotaur : MonoBehaviour
     }
 
     private void HandleCollidingObject(GameObject gameObject) {
+        Rock rock = gameObject.GetComponent<Rock>();
+        if (rock) {
+            if (_isDashing)
+                Destroy(gameObject);
+            return;
+        }
+    
         if (gameObject.layer != LayerMask.NameToLayer("HeroProjectile")) return;
 
         Projectile proj = gameObject.GetComponent<Projectiles>()?.projectile
@@ -120,6 +134,14 @@ public class Minotaur : MonoBehaviour
             float angle = base_angle + i * angle_width / (nb_bullets-1);
             bulletModel.Create(transform.position, 0.6f, new Vector2(Mathf.Cos(angle), Mathf.Sin(angle)), speed);
         }
+    }
+    
+    private IEnumerator _SpawnRocks(int n, float delay_between) {
+        for (int i = 0; i < n; ++i) {
+            rockModel.Create((Vector2)hero.transform.position + 15 * Random.insideUnitCircle);
+            yield return new WaitForSeconds(delay_between);
+        }
+        yield return null;
     }
     
     private IEnumerator _test_BulletWall() {

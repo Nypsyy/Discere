@@ -324,6 +324,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f06a396f043ae4f4b8f562e3238e6e45, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  damage: 20
   ray: {fileID: 6688090205294161516}
   readyRayColor: {r: 0.6226415, g: 0.17269489, b: 0.5964414, a: 1}
   readyRayWidth: 0.05
@@ -333,7 +334,7 @@ MonoBehaviour:
     m_Bits: 64
   hurtingLayers:
     serializedVersion: 2
-    m_Bits: 512
+    m_Bits: 576
   chargingTime: 1
   beamSprite: {fileID: 7129170162166371386}
   beamStartSprite: {fileID: 5861270145147902302}

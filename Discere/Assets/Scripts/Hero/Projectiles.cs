@@ -33,7 +33,13 @@ public class Projectiles : MonoBehaviour
     }
 
     private void OnCollisionEnter2D(Collision2D other) {
-        if (other.collider.gameObject.layer == LayerMask.NameToLayer("Obstacle")) {
+        GameObject gameObject = other.collider.gameObject;
+        
+        Rock rock = gameObject.GetComponent<Rock>();
+        if (projectile.projectileName == "Strong Arrow")
+            gameObject.GetComponent<Rock>()?.DestroyMe();
+        
+        if (gameObject.layer == LayerMask.NameToLayer("Obstacle")) {
             StartCoroutine(Destroying(DestructionTimer));
 
             Rigidbody2D rb = GetComponent<Rigidbody2D>();
@@ -45,7 +51,7 @@ public class Projectiles : MonoBehaviour
             rb.AddForce(forceDirection, ForceMode2D.Impulse);
         }
 
-        if (other.collider.gameObject.layer == LayerMask.NameToLayer("HeroProjectile")) {
+        else if (gameObject.layer == LayerMask.NameToLayer("HeroProjectile")) {
             StartCoroutine(Destroying(DestructionTimer));
         }
     }

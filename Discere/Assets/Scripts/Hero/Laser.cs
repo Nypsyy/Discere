@@ -60,6 +60,8 @@ public class Laser : MonoBehaviour
             {
                 var gameObject = hit2D.collider.gameObject;
                 gameObject.GetComponent<Minotaur>()?.TakeDamage(damage, FightingStyle.Style.Magic);
+                
+                gameObject.GetComponent<Rock>()?.DestroyMe();
             }
         }
 

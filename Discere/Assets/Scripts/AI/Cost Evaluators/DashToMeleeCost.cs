@@ -15,7 +15,7 @@ public class DashToMeleeCost : BasicCostEvaluator
         var factor = 1.5f / (rangeSensor.MeleeRange - rangeSensor.DistanceRange);
         var dashableDistance = AgentData.DistanceToTarget - rangeSensor.MeleeRange;
 
-        Debug.Log(factor * dashableDistance + offset + _timesUsed);
+        //Debug.Log(factor * dashableDistance + offset + _timesUsed);
 
         return factor * dashableDistance + offset + _timesUsed;
     }

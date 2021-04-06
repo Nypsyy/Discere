@@ -9,6 +9,7 @@ public class MinotaurSprite : MonoBehaviour
 {
     public float dashInFactor;
     public bool isBlinking { get; private set; }
+    
 
     private Animator _animator;                       // Sprite animator
     private SpriteRenderer _sprite;                   // Sprite renderer
@@ -24,6 +25,7 @@ public class MinotaurSprite : MonoBehaviour
         _aiDestinationSetter = GetComponentInParent<AIDestinationSetter>();
         isBlinking = false;
     }
+    
 
     private void Update() {
         // Update the running animation
@@ -59,6 +61,7 @@ public class MinotaurSprite : MonoBehaviour
 
     // Method used by the animator
     public void DashIn() {
+        
         var rb = GetComponentInParent<Rigidbody2D>();
 
         rb.isKinematic = false;
