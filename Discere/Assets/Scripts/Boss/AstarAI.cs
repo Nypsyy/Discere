@@ -21,7 +21,7 @@ public class AstarAI : MonoBehaviour
         _seeker = GetComponent<Seeker>();
         _rb2D = GetComponent<Rigidbody2D>();
 
-        InvokeRepeating("UpdatePath", 0f, .5f);
+        InvokeRepeating(nameof(UpdatePath), 0f, .5f);
     }
 
     void UpdatePath() {

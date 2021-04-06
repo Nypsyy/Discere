@@ -20,17 +20,29 @@ AnimationClip:
   m_PPtrCurves:
   - curve:
     - time: 0
+      value: {fileID: -2461768399311767414, guid: dc5331366ace0854ebc2a2c4726fd95f, type: 3}
+    - time: 0.2
+      value: {fileID: 3529761326654160688, guid: dc5331366ace0854ebc2a2c4726fd95f, type: 3}
+    - time: 0.65
+      value: {fileID: 2444066426116628744, guid: dc5331366ace0854ebc2a2c4726fd95f, type: 3}
+    - time: 0.75
+      value: {fileID: 3498436388096465697, guid: dc5331366ace0854ebc2a2c4726fd95f, type: 3}
+    - time: 0.85
+      value: {fileID: 1263595231250603967, guid: dc5331366ace0854ebc2a2c4726fd95f, type: 3}
+    - time: 0.95
+      value: {fileID: -616424306856935608, guid: dc5331366ace0854ebc2a2c4726fd95f, type: 3}
+    - time: 1.05
+      value: {fileID: 8378241899181544251, guid: dc5331366ace0854ebc2a2c4726fd95f, type: 3}
+    - time: 1.15
+      value: {fileID: 5188166441240543957, guid: dc5331366ace0854ebc2a2c4726fd95f, type: 3}
+    - time: 1.25
+      value: {fileID: -5605965328150943055, guid: dc5331366ace0854ebc2a2c4726fd95f, type: 3}
+    - time: 1.35
+      value: {fileID: -5768485365255475859, guid: dc5331366ace0854ebc2a2c4726fd95f, type: 3}
+    - time: 1.45
       value: {fileID: -1318174199656842201, guid: dc5331366ace0854ebc2a2c4726fd95f, type: 3}
-    - time: 0.15
-      value: {fileID: 6790658768629077787, guid: dc5331366ace0854ebc2a2c4726fd95f, type: 3}
-    - time: 0.3
-      value: {fileID: 5713599903254542684, guid: dc5331366ace0854ebc2a2c4726fd95f, type: 3}
-    - time: 0.45
-      value: {fileID: -6343145856857976981, guid: dc5331366ace0854ebc2a2c4726fd95f, type: 3}
-    - time: 0.6
-      value: {fileID: -4575402595078847498, guid: dc5331366ace0854ebc2a2c4726fd95f, type: 3}
-    - time: 0.9
-      value: {fileID: -4575402595078847498, guid: dc5331366ace0854ebc2a2c4726fd95f, type: 3}
+    - time: 1.65
+      value: {fileID: -2461768399311767414, guid: dc5331366ace0854ebc2a2c4726fd95f, type: 3}
     attribute: m_Sprite
     path: 
     classID: 212
@@ -50,18 +62,24 @@ AnimationClip:
       customType: 23
       isPPtrCurve: 1
     pptrCurveMapping:
+    - {fileID: -2461768399311767414, guid: dc5331366ace0854ebc2a2c4726fd95f, type: 3}
+    - {fileID: 3529761326654160688, guid: dc5331366ace0854ebc2a2c4726fd95f, type: 3}
+    - {fileID: 2444066426116628744, guid: dc5331366ace0854ebc2a2c4726fd95f, type: 3}
+    - {fileID: 3498436388096465697, guid: dc5331366ace0854ebc2a2c4726fd95f, type: 3}
+    - {fileID: 1263595231250603967, guid: dc5331366ace0854ebc2a2c4726fd95f, type: 3}
+    - {fileID: -616424306856935608, guid: dc5331366ace0854ebc2a2c4726fd95f, type: 3}
+    - {fileID: 8378241899181544251, guid: dc5331366ace0854ebc2a2c4726fd95f, type: 3}
+    - {fileID: 5188166441240543957, guid: dc5331366ace0854ebc2a2c4726fd95f, type: 3}
+    - {fileID: -5605965328150943055, guid: dc5331366ace0854ebc2a2c4726fd95f, type: 3}
+    - {fileID: -5768485365255475859, guid: dc5331366ace0854ebc2a2c4726fd95f, type: 3}
     - {fileID: -1318174199656842201, guid: dc5331366ace0854ebc2a2c4726fd95f, type: 3}
-    - {fileID: 6790658768629077787, guid: dc5331366ace0854ebc2a2c4726fd95f, type: 3}
-    - {fileID: 5713599903254542684, guid: dc5331366ace0854ebc2a2c4726fd95f, type: 3}
-    - {fileID: -6343145856857976981, guid: dc5331366ace0854ebc2a2c4726fd95f, type: 3}
-    - {fileID: -4575402595078847498, guid: dc5331366ace0854ebc2a2c4726fd95f, type: 3}
-    - {fileID: -4575402595078847498, guid: dc5331366ace0854ebc2a2c4726fd95f, type: 3}
+    - {fileID: -2461768399311767414, guid: dc5331366ace0854ebc2a2c4726fd95f, type: 3}
   m_AnimationClipSettings:
     serializedVersion: 2
     m_AdditiveReferencePoseClip: {fileID: 0}
     m_AdditiveReferencePoseTime: 0
     m_StartTime: 0
-    m_StopTime: 0.95
+    m_StopTime: 1.6999999
     m_OrientationOffsetY: 0
     m_Level: 0
     m_CycleOffset: 0
@@ -80,4 +98,25 @@ AnimationClip:
   m_EulerEditorCurves: []
   m_HasGenericRootTransform: 0
   m_HasMotionFloatCurves: 0
-  m_Events: []
+  m_Events:
+  - time: 0.7
+    functionName: LightMeleeAttackForward
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
+  - time: 0.9
+    functionName: LightMeleeAttackBelow
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
+  - time: 1.3
+    functionName: StopLightMeleeAttack
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0

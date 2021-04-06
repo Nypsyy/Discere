@@ -96,14 +96,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 055d7ae2d187c3e8dbb6507929fcc06d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bulletModel: {fileID: 5845740144753796348}
-  orbitEntity: {fileID: 0}
+  familierDatas:
+  - {fileID: 11400000, guid: 46c4c0a405355e24dae323b9846b614d, type: 2}
+  - {fileID: 11400000, guid: 8b98ccc908a80594a8112a1546734e29, type: 2}
+  - {fileID: 11400000, guid: fea4926bc466fe642ae13f175c94a267, type: 2}
+  bulletModel: {fileID: 5553012367387822031, guid: 53f8256c82f0e364eaa58f343f7124b7, type: 3}
   spriteRenderer: {fileID: 5276446609541548463}
-  orbitRadius: 3
-  orbitTime: 5
-  lifetime: 10
-  speed: 5
-  radiusEvolutionFactor: 3
 --- !u!1001 &2031262946420253491
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -150,14 +148,3 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7149207645272036484, guid: ee8ffe8814bc35a829eb79e069a8a343, type: 3}
   m_PrefabInstance: {fileID: 2031262946420253491}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &5845740144753796348 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 5553012367387822031, guid: ee8ffe8814bc35a829eb79e069a8a343, type: 3}
-  m_PrefabInstance: {fileID: 2031262946420253491}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b7467705de0d56caaa9da446f3f249ce, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 

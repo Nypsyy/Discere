@@ -1,9 +1,15 @@
 using SGoap;
+using UnityEngine;
 using static Utils;
 
 public class ProjectileWallAttackAction : BasicAction
 {
+    private ProjectileWallAttackCost _costEvaluator;
     private bool AttackDone => !AgentData.Animator.GetBool(AnimationVariables.BossAttacking) && !Cooldown.Active;
+
+    private void Awake() {
+        _costEvaluator = GetComponentInChildren<ProjectileWallAttackCost>();
+    }
 
     public override bool PrePerform() {
         AgentData.Animator.SetTrigger(AnimationVariables.ProjectileWallAttack);
@@ -15,7 +21,10 @@ public class ProjectileWallAttackAction : BasicAction
     }
 
     public override bool PostPerform() {
-        Cost += 0.1f;
+        _costEvaluator.Used();
+        // Wander goal priority
+        AgentData.Agent.Goals[2].Priority += 10 + Random.Range(0, 60);
+        AgentData.Agent.UpdateGoalOrderCache();
         return base.PostPerform();
     }
 }

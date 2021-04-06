@@ -6,14 +6,11 @@ public class WalkToDistanceAction : BasicAction
     public AIPath aiPath;
     public RangeSensor rangeSensor;
     public float abortTime;
-
-    private float _startTime;
-
-    private bool TookTooLong => TimeElapsed - _startTime > abortTime;
+    
+    private bool TookTooLong => TimeElapsed > abortTime;
 
     public override bool PrePerform() {
         aiPath.canMove = true;
-        _startTime = TimeElapsed;
         return base.PrePerform();
     }
 
@@ -27,5 +24,9 @@ public class WalkToDistanceAction : BasicAction
     public override bool PostPerform() {
         aiPath.canMove = false;
         return base.PostPerform();
+    }
+
+    public override void OnFailed() {
+        aiPath.canMove = false;
     }
 }

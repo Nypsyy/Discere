@@ -8,15 +8,16 @@ public class Minotaur : MonoBehaviour
 
     public Health health; // Minotaur's health
     public GameObject hero;
-    
+
     public Familier familierModel;
     public Bullet bulletModel;
+    public GameObject shockwave;
     public Rock rockModel;
 
     // Minotaur's rages
-    public Rage meleeRage;  // Melee rage
-    public Rage rangedRage; // Ranged rage
-    public Rage magicRage;  // Magic rage
+    public Rage meleeRage;    // Melee rage
+    public Rage distanceRage; // Ranged rage
+    public Rage magicRage;    // Magic rage
 
     public GameObject winScreen;
 
@@ -60,7 +61,7 @@ public class Minotaur : MonoBehaviour
     // Increases the boss' rages
     public void UpdateRage() {
         meleeRage.IncreaseRage(0.5f);
-        rangedRage.IncreaseRage(0.5f);
+        distanceRage.IncreaseRage(0.5f);
         magicRage.IncreaseRage(0.5f);
     }
 
@@ -93,6 +94,8 @@ public class Minotaur : MonoBehaviour
     }
 
     public void TakeDamage(float damage, FightingStyle.Style style) {
+        GetComponentInChildren<ShockwaveAttackCost>().Touched();
+
         if (_minotaurSprite.isBlinking)
             return; // do not apply damage when blinking = invulnerability time
 
@@ -105,7 +108,7 @@ public class Minotaur : MonoBehaviour
                 break;
 
             case FightingStyle.Style.Range:
-                rangedRage.IncreaseRage(damage);
+                distanceRage.IncreaseRage(damage);
                 break;
 
             case FightingStyle.Style.Magic:
@@ -131,24 +134,29 @@ public class Minotaur : MonoBehaviour
         }
     }
     
-    private IEnumerator _SpawnFamiliers(int n, float delay_between, float bullet_delay, float lifetime) {
-        for (int i = 0; i < n; ++i) {
-            familierModel.Create(hero, transform.position, bullet_delay, lifetime);
-            yield return new WaitForSeconds(delay_between);
+
+    public IEnumerator SpawnFamiliers(int n, float delay) {
+        for (var i = 0; i < n; i++) {
+            Instantiate(familierModel, transform.position, Quaternion.identity);
+            yield return new WaitForSeconds(delay);
         }
+
         yield return null;
     }
-    
+
     // angle_width & angle_offset are in degrees
-    private void _SpawnBulletWall(int nb_bullets, float speed, float angle_width, float angle_offset = 0) {
+    public void SpawnBulletWall(int nb_bullets, float speed, float angle_width, float angle_offset = 0, float scaling = 0f) {
         angle_width *= Mathf.Deg2Rad;
         angle_offset *= Mathf.Deg2Rad;
+
         // bullets are launched in [-angle_width/2, +angle_width/2] in direction of the player
-        Vector2 dir = hero.transform.position - transform.position;
-        float base_angle = Mathf.Atan2(dir.y, dir.x) + angle_offset - angle_width / 2;
-        for (int i = 0; i < nb_bullets; ++i) {
-            float angle = base_angle + i * angle_width / (nb_bullets-1);
-            bulletModel.Create(transform.position, 0.6f, new Vector2(Mathf.Cos(angle), Mathf.Sin(angle)), speed);
+        var dir = hero.transform.position - transform.position;
+        var base_angle = Mathf.Atan2(dir.y, dir.x) + angle_offset - angle_width / 2;
+        for (var i = 0; i < nb_bullets; ++i) {
+            var angle = base_angle + i * angle_width / (nb_bullets - 1);
+            Instantiate(bulletModel, transform.position,
+                        Quaternion.FromToRotation(Vector3.right,
+                                                  dir.normalized + new Vector3(Mathf.Cos(angle), Mathf.Sin(angle), 0).normalized));
         }
     }
     
@@ -158,23 +166,5 @@ public class Minotaur : MonoBehaviour
             yield return new WaitForSeconds(delay_between);
         }
         yield return null;
-    }
-    
-    private IEnumerator _test_BulletWall() {
-        yield return new WaitForSeconds(3);
-        for (float t = 0; t < 20; t += 0.5f) {
-            _SpawnBulletWall(15, 3, 60, 10*Mathf.Sin(t));
-            yield return new WaitForSeconds(0.5f);
-        }
-        yield return new WaitForSeconds(3f);
-        for (int i = 0; i < 20; ++i) {
-            _SpawnBulletWall(30, 10, 90);
-            yield return new WaitForSeconds(1f);
-        }
-        yield return new WaitForSeconds(3f);
-        for (float a = 0; a < 360*5; a += 30) {
-            _SpawnBulletWall(60, 6, 120, a);
-            yield return new WaitForSeconds(0.5f);
-        }
     }
 }
