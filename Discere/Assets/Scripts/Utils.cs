@@ -12,9 +12,10 @@ public static class Utils
     {
         // Boss
         public static readonly int Speed = Animator.StringToHash("Speed");
+        public static readonly int InvokeAttack = Animator.StringToHash("Invoke Attack");
         public static readonly int LightMeleeAttack = Animator.StringToHash("Light Melee Attack");
         public static readonly int ProjectileWallAttack = Animator.StringToHash("Projectile Wall Attack");
-        public static readonly int HeavyMeleeAttack = Animator.StringToHash("Heavy Melee Attack");
+        public static readonly int ShockwaveAttack = Animator.StringToHash("Shockwave Attack");
         public static readonly int BossAttacking = Animator.StringToHash("Boss Attacking");
         public static readonly int BossDash = Animator.StringToHash("Dash");
         public static readonly int PrepareDash = Animator.StringToHash("Prepare Dash");

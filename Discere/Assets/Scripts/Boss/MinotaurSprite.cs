@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using UnityEngine;
 using Pathfinding;
@@ -11,6 +10,7 @@ public class MinotaurSprite : MonoBehaviour
     public float dashInFactor;
     public bool isBlinking { get; private set; }
 
+    private Minotaur minotaurBehavior;
     private Animator _animator;                       // Sprite animator
     private SpriteRenderer _sprite;                   // Sprite renderer
     private AIPath _aiPath;                           // Pathfinding script
@@ -22,6 +22,7 @@ public class MinotaurSprite : MonoBehaviour
 
     private void Awake() {
         // Get the components
+        minotaurBehavior = GetComponentInParent<Minotaur>();
         _animator = GetComponent<Animator>();
         _sprite = GetComponent<SpriteRenderer>();
         _aiPath = GetComponentInParent<AIPath>();
@@ -65,7 +66,7 @@ public class MinotaurSprite : MonoBehaviour
 
     public IEnumerator Blink() {
         isBlinking = true;
-        for (int i = 0; i < 3; ++i) {
+        for (var i = 0; i < 3; ++i) {
             _sprite.material.SetColor(ShaderColor, Color.white);
             yield return new WaitForSeconds(0.1f);
             _sprite.material.SetColor(ShaderColor, Color.clear);
@@ -77,6 +78,11 @@ public class MinotaurSprite : MonoBehaviour
 
     #region ANIMATION METHODS
 
+    public void InvokeAttack() {
+        var familierNb = 1 + Mathf.Max(minotaurBehavior.distanceRage.FillRatio, minotaurBehavior.magicRage.FillRatio) / 34;
+        StartCoroutine(minotaurBehavior.SpawnFamiliers(familierNb, 1f));
+    }
+
     public void DashIn() {
         var rb = GetComponentInParent<Rigidbody2D>();
 
@@ -84,6 +90,14 @@ public class MinotaurSprite : MonoBehaviour
         Vector2 toTarget = GetComponentInParent<AIDestinationSetter>().target.position - transform.position;
         rb.AddForce(toTarget * dashInFactor, ForceMode2D.Impulse);
         _animator.SetBool(AnimationVariables.PrepareDash, false);
+    }
+
+    public void ShockwaveAttack() {
+        Instantiate(minotaurBehavior.shockwave, transform.position, Quaternion.identity);
+    }
+
+    public void ProjectileWallAttack() {
+        minotaurBehavior.SpawnBulletWall(6, 10, 70);
     }
 
     public void LightMeleeAttackForward() {

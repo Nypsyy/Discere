@@ -10,13 +10,12 @@ public class DashToMeleeCost : BasicCostEvaluator
         _timesUsed += 0.1f;
     }
 
+    // f(x) = 4/(melee - dist) * X + [4-5]
     public override float Evaluate(IContext context) {
         var offset = 3 + Random.value;
         var factor = 1.5f / (rangeSensor.MeleeRange - rangeSensor.DistanceRange);
         var dashableDistance = AgentData.DistanceToTarget - rangeSensor.MeleeRange;
-
-        Debug.Log(factor * dashableDistance + offset + _timesUsed);
-
+        
         return factor * dashableDistance + offset + _timesUsed;
     }
 }

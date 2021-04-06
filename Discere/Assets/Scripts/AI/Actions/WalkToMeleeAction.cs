@@ -6,23 +6,21 @@ public class WalkToMeleeAction : BasicAction
 {
     public StringReference heroKeepingDistanceState;
     public AIPath aiPath;
+    public LightMeleeAttackCost lightMeleeAttackCost;
     public RangeSensor rangeSensor;
     public float abortTime;
-
-    private float _startTime;
-
-    private bool TookTooLong => TimeElapsed - _startTime > abortTime;
+    
+    private bool TookTooLong =>  TimeElapsed > abortTime;
 
     public override bool PrePerform() {
         aiPath.canMove = true;
-        _startTime = TimeElapsed;
         return base.PrePerform();
     }
 
     public override EActionStatus Perform() {
         if (TookTooLong)
             return EActionStatus.Failed;
-        
+
         return rangeSensor.InMeleeRange ? EActionStatus.Success : EActionStatus.Running;
     }
 
@@ -33,6 +31,7 @@ public class WalkToMeleeAction : BasicAction
 
     public override void OnFailed() {
         aiPath.canMove = false;
+        lightMeleeAttackCost.Failed();
         AgentData.Agent.States.SetState(heroKeepingDistanceState.Value, 1);
     }
 }

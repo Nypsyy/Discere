@@ -1,4 +1,3 @@
-using System;
 using SGoap;
 using UnityEngine;
 using static Utils;
@@ -6,7 +5,6 @@ using static Utils;
 public class DashToMeleeAction : BasicAction
 {
     public Rigidbody2D rb;
-    
     private DashToMeleeCost cost;
 
     private bool DashDone => !AgentData.Animator.GetBool(AnimationVariables.PrepareDash) && rb.velocity.magnitude < 3;

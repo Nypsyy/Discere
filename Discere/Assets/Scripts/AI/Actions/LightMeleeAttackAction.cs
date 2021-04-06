@@ -1,13 +1,19 @@
 using SGoap;
 using static Utils;
+using Random = UnityEngine.Random;
 
 public class LightMeleeAttackAction : BasicAction
 {
+    private LightMeleeAttackCost _costEvaluator;
     private bool AttackDone => !AgentData.Animator.GetBool(AnimationVariables.BossAttacking) && !Cooldown.Active;
+
+
+    private void Awake() {
+        _costEvaluator = GetComponentInChildren<LightMeleeAttackCost>();
+    }
 
     public override bool PrePerform() {
         AgentData.Animator.SetTrigger(AnimationVariables.LightMeleeAttack);
-
         return base.PrePerform();
     }
 
@@ -16,11 +22,15 @@ public class LightMeleeAttackAction : BasicAction
     }
 
     public override bool PostPerform() {
-        Cost += 0.1f;
+        _costEvaluator.Used();
+        // Wander goal priority
+        AgentData.Agent.Goals[2].Priority += 10 + Random.Range(0,10);
+        AgentData.Agent.UpdateGoalOrderCache();
         return base.PostPerform();
     }
 
     public override void OnFailed() {
+        _costEvaluator.Failed();
         Cooldown.Run(2);
     }
 }

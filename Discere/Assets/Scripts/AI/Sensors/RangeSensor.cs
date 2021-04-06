@@ -17,6 +17,9 @@ public class RangeSensor : Sensor
     [SerializeField]
     private StringReference outOfRangeState;
 
+    [SerializeField]
+    private StringReference heroInSightState;
+
     private float DistanceToTarget => Vector2.Distance(AgentData.Target.position, transform.position);
 
     public bool InMeleeRange => DistanceToTarget <= MeleeRange;
@@ -32,6 +35,14 @@ public class RangeSensor : Sensor
     private void Update() {
         if (!Agent.States.HasState("HasTarget")) return;
 
+        // Checks any obstacle between Minotaur and Hero
+        if (!Physics2D.Raycast(transform.position, AgentData.DirectionToTarget, AgentData.DistanceToTarget, LayerMask.GetMask("Obstacle")))
+            Agent.States.SetState(heroInSightState.Value, 1);
+        else {
+            Debug.DrawRay(transform.position, AgentData.DirectionToTarget, Color.yellow);
+            Agent.States.RemoveState(heroInSightState.Value);
+        }
+
         if (InDistanceRange)
             Agent.States.SetState(inDistanceRangeState.Value, 1);
         else
@@ -46,9 +57,5 @@ public class RangeSensor : Sensor
             Agent.States.SetState(outOfRangeState.Value, 1);
         else
             Agent.States.RemoveState(outOfRangeState.Value);
-    }
-
-    private void OnDrawGizmos() {
-           Gizmos.DrawSphere(transform.position,MeleeRange);
     }
 }
