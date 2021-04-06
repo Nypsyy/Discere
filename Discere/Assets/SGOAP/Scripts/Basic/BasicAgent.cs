@@ -18,6 +18,7 @@ namespace SGoap
             TargetManager.Add(this);
         }
 
+
         public void Initialize()
         {
             var animator = GetComponentInChildren<Animator>();
