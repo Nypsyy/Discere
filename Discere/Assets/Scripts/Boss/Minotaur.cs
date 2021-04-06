@@ -18,6 +18,8 @@ public class Minotaur : MonoBehaviour
     public Rage rangedRage; // Ranged rage
     public Rage magicRage;  // Magic rage
 
+    public GameObject winScreen;
+
     private LightMeleeAttackAction _lightMeleeAttackAction;
     private Animator _spriteAnimator;       // Sprite animator
     private MinotaurSprite _minotaurSprite; // Sprite manager
@@ -46,7 +48,6 @@ public class Minotaur : MonoBehaviour
     private void Update() {
         // If the boss is dead then do nothing
         if (_isDead) return;
-
         // If the boss' health reaches 0
         if (health.value <= 0f) {
             _spriteAnimator.SetTrigger(IsDead); // Trigger death animation
@@ -113,6 +114,21 @@ public class Minotaur : MonoBehaviour
         }
 
         StartCoroutine(_minotaurSprite.Blink());
+    }
+
+    public void onHealthEmpty()
+    {
+        _spriteAnimator.SetBool(IsDead, true); // Trigger death animation
+        _isDead = true;
+        Invoke(nameof(_DisplayWinScreen), 1f);
+    }
+
+    private void _DisplayWinScreen()
+    {
+        if (winScreen != null)
+        {
+            winScreen.SetActive(true);
+        }
     }
     
     private IEnumerator _SpawnFamiliers(int n, float delay_between, float bullet_delay, float lifetime) {
