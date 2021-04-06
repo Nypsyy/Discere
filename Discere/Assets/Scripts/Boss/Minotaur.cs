@@ -167,22 +167,4 @@ public class Minotaur : MonoBehaviour
         }
         yield return null;
     }
-    
-    private IEnumerator _test_BulletWall() {
-        yield return new WaitForSeconds(3);
-        for (float t = 0; t < 20; t += 0.5f) {
-            _SpawnBulletWall(15, 3, 60, 10*Mathf.Sin(t));
-            yield return new WaitForSeconds(0.5f);
-        }
-        yield return new WaitForSeconds(3f);
-        for (int i = 0; i < 20; ++i) {
-            _SpawnBulletWall(30, 10, 90);
-            yield return new WaitForSeconds(1f);
-        }
-        yield return new WaitForSeconds(3f);
-        for (float a = 0; a < 360*5; a += 30) {
-            _SpawnBulletWall(60, 6, 120, a);
-            yield return new WaitForSeconds(0.5f);
-        }
-    }
 }
