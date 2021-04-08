@@ -125,7 +125,7 @@ public class Laser : MonoBehaviour
         ray.gameObject.SetActive(false);
 
         // Screen shake
-        CinemachineShake.Instance?.Shake(6f, 0.5f);
+        CinemachineEffects.Instance?.Shake(6f, 0.5f);
 
         isShooting = true;
 

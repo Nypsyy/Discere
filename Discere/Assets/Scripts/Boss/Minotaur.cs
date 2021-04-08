@@ -53,11 +53,6 @@ public class Minotaur : MonoBehaviour
             _rigidbody.constraints = RigidbodyConstraints2D.FreezeAll;
             return;
         }
-        // If the boss' health reaches 0
-        if (health.value <= 0f) {
-            _spriteAnimator.SetTrigger(IsDead); // Trigger death animation
-            _isDead = true;
-        }
         
         _isDashing = _rigidbody.velocity.sqrMagnitude > 10;
     }
@@ -125,8 +120,14 @@ public class Minotaur : MonoBehaviour
 
     public void onHealthEmpty()
     {
+        if (_isDead) return;
+
         _spriteAnimator.SetBool(IsDead, true); // Trigger death animation
         _isDead = true;
+        Time.timeScale = 0.5f;
+
+        CinemachineEffects.Instance.Zoom(2f, transform);
+
         Invoke(nameof(_DisplayWinScreen), 1f);
     }
 
@@ -136,6 +137,8 @@ public class Minotaur : MonoBehaviour
         {
             winScreen.SetActive(true);
         }
+        Time.timeScale = 1f;
+        CinemachineEffects.Instance.UnZoom();
     }
     
 
