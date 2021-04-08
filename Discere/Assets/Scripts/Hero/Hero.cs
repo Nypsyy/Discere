@@ -292,7 +292,7 @@ public class Hero : MonoBehaviour
             _bowScript.ChargeShot();
             anim.SwitchMode(HeroAnim.Mode.Aim);
         }
-        else if (_heavyAttackRelease) {
+        else if (_heavyAttackRelease && _bowScript.gameObject.activeSelf) {
             _bowScript.Shoot();
             _bowScript.gameObject.SetActive(false);
         }
@@ -421,7 +421,7 @@ public class Hero : MonoBehaviour
         _jump = _player.GetButtonDown("Jump");
         _dash = _player.GetButtonDown("Dash");
 
-        _lightAttack = (CurrentController.type == ControllerType.Joystick && _fightingStyle.currentStyle != FightingStyle.Style.Melee) ?
+        _lightAttack = (CurrentController?.type == ControllerType.Joystick && _fightingStyle.currentStyle != FightingStyle.Style.Melee) ?
             _joystickAim != Vector2.zero : _player.GetButtonDown("Light Attack");
 
         _heavyAttack = _player.GetButtonDown("Heavy Attack");

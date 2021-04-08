@@ -12,7 +12,7 @@ public class BowScript : MonoBehaviour
     private Hero _hero;
     private Animator _animator;
     private int _arrowIndex;
-    private float CurrentAngle => Vector2.SignedAngle(Vector2.right, _hero.ShootingDirection) * Mathf.Deg2Rad;
+    private float CurrentAngle => Vector2.SignedAngle(Vector2.right, _hero.ShootingDirection != Vector2.zero ? _hero.ShootingDirection : Vector2.right ) * Mathf.Deg2Rad;
 
     private new AudioManager audio;
 
