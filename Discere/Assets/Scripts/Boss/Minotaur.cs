@@ -48,7 +48,11 @@ public class Minotaur : MonoBehaviour
 
     private void Update() {
         // If the boss is dead then do nothing
-        if (_isDead) return;
+        if (_isDead)
+        {
+            _rigidbody.constraints = RigidbodyConstraints2D.FreezeAll;
+            return;
+        }
         // If the boss' health reaches 0
         if (health.value <= 0f) {
             _spriteAnimator.SetTrigger(IsDead); // Trigger death animation
