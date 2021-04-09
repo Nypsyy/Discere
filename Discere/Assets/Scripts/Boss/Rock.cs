@@ -60,6 +60,7 @@ public class Rock : MonoBehaviour
             GetComponent<CapsuleCollider2D>().enabled = true;
             particles.Play();
             AstarPath.active.Scan();
+            CinemachineEffects.Instance.Shake(2f, 0.2f);
         }
         transform.position = new Vector2(transform.position.x, newY);
         

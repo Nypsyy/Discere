@@ -96,10 +96,12 @@ public class MinotaurSprite : MonoBehaviour
     }
 
     public void ShockwaveAttack() {
+        CinemachineEffects.Instance.Shake(3f, 0.3f);
         Instantiate(minotaurBehavior.shockwave, transform.position, Quaternion.identity);
     }
 
     public void ProjectileWallAttack() {
+        FreezeFrame.Instance.Freeze(0.07f);
         minotaurBehavior.SpawnBulletWall(6, 10, 70);
     }
 

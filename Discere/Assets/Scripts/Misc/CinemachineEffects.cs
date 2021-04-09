@@ -55,6 +55,11 @@ public class CinemachineEffects : MonoBehaviour
         StartCoroutine(DoZoom(multiplier, target, transitionDuration, useRealTime));
     }
 
+    public void Zoom(float multiplier, float transitionDuration = 0.2f, bool useRealTime = false)
+    {
+        Zoom(multiplier, originalTarget, transitionDuration, useRealTime);
+    }
+
     public void UnZoom(float transitionDuration = 0.2f, bool useRealTime = false)
     {
         if (isZooming)
