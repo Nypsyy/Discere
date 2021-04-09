@@ -41,10 +41,6 @@ public class Rock : MonoBehaviour
 
         _targetPos = transform.position;
         transform.position += Vector3.up * 100;
-    
-    // Start is called before the first frame update
-    void Start()
-    {
         audio = FindObjectOfType<AudioManager>();
     }
 
