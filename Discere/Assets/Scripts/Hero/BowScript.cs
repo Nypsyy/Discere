@@ -41,7 +41,8 @@ public class BowScript : MonoBehaviour
 
     public void Shoot() {
         _animator.SetTrigger(AnimationVariables.FiringShot);
-        Instantiate(arrows[_arrowIndex], transform.position, Quaternion.identity);
+        if (_arrowIndex >= 0 && _arrowIndex < arrows.Length)
+            Instantiate(arrows[_arrowIndex], transform.position, Quaternion.identity);
         audio.Play("BowShoot" + (_arrowIndex + 1).ToString());
     }
 

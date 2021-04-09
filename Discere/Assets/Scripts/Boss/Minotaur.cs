@@ -114,7 +114,9 @@ public class Minotaur : MonoBehaviour
                 magicRage.IncreaseRage(damage);
                 break;
         }
-
+        float shockwavespeed = 6 + 12 * health.progress;
+        shockwave.GetComponent<ShockwaveBehavior>().data.speed = shockwavespeed;
+        
         StartCoroutine(_minotaurSprite.Blink());
     }
 
@@ -157,6 +159,7 @@ public class Minotaur : MonoBehaviour
     public void SpawnBulletWall(int nb_bullets, float speed, float angle_width, float angle_offset = 0, float scaling = 0f) {
         angle_width *= Mathf.Deg2Rad;
         angle_offset *= Mathf.Deg2Rad;
+        bulletModel.GetComponent<Bullet>().data.speed = speed;
 
         // bullets are launched in [-angle_width/2, +angle_width/2] in direction of the player
         var dir = hero.transform.position - transform.position;
