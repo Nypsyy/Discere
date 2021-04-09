@@ -22,12 +22,13 @@ public class FreezeFrame : MonoBehaviour
 
     public void Freeze(float duration = 0.1f)
     {
+        StopAllCoroutines();
         StartCoroutine(DoFreeze(duration));
     }
 
     private IEnumerator DoFreeze(float duration)
     {
-        oldTimeScale = Time.timeScale;
+        if (Time.timeScale > 0f) oldTimeScale = Time.timeScale;
         Time.timeScale = 0f;
         yield return new WaitForSecondsRealtime(duration);
         Time.timeScale = oldTimeScale;

@@ -63,6 +63,7 @@ public class Familier : MonoBehaviour
     private void Start() {
         Invoke(nameof(Fade), _lifeTime);
         InvokeRepeating(nameof(Fire), _fireDelay, _fireDelay);
+        FindObjectOfType<AudioManager>().Play("FamilierSpawn");
     }
 
     private void Update() {
