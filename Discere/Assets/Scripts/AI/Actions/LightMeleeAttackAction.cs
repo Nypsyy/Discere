@@ -14,6 +14,7 @@ public class LightMeleeAttackAction : BasicAction
 
     public override bool PrePerform() {
         AgentData.Animator.SetTrigger(AnimationVariables.LightMeleeAttack);
+        CinemachineEffects.Instance.Zoom(1.2f);
         return base.PrePerform();
     }
 
@@ -26,6 +27,7 @@ public class LightMeleeAttackAction : BasicAction
         // Wander goal priority
         AgentData.Agent.Goals[2].Priority += 10 + Random.Range(0,10);
         AgentData.Agent.UpdateGoalOrderCache();
+        CinemachineEffects.Instance.UnZoom();
         return base.PostPerform();
     }
 

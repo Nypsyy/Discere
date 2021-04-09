@@ -43,6 +43,8 @@ public class Hero : MonoBehaviour
     public UnityEvent OnHitEvent;
     public GameObject gameOverUI;
 
+    public bool Won { get; set; } = false;
+
     #endregion
 
     #region PRIVATE VARIABLES
@@ -84,6 +86,7 @@ public class Hero : MonoBehaviour
     private bool _lightAttack;
     private bool _heavyAttack;
     private bool _heavyAttackRelease;
+    private bool _heavyAttackCurrentlyPressed;
     
     #endregion
 
@@ -102,6 +105,7 @@ public class Hero : MonoBehaviour
     public void TakeDamage(float damage) {
         if (_isDead) return;
         if (_iframeTiming > 0f) return;
+        if (Won) return;
 
         FreezeFrame.Instance.Freeze();
 
@@ -174,6 +178,7 @@ public class Hero : MonoBehaviour
         _facingVec = new Vector2(1.0f, 0);
         audio = FindObjectOfType<AudioManager>();
         _isDead = false;
+        Won = false;
     }
 
 
@@ -262,12 +267,15 @@ public class Hero : MonoBehaviour
     }
 
     private void UpdateAttackRange() {
+
         // If still attacking or aiming
         if (anim.IsAttacking() || anim.CurrentMode == HeroAnim.Mode.Aim)
             return;
         // If not trying to shoot
         if (CurrentController.type != ControllerType.Joystick && ShootingDirection.magnitude == 0 || !_lightAttack)
             return;
+
+        if (_heavyAttackCurrentlyPressed) return;
 
         // Shooting the dagger
         Instantiate(daggerPrefab, transform.position - new Vector3(0.0f, 0.0f), Quaternion.identity);
@@ -288,7 +296,7 @@ public class Hero : MonoBehaviour
             _bowScript.ChargeShot();
             anim.SwitchMode(HeroAnim.Mode.Aim);
         }
-        else if (_heavyAttackRelease) {
+        else if (_heavyAttackRelease && _bowScript.gameObject.activeSelf) {
             _bowScript.Shoot();
             _bowScript.gameObject.SetActive(false);
         }
@@ -302,7 +310,7 @@ public class Hero : MonoBehaviour
 
         if (CurrentController.type != ControllerType.Joystick && ShootingDirection.magnitude == 0 || !_lightAttack) return;
 
-        if (_heavyAttack) return;
+        if (_heavyAttackCurrentlyPressed) return;
 
         if (!_mana.UseMana(magicManaCost)) return; // ensure enough mana is available, and use mana
 
@@ -344,10 +352,9 @@ public class Hero : MonoBehaviour
         }
 
         if (_magicLaserInstance != null && !_magicLaserInstance.isShooting) {
-            Vector2 aimDir = GetAimingMouseDirection();
-            _magicLaserInstance.SetDirection(aimDir);
-            anim.UpdateDirection(aimDir);
-            anim.UpdateSlashDirection(aimDir);
+            _magicLaserInstance.SetDirection(ShootingDirection);
+            anim.UpdateDirection(ShootingDirection);
+            anim.UpdateSlashDirection(ShootingDirection);
         }
     }
 
@@ -411,12 +418,19 @@ public class Hero : MonoBehaviour
     private void GetInputs() {
         _movement = _player.GetAxis2D("Move Horizontal", "Move Vertical").normalized;
         _joystickAim = _player.GetAxis2D("Aim Horizontal", "Aim Vertical").normalized;
+
         _attackStyleChange = _player.GetAxis("Attack Style");
+        if (_attackStyleChange == _player.GetAxisPrev("Attack Style")) _attackStyleChange = 0f; // Prevents repeats with gamepad
+
         _jump = _player.GetButtonDown("Jump");
         _dash = _player.GetButtonDown("Dash");
-        _lightAttack = _player.GetButtonDown("Light Attack");
+
+        _lightAttack = (CurrentController?.type == ControllerType.Joystick && _fightingStyle.currentStyle != FightingStyle.Style.Melee) ?
+            _joystickAim != Vector2.zero : _player.GetButtonDown("Light Attack");
+
         _heavyAttack = _player.GetButtonDown("Heavy Attack");
         _heavyAttackRelease = _player.GetButtonUp("Heavy Attack");
+        _heavyAttackCurrentlyPressed = _player.GetButton("Heavy Attack");
     }
 
     public void OnHealthEmpty() {
