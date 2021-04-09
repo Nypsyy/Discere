@@ -6124,7 +6124,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 8531273426247194774}
         m_TargetAssemblyTypeName: Minotaur, Assembly-CSharp
-        m_MethodName: onHealthEmpty
+        m_MethodName: OnHealthEmpty
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

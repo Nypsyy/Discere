@@ -9,7 +9,7 @@ public class MinotaurSprite : MonoBehaviour
 {
     public float dashInFactor;
     public bool isBlinking { get; private set; }
-    
+
 
     private Minotaur minotaurBehavior;
     private Animator _animator;                       // Sprite animator
@@ -37,11 +37,11 @@ public class MinotaurSprite : MonoBehaviour
         _hitboxForward.enabled = false;
         _hitboxBelow.enabled = false;
     }
-    
+
 
     private void Update() {
         // Update the running animation
-        _animator.SetFloat(AnimationVariables.Speed, Mathf.Abs(_aiPath.desiredVelocity.x));
+        _animator.SetFloat(AnimStrings.Speed, Mathf.Abs(_aiPath.desiredVelocity.x));
 
         Flip(); // Flip sprite
     }
@@ -86,13 +86,12 @@ public class MinotaurSprite : MonoBehaviour
     }
 
     public void DashIn() {
-        
         var rb = GetComponentInParent<Rigidbody2D>();
 
         rb.isKinematic = false;
         Vector2 toTarget = GetComponentInParent<AIDestinationSetter>().target.position - transform.position;
         rb.AddForce(toTarget * dashInFactor, ForceMode2D.Impulse);
-        _animator.SetBool(AnimationVariables.PrepareDash, false);
+        _animator.SetBool(AnimStrings.PrepareDash, false);
     }
 
     public void ShockwaveAttack() {

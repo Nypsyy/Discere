@@ -179,7 +179,7 @@ AnimatorTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 6
-    m_ConditionEvent: SlashDirection
+    m_ConditionEvent: Slash Direction
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -2463309182916664814}
@@ -196,7 +196,7 @@ AnimatorTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 6
-    m_ConditionEvent: SlashDirection
+    m_ConditionEvent: Slash Direction
     m_EventTreshold: 1
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -8271075659220752064}
@@ -448,7 +448,7 @@ AnimatorTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 6
-    m_ConditionEvent: SlashDirection
+    m_ConditionEvent: Slash Direction
     m_EventTreshold: 2
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -7387088802972530717}
@@ -895,7 +895,7 @@ AnimatorTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 6
-    m_ConditionEvent: SlashDirection
+    m_ConditionEvent: Slash Direction
     m_EventTreshold: 3
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -368410755845204612}
@@ -992,7 +992,7 @@ AnimatorTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 6
-    m_ConditionEvent: SlashDirection
+    m_ConditionEvent: Slash Direction
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 7254038916937368148}
@@ -1051,7 +1051,7 @@ AnimatorStateTransition:
     m_ConditionEvent: Mode
     m_EventTreshold: 4
   - m_ConditionMode: 1
-    m_ConditionEvent: SwitchMode
+    m_ConditionEvent: Switch Mode
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 7603357980887273461}
   m_DstState: {fileID: 0}
@@ -1282,37 +1282,37 @@ AnimatorController:
     m_DefaultFloat: 0
     m_DefaultInt: 2
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
-  - m_Name: SlashDirection
+    m_Controller: {fileID: 0}
+  - m_Name: Slash Direction
     m_Type: 3
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
   - m_Name: Mode
     m_Type: 3
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
-  - m_Name: SwitchMode
+    m_Controller: {fileID: 0}
+  - m_Name: Switch Mode
     m_Type: 9
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
   - m_Name: Fire
     m_Type: 9
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
-  - m_Name: IsAttacking
+    m_Controller: {fileID: 0}
+  - m_Name: Is Attacking
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
   m_AnimatorLayers:
   - serializedVersion: 5
     m_Name: Base Layer
@@ -1445,7 +1445,7 @@ AnimatorTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 6
-    m_ConditionEvent: SlashDirection
+    m_ConditionEvent: Slash Direction
     m_EventTreshold: 3
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 4457715325727038070}
@@ -2069,7 +2069,7 @@ AnimatorTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 6
-    m_ConditionEvent: SlashDirection
+    m_ConditionEvent: Slash Direction
     m_EventTreshold: 1
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -4405595733467866671}
@@ -2439,7 +2439,7 @@ AnimatorStateTransition:
     m_ConditionEvent: Mode
     m_EventTreshold: 3
   - m_ConditionMode: 1
-    m_ConditionEvent: SwitchMode
+    m_ConditionEvent: Switch Mode
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 3609295400928878050}
   m_DstState: {fileID: 0}
@@ -2464,7 +2464,7 @@ AnimatorTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 6
-    m_ConditionEvent: SlashDirection
+    m_ConditionEvent: Slash Direction
     m_EventTreshold: 2
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -2901964142826508615}
@@ -2484,7 +2484,7 @@ AnimatorStateTransition:
     m_ConditionEvent: Mode
     m_EventTreshold: 1
   - m_ConditionMode: 1
-    m_ConditionEvent: SwitchMode
+    m_ConditionEvent: Switch Mode
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 3609295400928878050}
   m_DstState: {fileID: 0}

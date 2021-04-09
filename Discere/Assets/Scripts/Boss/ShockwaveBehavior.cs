@@ -17,7 +17,7 @@ public class ShockwaveBehavior : MonoBehaviour
 
     private void OnTriggerStay2D(Collider2D other) {
         if (!other.gameObject.CompareTag("Player") || _touched ||
-            other.gameObject.GetComponent<Hero>().anim.CurrentMode == HeroAnim.Mode.Jump)
+            other.gameObject.GetComponent<Hero>().anim.CurrentMode == Utils.HeroMode.Jump)
             return;
 
         FindObjectOfType<Hero>().TakeDamage(data.damage);

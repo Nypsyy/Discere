@@ -5,14 +5,14 @@ using static Utils;
 public class ShockwaveAttackAction : BasicAction
 {
     private ShockwaveAttackCost _costEvaluator;
-    private bool AttackDone => !AgentData.Animator.GetBool(AnimationVariables.BossAttacking) && !Cooldown.Active;
+    private bool AttackDone => !AgentData.Animator.GetBool(AnimStrings.BossAttacking) && !Cooldown.Active;
 
     private void Awake() {
         _costEvaluator = GetComponentInChildren<ShockwaveAttackCost>();
     }
 
     public override bool PrePerform() {
-        AgentData.Animator.SetTrigger(AnimationVariables.ShockwaveAttack);
+        AgentData.Animator.SetTrigger(AnimStrings.ShockwaveAttack);
         return base.PrePerform();
     }
 

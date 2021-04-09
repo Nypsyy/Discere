@@ -1,9 +1,11 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using Rewired;
 using TMPro;
 using UnityEngine.EventSystems;
+using static Utils;
 
 public class MenuButtonBehavior : MonoBehaviour
 {
@@ -16,14 +18,16 @@ public class MenuButtonBehavior : MonoBehaviour
 
     [Header("General")]
     public GameObject mainMenu;
+
     public GameObject howToMenu;
     public GameObject backButton;
     public GameObject howToButton;
 
     [Header("HowTo menu")]
     public TutorialImage[] controllerTutorials;
+
     public TextMeshProUGUI changeTutorialBtnText;
-    
+
     private Player _input;
     private int _tutorialIndex;
 
@@ -32,7 +36,7 @@ public class MenuButtonBehavior : MonoBehaviour
     }
 
     private void Update() {
-        if (_input.GetButtonDown("UI Cancel") && howToMenu.activeSelf) {
+        if (_input.GetButtonDown(Inputs.UICancel) && howToMenu.activeSelf) {
             Back();
         }
     }
