@@ -3,6 +3,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using Rewired;
 using TMPro;
+using UnityEngine.EventSystems;
 
 public class MenuButtonBehavior : MonoBehaviour
 {
@@ -15,78 +16,64 @@ public class MenuButtonBehavior : MonoBehaviour
 
     [Header("General")]
     public GameObject mainMenu;
-    public GameObject howTo;
-    private Player input;
-    private Button.ButtonClickedEvent onCancelPressed = null;
+    public GameObject howToMenu;
+    public GameObject backButton;
+    public GameObject howToButton;
 
     [Header("HowTo menu")]
     public TutorialImage[] controllerTutorials;
-    private int tutorialIndex = 0;
     public TextMeshProUGUI changeTutorialBtnText;
+    
+    private Player _input;
+    private int _tutorialIndex;
 
-    private void Awake()
-    {
-        input = ReInput.players.GetPlayer(0);
-
-        // Switch input map
-        input.controllers.maps.mapEnabler.ruleSets.Find(rs => rs.tag == "Gameplay").enabled = false;
-        input.controllers.maps.mapEnabler.ruleSets.Find(rs => rs.tag == "UI").enabled = true;
-        input.controllers.maps.mapEnabler.Apply();
+    private void Awake() {
+        _input = ReInput.players.GetPlayer("SYSTEM");
     }
 
-    private void Update()
-    {
-        if (input.GetButtonDown("UI Cancel") && onCancelPressed != null)
-        {
-            onCancelPressed.Invoke();
+    private void Update() {
+        if (_input.GetButtonDown("UI Cancel") && howToMenu.activeSelf) {
+            Back();
         }
     }
 
     // MAIN MENU
-    public void NewGame()
-    {
+    public void NewGame() {
         SceneManager.LoadScene("Boss");
     }
 
-    public void HowTo()
-    {
+    public void HowTo() {
         mainMenu.SetActive(false);
-        howTo.SetActive(true);
-        tutorialIndex = 0;
-        onCancelPressed = howTo?.transform.Find("Back")?.GetComponent<Button>()?.onClick;
-
+        howToMenu.SetActive(true);
+        _tutorialIndex = 0;
+        EventSystem.current.SetSelectedGameObject(backButton);
         UpdateTutorialView();
     }
 
-    public void Quit()
-    {
+    public void Quit() {
         Application.Quit();
     }
 
     // HOW TO
 
-    public void Back()
-    {
+    public void Back() {
         mainMenu.SetActive(true);
-        howTo.SetActive(false);
-        onCancelPressed = null;
+        howToMenu.SetActive(false);
+        EventSystem.current.SetSelectedGameObject(howToButton);
     }
 
-    public void ChangeControlsView()
-    {
-        tutorialIndex = (tutorialIndex + 1) % controllerTutorials.Length;
+    public void ChangeControlsView() {
+        _tutorialIndex = (_tutorialIndex + 1) % controllerTutorials.Length;
 
         UpdateTutorialView();
     }
 
-    private void UpdateTutorialView()
-    {
-        for (int i = 0; i < controllerTutorials.Length; i++)
-        {
-            controllerTutorials[i].image.gameObject.SetActive(i == tutorialIndex);
+    private void UpdateTutorialView() {
+        for (var i = 0; i < controllerTutorials.Length; i++) {
+            controllerTutorials[i].image.gameObject.SetActive(i == _tutorialIndex);
         }
 
-        string nextControllerName = controllerTutorials[(tutorialIndex + 1) % controllerTutorials.Length].name;
+        var nextControllerName = controllerTutorials[(_tutorialIndex + 1) % controllerTutorials.Length].name;
         changeTutorialBtnText.text = $"Show {nextControllerName} controls";
     }
 }
