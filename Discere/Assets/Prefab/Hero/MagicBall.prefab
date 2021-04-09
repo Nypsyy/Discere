@@ -99,7 +99,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c7be31e6145fa742854597f0ba32147, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  projectile: {fileID: 11400000, guid: 134a396175db1684b9553f22e4085b0a, type: 2}
+  projectileData: {fileID: 11400000, guid: 134a396175db1684b9553f22e4085b0a, type: 2}
   autoSeekRadius: 2
   autoSeekStrength: 4
   autoSeekLayer:

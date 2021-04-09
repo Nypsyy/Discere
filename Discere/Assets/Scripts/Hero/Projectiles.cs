@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class Projectiles : MonoBehaviour
 {
-    public Projectile projectile;
+    public ProjectileData projectileData;
 
-    public float Damage => projectile.damage;
-    public float Velocity => projectile.velocity;
+    public float Damage => projectileData.damage;
+    public float Velocity => projectileData.velocity;
 
-    private float DestructionTimer => projectile.destructionTime;
+    private float DestructionTimer => projectileData.destructionTime;
     private Rigidbody2D _rb;
     private SpriteRenderer _spriteRenderer;
 
@@ -19,7 +19,7 @@ public class Projectiles : MonoBehaviour
     }
 
     protected void Start() {
-        _spriteRenderer.sprite = projectile.sprite;
+        _spriteRenderer.sprite = projectileData.sprite;
 
         var direction = FindObjectOfType<Hero>().GetComponent<Hero>().ShootingDirection;
         transform.right = direction;
@@ -36,7 +36,7 @@ public class Projectiles : MonoBehaviour
         GameObject gameObject = other.collider.gameObject;
         
         Rock rock = gameObject.GetComponent<Rock>();
-        if (projectile.projectileName == "Strong Arrow")
+        if (projectileData.projectileName == "Strong Arrow")
             gameObject.GetComponent<Rock>()?.DestroyMe();
         
         if (gameObject.layer == LayerMask.NameToLayer("Obstacle")) {

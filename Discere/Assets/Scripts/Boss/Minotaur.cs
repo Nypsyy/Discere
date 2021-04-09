@@ -12,7 +12,7 @@ public class Minotaur : MonoBehaviour
     public Familier familierModel;
     public Bullet bulletModel;
     public GameObject shockwave;
-    public Rock rockModel;
+    public GameObject rockModel;
 
     // Minotaur's rages
     public Rage meleeRage;    // Melee rage
@@ -42,8 +42,6 @@ public class Minotaur : MonoBehaviour
     private void Start() {
         // Boss' rages are increasing constantly
         InvokeRepeating(nameof(UpdateRage), 0, 1);
-        //StartCoroutine(_SpawnRocks(30, 0.2f));
-        // For testing BulletWall only: StartCoroutine(_test_BulletWall());
     }
 
     private void Update() {
@@ -72,19 +70,11 @@ public class Minotaur : MonoBehaviour
     }
 
     private void HandleCollidingObject(GameObject obj) {
-        var rock = obj.GetComponent<Rock>();
-
-        if (rock) {
-            if (_isDashing)
-                Destroy(obj);
-            return;
-        }
-
         if (obj.layer != LayerMask.NameToLayer("HeroProjectile")) return;
 
-        var proj = obj.GetComponent<Projectiles>()?.projectile
-            ? obj.GetComponent<Projectiles>()?.projectile
-            : obj.GetComponent<MagicProjectile>()?.projectile;
+        var proj = obj.GetComponent<Projectiles>()?.projectileData
+            ? obj.GetComponent<Projectiles>()?.projectileData
+            : obj.GetComponent<MagicProjectile>()?.projectileData;
 
         if (proj is null) return;
 
@@ -107,6 +97,7 @@ public class Minotaur : MonoBehaviour
                 break;
 
             case FightingStyle.Style.Range:
+                GetComponentInChildren<RockFallAttackCost>().Touched();
                 distanceRage.IncreaseRage(damage);
                 break;
 
@@ -174,9 +165,9 @@ public class Minotaur : MonoBehaviour
         }
     }
 
-    private IEnumerator _SpawnRocks(int n, float delayBetween) {
+    public IEnumerator SpawnRocks(int n, float delayBetween) {
         for (var i = 0; i < n; ++i) {
-            rockModel.Create((Vector2) hero.transform.position + 15 * Random.insideUnitCircle);
+            Instantiate(rockModel, hero.transform.position + (Vector3) Random.insideUnitCircle * 15, Quaternion.identity);
             yield return new WaitForSeconds(delayBetween);
         }
 

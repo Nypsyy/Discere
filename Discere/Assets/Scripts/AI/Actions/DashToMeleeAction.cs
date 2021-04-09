@@ -5,6 +5,7 @@ using static Utils;
 public class DashToMeleeAction : BasicAction
 {
     public Rigidbody2D rb;
+    public CircleCollider2D dashTrigger;
     private DashToMeleeCost cost;
 
     private bool DashDone => !AgentData.Animator.GetBool(AnimStrings.PrepareDash) && rb.velocity.magnitude < 3;
@@ -23,6 +24,7 @@ public class DashToMeleeAction : BasicAction
     }
 
     public override bool PostPerform() {
+        dashTrigger.enabled = false;
         cost.Used();
         rb.velocity = Vector2.zero;
         rb.isKinematic = true;

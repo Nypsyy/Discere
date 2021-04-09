@@ -25,7 +25,7 @@ public class LightMeleeAttackAction : BasicAction
     public override bool PostPerform() {
         _costEvaluator.Used();
         // Wander goal priority
-        AgentData.Agent.Goals[2].Priority += 10 + Random.Range(0,10);
+        AgentData.Agent.Goals[2].Priority += 30 + Random.Range(0,10);
         AgentData.Agent.UpdateGoalOrderCache();
         CinemachineEffects.Instance.UnZoom();
         return base.PostPerform();

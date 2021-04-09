@@ -3,11 +3,11 @@ using UnityEngine;
 
 public class MagicProjectile : MonoBehaviour
 {
-    public Projectile projectile;
+    public ProjectileData projectileData;
 
-    public float Damage => projectile.damage;
-    public float Velocity => projectile.velocity;
-    public float DestructionTime => projectile.destructionTime;
+    public float Damage => projectileData.damage;
+    public float Velocity => projectileData.velocity;
+    public float DestructionTime => projectileData.destructionTime;
 
     public float autoSeekRadius = 2f;
     public float autoSeekStrength = 4f;
@@ -25,7 +25,7 @@ public class MagicProjectile : MonoBehaviour
     }
 
     private void Start() {
-        _spriteRenderer.sprite = projectile.sprite;
+        _spriteRenderer.sprite = projectileData.sprite;
 
         var direction = FindObjectOfType<Hero>().GetComponent<Hero>().ShootingDirection;
         SetDirection(direction);

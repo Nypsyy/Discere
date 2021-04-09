@@ -23,8 +23,8 @@ public class ShockwaveAttackAction : BasicAction
     public override bool PostPerform() {
         _costEvaluator.Used();
         // Wander goal priority
-        AgentData.Agent.Goals[2].Priority += 10 + Random.Range(0, 30);
-        AgentData.Agent.UpdateGoalOrderCache();
+        //AgentData.Agent.Goals[2].Priority += 40 + Random.Range(0, 100);
+        //AgentData.Agent.UpdateGoalOrderCache();
         return base.PostPerform();
     }
 }

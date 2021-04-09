@@ -7,6 +7,7 @@ using static Utils;
 [RequireComponent(typeof(SpriteRenderer))]
 public class MinotaurSprite : MonoBehaviour
 {
+    public Collider2D dashTrigger;
     public float dashInFactor;
     public bool isBlinking { get; private set; }
 
@@ -82,6 +83,11 @@ public class MinotaurSprite : MonoBehaviour
 
     #region ANIMATION METHODS
 
+    public void RockFallAttack() {
+        var nbRocks = 10 + minotaurBehavior.distanceRage.FillRatio / 5;
+        StartCoroutine(minotaurBehavior.SpawnRocks(nbRocks, .2f));
+    }
+
     public void InvokeAttack() {
         var familierNb = 1 + Mathf.Max(minotaurBehavior.distanceRage.FillRatio, minotaurBehavior.magicRage.FillRatio) / 34;
         StartCoroutine(minotaurBehavior.SpawnFamiliers(familierNb, 1f));
@@ -90,6 +96,7 @@ public class MinotaurSprite : MonoBehaviour
     public void DashIn() {
         var rb = GetComponentInParent<Rigidbody2D>();
         _audio.Play("BossDash");
+        dashTrigger.enabled = true;
         rb.isKinematic = false;
         Vector2 toTarget = GetComponentInParent<AIDestinationSetter>().target.position - transform.position;
         rb.AddForce(toTarget * dashInFactor, ForceMode2D.Impulse);
@@ -106,9 +113,9 @@ public class MinotaurSprite : MonoBehaviour
         FreezeFrame.Instance.Freeze(0.07f);
         var progress = Mathf.Max(1 - minotaurBehavior.magicRage.progress, 1 - minotaurBehavior.distanceRage.progress);
         var angleWidth = 45 + 135 * progress;
-        var nbBullets = (int) angleWidth / 5;
+        var nbBullets = (int) angleWidth / 8;
         var speed = 5 + 15 * progress;
-        
+
         minotaurBehavior.SpawnBulletWall(nbBullets, speed, angleWidth);
     }
 
