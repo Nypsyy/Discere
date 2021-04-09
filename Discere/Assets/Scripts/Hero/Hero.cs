@@ -43,6 +43,8 @@ public class Hero : MonoBehaviour
     public UnityEvent OnHitEvent;
     public GameObject gameOverUI;
 
+    public bool Won { get; set; } = false;
+
     #endregion
 
     #region PRIVATE VARIABLES
@@ -103,6 +105,7 @@ public class Hero : MonoBehaviour
     public void TakeDamage(float damage) {
         if (_isDead) return;
         if (_iframeTiming > 0f) return;
+        if (Won) return;
 
         FreezeFrame.Instance.Freeze();
 
@@ -175,6 +178,7 @@ public class Hero : MonoBehaviour
         _facingVec = new Vector2(1.0f, 0);
         audio = FindObjectOfType<AudioManager>();
         _isDead = false;
+        Won = false;
     }
 
 
