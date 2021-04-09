@@ -29,7 +29,7 @@ public class Projectiles : MonoBehaviour
 
         _rb.velocity = direction * Velocity;
 
-        StartCoroutine(Destroying(15f));
+        StartCoroutine(Destroying(3f));
     }
 
     private void OnCollisionEnter2D(Collision2D other) {
@@ -52,6 +52,10 @@ public class Projectiles : MonoBehaviour
         }
 
         else if (gameObject.layer == LayerMask.NameToLayer("HeroProjectile")) {
+            StartCoroutine(Destroying(DestructionTimer));
+        }
+        else if (gameObject.layer == LayerMask.NameToLayer("Boss"))
+        {
             StartCoroutine(Destroying(DestructionTimer));
         }
     }
