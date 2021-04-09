@@ -42,16 +42,17 @@ public class Minotaur : MonoBehaviour
     private void Start() {
         // Boss' rages are increasing constantly
         InvokeRepeating(nameof(UpdateRage), 0, 1);
-        StartCoroutine(_SpawnRocks(30, 0.2f));
+        //StartCoroutine(_SpawnRocks(30, 0.2f));
         // For testing BulletWall only: StartCoroutine(_test_BulletWall());
     }
 
     private void Update() {
         // If the boss is dead then do nothing
-        if (_isDead)
-        {
+        if (_isDead) {
             _rigidbody.constraints = RigidbodyConstraints2D.FreezeAll;
             return;
+        }
+
         // If the boss' health reaches 0
         if (health.value <= 0f) {
             _spriteAnimator.SetTrigger(AnimStrings.IsDead); // Trigger death animation
@@ -78,7 +79,7 @@ public class Minotaur : MonoBehaviour
 
     private void HandleCollidingObject(GameObject obj) {
         var rock = obj.GetComponent<Rock>();
-        
+
         if (rock) {
             if (_isDashing)
                 Destroy(obj);
@@ -119,19 +120,19 @@ public class Minotaur : MonoBehaviour
                 magicRage.IncreaseRage(damage);
                 break;
         }
-        float shockwavespeed = 6 + 12 * health.progress;
-        shockwave.GetComponent<ShockwaveBehavior>().data.speed = shockwavespeed;
-        
+
+        var shockwaveSpeed = 6 + 12 * health.progress;
+        shockwave.GetComponent<ShockwaveBehavior>().data.speed = shockwaveSpeed;
+
         StartCoroutine(_minotaurSprite.Blink());
     }
 
-    public void onHealthEmpty()
-    {
+    public void OnHealthEmpty() {
         if (_isDead) return;
 
         hero.GetComponent<Hero>().Won = true;
 
-        _spriteAnimator.SetBool(IsDead, true); // Trigger death animation
+        _spriteAnimator.SetBool(AnimStrings.IsDead, true); // Trigger death animation
         _isDead = true;
         Time.timeScale = 0.5f;
 
@@ -144,6 +145,7 @@ public class Minotaur : MonoBehaviour
         if (winScreen != null) {
             winScreen.SetActive(true);
         }
+
         Time.timeScale = 1f;
         CinemachineEffects.Instance.UnZoom();
     }
@@ -159,9 +161,9 @@ public class Minotaur : MonoBehaviour
     }
 
     // angle_width & angle_offset are in degrees
-    public void SpawnBulletWall(int nb_bullets, float speed, float angle_width, float angle_offset = 0, float scaling = 0f) {
-        angle_width *= Mathf.Deg2Rad;
-        angle_offset *= Mathf.Deg2Rad;
+    public void SpawnBulletWall(int nbBullets, float speed, float angleWidth, float angleOffset = 0) {
+        angleWidth *= Mathf.Deg2Rad;
+        angleOffset *= Mathf.Deg2Rad;
         bulletModel.GetComponent<Bullet>().data.speed = speed;
 
         // bullets are launched in [-angle_width/2, +angle_width/2] in direction of the player

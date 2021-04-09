@@ -11,7 +11,10 @@ public class BowScript : MonoBehaviour
     private Hero _hero;
     private Animator _animator;
     private int _arrowIndex;
-    private float CurrentAngle => Vector2.SignedAngle(Vector2.right, _hero.ShootingDirection != Vector2.zero ? _hero.ShootingDirection : Vector2.right ) * Mathf.Deg2Rad;
+
+    private float CurrentAngle =>
+        Vector2.SignedAngle(Vector2.right, _hero.ShootingDirection != Vector2.zero ? _hero.ShootingDirection : Vector2.right) *
+        Mathf.Deg2Rad;
 
     private AudioManager _audio;
 
@@ -39,10 +42,10 @@ public class BowScript : MonoBehaviour
     }
 
     public void Shoot() {
-        _animator.SetTrigger(AnimationVariables.FiringShot);
+        _animator.SetTrigger(AnimStrings.FiringShot);
         if (_arrowIndex >= 0 && _arrowIndex < arrows.Length)
             Instantiate(arrows[_arrowIndex], transform.position, Quaternion.identity);
-        audio.Play("BowShoot" + (_arrowIndex + 1).ToString());
+        _audio.Play(Sounds.BowShoot + (_arrowIndex + 1));
     }
 
     // Used by the animation

@@ -19,7 +19,7 @@ public class Hero_Slash_Behaviour : StateMachineBehaviour
     // OnStateUpdate is called before OnStateUpdate is called on any state inside this state machine
     public override void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
         _blockedStart -= Time.deltaTime;
-        
+
         if (_blockedStart <= 0)
             animator.speed = 1;
     }

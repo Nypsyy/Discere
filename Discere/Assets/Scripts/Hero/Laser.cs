@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using UnityEngine;
 
@@ -134,8 +133,8 @@ public class Laser : MonoBehaviour
         ray.gameObject.SetActive(false);
 
         // Screen shake
-        if (CinemachineShake.Instance)
-            CinemachineShake.Instance.Shake(6f, 0.5f);
+        if (CinemachineEffects.Instance)
+            CinemachineEffects.Instance.Shake(6f, 0.5f);
 
         StartCoroutine(Shooting());
     }

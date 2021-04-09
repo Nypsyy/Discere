@@ -101,11 +101,12 @@ public class MinotaurSprite : MonoBehaviour
 
     public void ProjectileWallAttack() {
         FreezeFrame.Instance.Freeze(0.07f);
-        float progress = Mathf.Max(1-minotaurBehavior.magicRage.progress, 1-minotaurBehavior.distanceRage.progress);
-        float angle_width = 45 + 135 * progress;
-        int nb_bullets = (int)angle_width / 5;
-        float speed = 5 + 15 * progress;
-        minotaurBehavior.SpawnBulletWall(nb_bullets, speed, angle_width);
+        var progress = Mathf.Max(1 - minotaurBehavior.magicRage.progress, 1 - minotaurBehavior.distanceRage.progress);
+        var angleWidth = 45 + 135 * progress;
+        var nbBullets = (int) angleWidth / 5;
+        var speed = 5 + 15 * progress;
+        
+        minotaurBehavior.SpawnBulletWall(nbBullets, speed, angleWidth);
     }
 
     public void LightMeleeAttackForward() {
