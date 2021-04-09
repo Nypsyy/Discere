@@ -19,7 +19,7 @@ TagManager:
   - Hero
   - Boss
   - Post Processing
-  - 
+  - OutOfLimits
   - 
   - 
   - 
@@ -58,4 +58,7 @@ TagManager:
     locked: 0
   - name: Effects
     uniqueID: 1959039173
+    locked: 0
+  - name: OutOfLimits
+    uniqueID: 4000926505
     locked: 0
