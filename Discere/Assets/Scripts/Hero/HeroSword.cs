@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class HeroSword : MonoBehaviour
 {
-    
     public float small_damage = 5;
     public float big_damage = 15;
     

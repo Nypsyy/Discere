@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "Data", menuName = "ScriptableObject/Familier", order = 0)]
+[CreateAssetMenu(fileName = "FamilierData", menuName = "ScriptableObject/Familier", order = 0)]
 public class FamilierData : ScriptableObject
 {
     public float fireFrequency;

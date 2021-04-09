@@ -5,7 +5,7 @@ using Random = UnityEngine.Random;
 public class LightMeleeAttackAction : BasicAction
 {
     private LightMeleeAttackCost _costEvaluator;
-    private bool AttackDone => !AgentData.Animator.GetBool(AnimationVariables.BossAttacking) && !Cooldown.Active;
+    private bool AttackDone => !AgentData.Animator.GetBool(AnimStrings.BossAttacking) && !Cooldown.Active;
 
 
     private void Awake() {
@@ -13,7 +13,7 @@ public class LightMeleeAttackAction : BasicAction
     }
 
     public override bool PrePerform() {
-        AgentData.Animator.SetTrigger(AnimationVariables.LightMeleeAttack);
+        AgentData.Animator.SetTrigger(AnimStrings.LightMeleeAttack);
         CinemachineEffects.Instance.Zoom(1.2f);
         return base.PrePerform();
     }

@@ -1,14 +1,13 @@
 using Rewired;
 using System.Collections;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.Rendering.PostProcessing;
 using static Utils;
 
 public class Hero : MonoBehaviour
 {
     #region EDITOR
-    
+
     [Header("General")]
     public float speed;
 
@@ -39,8 +38,8 @@ public class Hero : MonoBehaviour
 
     [Header("Hit")]
     public float iframeTime = 0.5f;
+
     public float iframeBlinkPeriod = 0.2f;
-    public UnityEvent OnHitEvent;
     public GameObject gameOverUI;
 
     public bool Won { get; set; } = false;
@@ -48,20 +47,20 @@ public class Hero : MonoBehaviour
     #endregion
 
     #region PRIVATE VARIABLES
-    
+
     private Vector2 _facingVec;
     private bool _wantsToDash;
     private float _dashTiming;
     private Laser _magicLaserInstance;
     private Camera _mainCamera;
-    private new AudioManager audio;
-    private float _iframeTiming = 0f;
+    private AudioManager _audio;
+    private float _iframeTiming;
     private bool _isDead;
 
     // Post Procesing
     private PostProcessVolume _postProcess;
     private Vignette _ppVignette;
-    
+
     #endregion
 
     #region COMPONENTS
@@ -77,7 +76,7 @@ public class Hero : MonoBehaviour
     #endregion
 
     #region INPUT VARIABLES
-    
+
     private Vector2 _movement;
     private Vector2 _joystickAim;
     private float _attackStyleChange;
@@ -99,9 +98,19 @@ public class Hero : MonoBehaviour
 
     // Current active controller
     private Controller CurrentController => _player.controllers.GetLastActiveController();
-    
+
     #endregion
-    
+
+    public void UpdateControllerMap(string mapTag) {
+        var enabler = _player.controllers.maps.mapEnabler;
+
+        foreach (var ruleSet in enabler.ruleSets)
+            ruleSet.enabled = false;
+        enabler.ruleSets.Find(rs => rs.tag == mapTag).enabled = true;
+
+        enabler.Apply();
+    }
+
     public void TakeDamage(float damage) {
         if (_isDead) return;
         if (_iframeTiming > 0f) return;
@@ -110,45 +119,40 @@ public class Hero : MonoBehaviour
         FreezeFrame.Instance.Freeze();
 
         _health.TakeDamage(damage);
-        audio.Play("HeroHurt");
+        _audio.Play(Sounds.HeroHurt);
         _iframeTiming = iframeTime;
 
         StartCoroutine(BlinkSprite(iframeBlinkPeriod));
-        if (_ppVignette)
-        {
-            _ppVignette.intensity.Interp(0f, 0.6f, 1f - _health.value / _health.maxValue);
-            StartCoroutine(BlinkScreen(_ppVignette, _ppVignette.intensity.value, 0.7f, 0.4f));
-        }
+
+        if (!_ppVignette) return;
+
+        _ppVignette.intensity.Interp(0f, 0.6f, 1f - _health.value / _health.maxValue);
+        StartCoroutine(BlinkScreen(_ppVignette, _ppVignette.intensity.value, 0.7f, 0.4f));
     }
-    
-    private IEnumerator BlinkSprite(float period)
-    {
-        while (_iframeTiming > 0f)
-        {
+
+    private IEnumerator BlinkSprite(float period) {
+        while (_iframeTiming > 0f) {
             _spriteRenderer.enabled = !_spriteRenderer.enabled;
             yield return new WaitForSeconds(period / 2f);
         }
+
         _spriteRenderer.enabled = true;
     }
 
-    private IEnumerator BlinkScreen(Vignette vignette, float initialIntensity, float maxIntensity, float duration)
-    {
-        float timeElapsed = 0f;
-        while (timeElapsed < duration)
-        {
-            if (Time.timeScale > 0f)
-            {
-                if (timeElapsed < duration / 2f)
-                {
+    private IEnumerator BlinkScreen(Vignette vignette, float initialIntensity, float maxIntensity, float duration) {
+        var timeElapsed = 0f;
+        while (timeElapsed < duration) {
+            if (Time.timeScale > 0f) {
+                if (timeElapsed < duration / 2f) {
                     vignette.intensity.Interp(initialIntensity, maxIntensity, 2 * timeElapsed / duration);
                 }
-                else
-                {
+                else {
                     vignette.intensity.Interp(maxIntensity, initialIntensity, (duration / 2f + (timeElapsed - duration / 2f)) / duration);
                 }
 
                 timeElapsed += Time.deltaTime;
             }
+
             yield return null;
         }
     }
@@ -163,20 +167,18 @@ public class Hero : MonoBehaviour
         _spriteRenderer = anim.GetComponent<SpriteRenderer>();
 
         _postProcess = GameObject.FindGameObjectWithTag("Post Processing")?.GetComponent<PostProcessVolume>();
-        _ppVignette = _postProcess?.profile.GetSetting<Vignette>();
+        if (_postProcess) _ppVignette = _postProcess.profile.GetSetting<Vignette>();
         if (_ppVignette) _ppVignette.intensity.value = 0f;
 
         // Controller map in gameplay mode
-        _player.controllers.maps.mapEnabler.ruleSets.Find(rs => rs.tag == "Gameplay").enabled = true;
-        _player.controllers.maps.mapEnabler.ruleSets.Find(rs => rs.tag == "UI").enabled = false;
-        _player.controllers.maps.mapEnabler.Apply();
+        UpdateControllerMap(Inputs.GameplayMap);
     }
 
     private void Start() {
         _mainCamera = Camera.main;
 
         _facingVec = new Vector2(1.0f, 0);
-        audio = FindObjectOfType<AudioManager>();
+        _audio = FindObjectOfType<AudioManager>();
         _isDead = false;
         Won = false;
     }
@@ -186,14 +188,13 @@ public class Hero : MonoBehaviour
         GetInputs();
 
         if (_movement.magnitude > 0) {
-            if (anim.CurrentMode == HeroAnim.Mode.Move || anim.CurrentMode == HeroAnim.Mode.Jump) {
+            if (anim.CurrentMode == HeroMode.Move || anim.CurrentMode == HeroMode.Jump) {
                 // only updating facing_vec when actually moving
                 _facingVec = _movement;
             }
         }
 
-        if (_iframeTiming > 0f)
-        {
+        if (_iframeTiming > 0f) {
             _iframeTiming = Mathf.Clamp(_iframeTiming - Time.deltaTime, 0f, iframeTime);
         }
 
@@ -201,21 +202,20 @@ public class Hero : MonoBehaviour
             anim.UpdateDirection(_movement);
 
         if (_magicLaserInstance && _fightingStyle.currentStyle != FightingStyle.Style.Magic) {
-            _magicLaserInstance.Destroy();
+            _magicLaserInstance.Cancel();
             _magicLaserInstance = null;
         }
 
-        if (_bowScript.gameObject.activeSelf && _fightingStyle.currentStyle != FightingStyle.Style.Range) {
+        if (_bowScript.gameObject.activeSelf && _fightingStyle.currentStyle != FightingStyle.Style.Range)
             _bowScript.gameObject.SetActive(false);
-        }
 
         Dash();
 
         if (_jump) {
-            anim.SwitchMode(HeroAnim.Mode.Jump);
+            anim.SwitchMode(HeroMode.Jump);
         }
 
-        if (anim.CurrentMode != HeroAnim.Mode.Jump) {
+        if (anim.CurrentMode != HeroMode.Jump) {
             switch (_fightingStyle.currentStyle) {
                 case FightingStyle.Style.Melee:
                     UpdateAttackMelee();
@@ -233,43 +233,40 @@ public class Hero : MonoBehaviour
             }
         }
 
-        if (anim.CurrentMode == HeroAnim.Mode.BigSlash) {
+        if (anim.CurrentMode == HeroMode.BigSlash) {
             if (_heavyAttackRelease)
                 if (sword.CancelBigSlash())
-                    anim.SwitchMode(HeroAnim.Mode.Move);
+                    anim.SwitchMode(HeroMode.Move);
             anim.SetModeSpeed(sword.GetSpeedForHeroAnimator());
         }
 
-        if (_attackStyleChange > 0)
-        {
+        if (_attackStyleChange > 0) {
             _fightingStyle.NextStyle();
         }
-        else if (_attackStyleChange < 0)
-        {
+        else if (_attackStyleChange < 0) {
             _fightingStyle.PreviousStyle();
         }
 
         // On fighting style change
-        if (_attackStyleChange != 0)
-        {
+        if (_attackStyleChange != 0) {
             _mana.SetEnabled(_fightingStyle.currentStyle == FightingStyle.Style.Magic);
         }
     }
 
 
     private void UpdateAttackMelee() {
-        if (_lightAttack == _heavyAttack || anim.IsAttacking() || anim.CurrentMode != HeroAnim.Mode.Move)
+        if (_lightAttack == _heavyAttack || anim.IsAttacking() || anim.CurrentMode != HeroMode.Move)
             return;
 
         anim.UpdateSlashDirection(_facingVec);
-        anim.SwitchMode(_heavyAttack ? HeroAnim.Mode.BigSlash : HeroAnim.Mode.Slash);
+        anim.SwitchMode(_heavyAttack ? HeroMode.BigSlash : HeroMode.Slash);
         sword.TriggerSlash(_facingVec, _heavyAttack);
     }
 
     private void UpdateAttackRange() {
 
         // If still attacking or aiming
-        if (anim.IsAttacking() || anim.CurrentMode == HeroAnim.Mode.Aim)
+        if (anim.IsAttacking() || anim.CurrentMode == HeroMode.Aim)
             return;
         // If not trying to shoot
         if (CurrentController.type != ControllerType.Joystick && ShootingDirection.magnitude == 0 || !_lightAttack)
@@ -283,18 +280,18 @@ public class Hero : MonoBehaviour
         // Triggering the animation
         anim.UpdateDirection(ShootingDirection);
         anim.UpdateSlashDirection(ShootingDirection);
-        anim.SwitchMode(HeroAnim.Mode.Slash);
+        anim.SwitchMode(HeroMode.Slash);
         // Increase attack animation's speed
         anim.SetModeSpeed(attackAnimSpeedFactor);
 
-        audio.Play("Throw");
+        _audio.Play(Sounds.Throw);
     }
 
     private void UpdateAttackRangeHeavy() {
-        if (_heavyAttack) {
+        if (_heavyAttack && !_bowScript.gameObject.activeSelf) {
             _bowScript.gameObject.SetActive(true);
             _bowScript.ChargeShot();
-            anim.SwitchMode(HeroAnim.Mode.Aim);
+            anim.SwitchMode(HeroMode.Aim);
         }
         else if (_heavyAttackRelease && _bowScript.gameObject.activeSelf) {
             _bowScript.Shoot();
@@ -320,42 +317,41 @@ public class Hero : MonoBehaviour
         // triggering the animation
         anim.UpdateDirection(ShootingDirection);
         anim.UpdateSlashDirection(ShootingDirection);
-        anim.SwitchMode(HeroAnim.Mode.Slash);
+        anim.SwitchMode(HeroMode.Slash);
         anim.SetModeSpeed(3); // Slash animation 3 times faster
 
         // playing sound
-        audio.Play("CastSpell");
+        _audio.Play(Sounds.CastSpell);
     }
 
     private void UpdateAttackMagicHeavy() {
-        if (_heavyAttack && _magicLaserInstance == null) {
+        if (_heavyAttack && _magicLaserInstance is null) {
             if (!_mana.HasEnough(magicHeavyManaCost)) return;
             _magicLaserInstance = Instantiate(magicLaserPrefab, transform.position, Quaternion.identity, transform).GetComponent<Laser>();
-            audio.Play("LaserBuildup");
+            _audio.Play(Sounds.LaserBuildup);
         }
 
-        if (_heavyAttackRelease && _magicLaserInstance != null) {
-            if (_magicLaserInstance.isReady) {
+        if (_heavyAttackRelease && _magicLaserInstance) {
+            if (_magicLaserInstance.IsReady) {
                 _mana.UseMana(magicHeavyManaCost);
                 _magicLaserInstance.Shoot();
 
-                anim.SwitchMode(HeroAnim.Mode.Slash);
+                anim.SwitchMode(HeroMode.Slash);
                 anim.SetModeSpeed(3);
 
-                audio.Play("LaserShoot");
+                _audio.Play(Sounds.LaserShoot);
             }
             else {
-                _magicLaserInstance.Destroy();
-                _magicLaserInstance = null;
+                _magicLaserInstance.Cancel();
             }
-            audio.Stop("LaserBuildup");
+
+            _magicLaserInstance = null;
+            _audio.Stop(Sounds.LaserBuildup);
         }
 
-        if (_magicLaserInstance != null && !_magicLaserInstance.isShooting) {
-            _magicLaserInstance.SetDirection(ShootingDirection);
-            anim.UpdateDirection(ShootingDirection);
-            anim.UpdateSlashDirection(ShootingDirection);
-        }
+        if (_magicLaserInstance is null || _magicLaserInstance.IsShooting) return;
+        anim.UpdateDirection(ShootingDirection);
+        anim.UpdateSlashDirection(ShootingDirection);
     }
 
 
@@ -370,35 +366,33 @@ public class Hero : MonoBehaviour
         if (_dashTiming <= dashCooldown - dashDuration) {
             // If doing dash, do not modify velocity by hand
             switch (anim.CurrentMode) {
-                case HeroAnim.Mode.Move:
-                case HeroAnim.Mode.Jump:
+                case HeroMode.Move:
+                case HeroMode.Jump:
                     _body.velocity = _movement * speed;
                     break;
-                case HeroAnim.Mode.Slash:
+                case HeroMode.Slash:
                     _body.velocity = _movement * (speed * slowFactor);
                     break;
-                case HeroAnim.Mode.BigSlash:
+                case HeroMode.BigSlash:
                     _body.velocity = Vector2.zero;
                     break;
             }
-            
+
             // Managing move speed while charging arrows / shooting laser
             switch (_fightingStyle.currentStyle) {
                 case FightingStyle.Style.Range when _bowScript.gameObject.activeSelf:
                     _body.velocity = Vector2.zero;
                     break;
-                case FightingStyle.Style.Magic when _magicLaserInstance != null:
-                    _body.velocity = _magicLaserInstance.isShooting ? Vector2.zero : _movement * (speed * slowFactor);
+                case FightingStyle.Style.Magic when _magicLaserInstance:
+                    _body.velocity = _magicLaserInstance.IsShooting ? Vector2.zero : _movement * (speed * slowFactor);
                     break;
             }
-
         }
-        
 
         // Dashing
         if (!_wantsToDash) return;
         _body.AddForce(_facingVec * (_body.mass * dashImpulseFactor), ForceMode2D.Impulse);
-        audio.Play("Dash");
+        _audio.Play(Sounds.Dash);
         _wantsToDash = false;
     }
 
@@ -416,20 +410,16 @@ public class Hero : MonoBehaviour
     }
 
     private void GetInputs() {
-        _movement = _player.GetAxis2D("Move Horizontal", "Move Vertical").normalized;
-        _joystickAim = _player.GetAxis2D("Aim Horizontal", "Aim Vertical").normalized;
-
-        _attackStyleChange = _player.GetAxis("Attack Style");
+        _movement = _player.GetAxis2D(Inputs.MoveHorizontal, Inputs.MoveVertical).normalized;
+        _joystickAim = _player.GetAxis2D(Inputs.AimHorizontal, Inputs.AimVertical).normalized;
+        _attackStyleChange = _player.GetAxis(Inputs.AttackStyle);
+        _jump = _player.GetButtonDown(Inputs.Jump);
+        _dash = _player.GetButtonDown(Inputs.Dash);
+        _heavyAttack = _player.GetButtonDown(Inputs.HeavyAttack);
+        _heavyAttackRelease = _player.GetButtonUp(Inputs.HeavyAttack);
         if (_attackStyleChange == _player.GetAxisPrev("Attack Style")) _attackStyleChange = 0f; // Prevents repeats with gamepad
-
-        _jump = _player.GetButtonDown("Jump");
-        _dash = _player.GetButtonDown("Dash");
-
         _lightAttack = (CurrentController?.type == ControllerType.Joystick && _fightingStyle.currentStyle != FightingStyle.Style.Melee) ?
             _joystickAim != Vector2.zero : _player.GetButtonDown("Light Attack");
-
-        _heavyAttack = _player.GetButtonDown("Heavy Attack");
-        _heavyAttackRelease = _player.GetButtonUp("Heavy Attack");
         _heavyAttackCurrentlyPressed = _player.GetButton("Heavy Attack");
     }
 

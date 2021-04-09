@@ -1,10 +1,10 @@
 using UnityEngine;
 using System.Collections;
+using static Utils;
 
 public class Minotaur : MonoBehaviour
 {
     // String hashes
-    private static readonly int IsDead = Animator.StringToHash("IsDead");
 
     public Health health; // Minotaur's health
     public GameObject hero;
@@ -25,7 +25,7 @@ public class Minotaur : MonoBehaviour
     private Animator _spriteAnimator;       // Sprite animator
     private MinotaurSprite _minotaurSprite; // Sprite manager
     private Rigidbody2D _rigidbody;
-    private new AudioManager audio;
+    private AudioManager _audio;
     private bool _isDead;
     private bool _isDashing;
 
@@ -34,7 +34,7 @@ public class Minotaur : MonoBehaviour
         _spriteAnimator = GetComponentInChildren<Animator>();
         _minotaurSprite = GetComponentInChildren<MinotaurSprite>();
         _lightMeleeAttackAction = GetComponentInChildren<LightMeleeAttackAction>();
-        audio = FindObjectOfType<AudioManager>();
+        _audio = FindObjectOfType<AudioManager>();
         _rigidbody = GetComponent<Rigidbody2D>();
         _isDashing = false;
     }
@@ -42,18 +42,23 @@ public class Minotaur : MonoBehaviour
     private void Start() {
         // Boss' rages are increasing constantly
         InvokeRepeating(nameof(UpdateRage), 0, 1);
-        StartCoroutine(_SpawnRocks(30, 0.2f));
+        //StartCoroutine(_SpawnRocks(30, 0.2f));
         // For testing BulletWall only: StartCoroutine(_test_BulletWall());
     }
 
     private void Update() {
         // If the boss is dead then do nothing
-        if (_isDead)
-        {
+        if (_isDead) {
             _rigidbody.constraints = RigidbodyConstraints2D.FreezeAll;
             return;
         }
-        
+
+        // If the boss' health reaches 0
+        if (health.value <= 0f) {
+            _spriteAnimator.SetTrigger(AnimStrings.IsDead); // Trigger death animation
+            _isDead = true;
+        }
+
         _isDashing = _rigidbody.velocity.sqrMagnitude > 10;
     }
 
@@ -72,23 +77,24 @@ public class Minotaur : MonoBehaviour
         HandleCollidingObject(other.gameObject);
     }
 
-    private void HandleCollidingObject(GameObject gameObject) {
-        Rock rock = gameObject.GetComponent<Rock>();
+    private void HandleCollidingObject(GameObject obj) {
+        var rock = obj.GetComponent<Rock>();
+
         if (rock) {
             if (_isDashing)
-                Destroy(gameObject);
+                Destroy(obj);
             return;
         }
-    
-        if (gameObject.layer != LayerMask.NameToLayer("HeroProjectile")) return;
 
-        Projectile proj = gameObject.GetComponent<Projectiles>()?.projectile
-                          ?? gameObject.GetComponent<MagicProjectile>()?.projectile;
+        if (obj.layer != LayerMask.NameToLayer("HeroProjectile")) return;
 
-        if (proj == null) return;
+        var proj = obj.GetComponent<Projectiles>()?.projectile
+            ? obj.GetComponent<Projectiles>()?.projectile
+            : obj.GetComponent<MagicProjectile>()?.projectile;
+
+        if (proj is null) return;
 
         _lightMeleeAttackAction.Cost += 0.05f;
-
         TakeDamage(proj.damage, proj.style);
     }
 
@@ -99,7 +105,7 @@ public class Minotaur : MonoBehaviour
             return; // do not apply damage when blinking = invulnerability time
 
         health.TakeDamage(damage);
-        audio.Play("MinautorHurt");
+        _audio.Play(Sounds.MinotaurHurt);
 
         switch (style) {
             case FightingStyle.Style.Melee:
@@ -115,16 +121,18 @@ public class Minotaur : MonoBehaviour
                 break;
         }
 
+        var shockwaveSpeed = 6 + 12 * health.progress;
+        shockwave.GetComponent<ShockwaveBehavior>().data.speed = shockwaveSpeed;
+
         StartCoroutine(_minotaurSprite.Blink());
     }
 
-    public void onHealthEmpty()
-    {
+    public void OnHealthEmpty() {
         if (_isDead) return;
 
         hero.GetComponent<Hero>().Won = true;
 
-        _spriteAnimator.SetBool(IsDead, true); // Trigger death animation
+        _spriteAnimator.SetBool(AnimStrings.IsDead, true); // Trigger death animation
         _isDead = true;
         Time.timeScale = 0.5f;
 
@@ -133,16 +141,15 @@ public class Minotaur : MonoBehaviour
         Invoke(nameof(_DisplayWinScreen), 1f);
     }
 
-    private void _DisplayWinScreen()
-    {
-        if (winScreen != null)
-        {
+    private void _DisplayWinScreen() {
+        if (winScreen != null) {
             winScreen.SetActive(true);
         }
+
         Time.timeScale = 1f;
         CinemachineEffects.Instance.UnZoom();
     }
-    
+
 
     public IEnumerator SpawnFamiliers(int n, float delay) {
         for (var i = 0; i < n; i++) {
@@ -154,26 +161,31 @@ public class Minotaur : MonoBehaviour
     }
 
     // angle_width & angle_offset are in degrees
-    public void SpawnBulletWall(int nb_bullets, float speed, float angle_width, float angle_offset = 0, float scaling = 0f) {
-        angle_width *= Mathf.Deg2Rad;
-        angle_offset *= Mathf.Deg2Rad;
+    public void SpawnBulletWall(int nbBullets, float speed, float angleWidth, float angleOffset = 0) {
+        angleWidth *= Mathf.Deg2Rad;
+        angleOffset *= Mathf.Deg2Rad;
+        bulletModel.GetComponent<Bullet>().data.speed = speed;
 
         // bullets are launched in [-angle_width/2, +angle_width/2] in direction of the player
         var dir = hero.transform.position - transform.position;
-        var base_angle = Mathf.Atan2(dir.y, dir.x) + angle_offset - angle_width / 2;
-        for (var i = 0; i < nb_bullets; ++i) {
-            var angle = base_angle + i * angle_width / (nb_bullets - 1);
-            Instantiate(bulletModel, transform.position,
-                        Quaternion.FromToRotation(Vector3.right,
-                                                  dir.normalized + new Vector3(Mathf.Cos(angle), Mathf.Sin(angle), 0).normalized));
+        var baseAngle = Mathf.Atan2(dir.y, dir.x) + angleOffset - angleWidth / 2;
+
+        for (var i = 0; i < nbBullets; ++i) {
+            var angle = baseAngle + i * angleWidth / (nbBullets - 1);
+            Instantiate(bulletModel,
+                        transform.position,
+                        Quaternion.FromToRotation(
+                            Vector3.right,
+                            dir.normalized + new Vector3(Mathf.Cos(angle), Mathf.Sin(angle), 0).normalized));
         }
     }
-    
-    private IEnumerator _SpawnRocks(int n, float delay_between) {
-        for (int i = 0; i < n; ++i) {
-            rockModel.Create((Vector2)hero.transform.position + 15 * Random.insideUnitCircle);
-            yield return new WaitForSeconds(delay_between);
+
+    private IEnumerator _SpawnRocks(int n, float delayBetween) {
+        for (var i = 0; i < n; ++i) {
+            rockModel.Create((Vector2) hero.transform.position + 15 * Random.insideUnitCircle);
+            yield return new WaitForSeconds(delayBetween);
         }
+
         yield return null;
     }
 }

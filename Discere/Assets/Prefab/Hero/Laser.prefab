@@ -324,6 +324,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f06a396f043ae4f4b8f562e3238e6e45, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  laserData: {fileID: 11400000, guid: b18c8f7df7232df4db1c39b51d185a0d, type: 2}
   damage: 20
   ray: {fileID: 6688090205294161516}
   readyRayColor: {r: 0.6226415, g: 0.17269489, b: 0.5964414, a: 1}

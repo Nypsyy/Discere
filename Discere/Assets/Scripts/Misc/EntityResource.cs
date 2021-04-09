@@ -24,6 +24,7 @@ public class EntityResource : MonoBehaviour
 
     public float value { get; private set; }
     public int FillRatio => (int) ((value / maxValue) * 100);
+    public float progress => Mathf.InverseLerp(maxValue, minValue, value);
 
     // Start is called before the first frame update
     protected void Start() {

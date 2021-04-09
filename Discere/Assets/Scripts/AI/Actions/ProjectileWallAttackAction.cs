@@ -5,14 +5,14 @@ using static Utils;
 public class ProjectileWallAttackAction : BasicAction
 {
     private ProjectileWallAttackCost _costEvaluator;
-    private bool AttackDone => !AgentData.Animator.GetBool(AnimationVariables.BossAttacking) && !Cooldown.Active;
+    private bool AttackDone => !AgentData.Animator.GetBool(AnimStrings.BossAttacking) && !Cooldown.Active;
 
     private void Awake() {
         _costEvaluator = GetComponentInChildren<ProjectileWallAttackCost>();
     }
 
     public override bool PrePerform() {
-        AgentData.Animator.SetTrigger(AnimationVariables.ProjectileWallAttack);
+        AgentData.Animator.SetTrigger(AnimStrings.ProjectileWallAttack);
         return base.PrePerform();
     }
 

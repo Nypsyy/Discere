@@ -7,14 +7,14 @@ public class DashToMeleeAction : BasicAction
     public Rigidbody2D rb;
     private DashToMeleeCost cost;
 
-    private bool DashDone => !AgentData.Animator.GetBool(AnimationVariables.PrepareDash) && rb.velocity.magnitude < 3;
+    private bool DashDone => !AgentData.Animator.GetBool(AnimStrings.PrepareDash) && rb.velocity.magnitude < 3;
 
     private void Awake() {
         cost = GetComponentInChildren<DashToMeleeCost>();
     }
 
     public override bool PrePerform() {
-        AgentData.Animator.SetTrigger(AnimationVariables.BossDash);
+        AgentData.Animator.SetTrigger(AnimStrings.BossDash);
         return base.PrePerform();
     }
 

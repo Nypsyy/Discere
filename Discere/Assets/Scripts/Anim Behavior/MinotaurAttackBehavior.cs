@@ -1,5 +1,5 @@
 using UnityEngine;
-using static Utils.AnimationVariables;
+using static Utils.AnimStrings;
 
 public class MinotaurAttackBehavior : StateMachineBehaviour
 {

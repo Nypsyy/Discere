@@ -57,7 +57,19 @@ public class Rock : MonoBehaviour
         float newY = transform.position.y + _speed * Time.fixedDeltaTime;
         if (newY < _targetPos.y) {
             newY = _targetPos.y; _speed = 0;
-            GetComponent<CapsuleCollider2D>().enabled = true;
+            
+            Collider2D collider = GetComponent<CapsuleCollider2D>();
+            collider.enabled = true;
+            Collider2D[] colliders = new Collider2D[10];
+            int nb_colliders = collider.OverlapCollider(new ContactFilter2D().NoFilter(), colliders);
+            for (int i = 0; i < nb_colliders; ++i) {
+                Hero hero = colliders[i].gameObject.GetComponent<Hero>();
+                if (hero) {
+                    hero.TakeDamage(10);
+                    break;
+                }
+            }
+            
             particles.Play();
             AstarPath.active.Scan();
             CinemachineEffects.Instance.Shake(2f, 0.2f);
@@ -69,4 +81,5 @@ public class Rock : MonoBehaviour
         shadowParent.transform.position = _targetPos;
         
     }
+    
 }

@@ -1,143 +1,151 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Laser : MonoBehaviour
 {
-    public float damage = 20.0f;
+    public LaserData laserData;
 
     public LineRenderer ray;
-    public Color readyRayColor;
-    public float readyRayWidth = 0.1f;
-    private float initialRayWidth;
-
     public GameObject chargingCircle;
     public LayerMask obstacleLayers;
     public LayerMask hurtingLayers;
-
-    public float chargingTime = 1f;
-    private float chargingTimer = 0f;
-    private Vector3 initialChargingCircleScale;
-
     public SpriteRenderer beamSprite;
     public SpriteRenderer beamStartSprite;
-    public float beamDuration = 0.5f;
-    private float beamWidth;
 
-    private Vector2 dir = Vector2.up;
-    public bool isReady { get; private set; } = false;
-    public bool isShooting { get; private set; } = false;
-    private Vector2 laserVector;
+    private Hero _hero;
+    private float _initialRayWidth;
+    private float _chargingTimer;
+    private Vector3 _initialChargingCircleScale;
+    private float _beamWidth;
+    private Vector2 _laserVector;
+    private bool _isCharging;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        initialChargingCircleScale = chargingCircle.transform.localScale;
-        initialRayWidth = ray.startWidth;
-    }
+    public bool IsReady { get; private set; }
+    public bool IsShooting { get; private set; }
 
-    public void SetDirection(Vector2 direction)
-    {
-        dir = direction;
-    }
-
-    public void Destroy()
-    {
+    public void Cancel() {
+        StopAllCoroutines();
         Destroy(gameObject);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
+    private IEnumerator Shooting() {
+        IsShooting = true;
+        yield return new WaitForSeconds(laserData.beamDuration);
+        Destroy(gameObject);
+
+        yield return null;
+    }
+
+    private void UpdateChargingRay() {
+        // Update timer
+        _chargingTimer += Time.deltaTime;
+
+        chargingCircle.transform.localScale = _initialChargingCircleScale * (laserData.chargeTime - _chargingTimer) / laserData.chargeTime;
+
+        // Update ray width
+        var newWidth = (_initialRayWidth - laserData.readyRayWidth) * (laserData.chargeTime - _chargingTimer) / laserData.chargeTime +
+                       laserData.readyRayWidth;
+        ray.startWidth = newWidth;
+        ray.endWidth = newWidth;
+    }
+
+    private IEnumerator Charging() {
+        _isCharging = true;
+        yield return new WaitForSeconds(laserData.chargeTime);
+        _isCharging = false;
+        chargingCircle.SetActive(false);
+        StartCoroutine(ReadyRay());
+        IsReady = true;
+
+        yield return null;
+    }
+
+    private void Awake() {
+        _hero = GetComponentInParent<Hero>();
+    }
+
+    private void Start() {
+        _initialChargingCircleScale = chargingCircle.transform.localScale;
+        _initialRayWidth = ray.startWidth;
+        StartCoroutine(Charging());
+    }
+
+    private void Update() {
         // Manage shooting
-        if (isShooting)
-        {
-            float angle = Vector2.SignedAngle(Vector2.up, dir);
-            RaycastHit2D[] hits = Physics2D.BoxCastAll(transform.position, Vector2.one * beamWidth, angle, dir, laserVector.magnitude, hurtingLayers);
+        if (IsShooting) {
+            var angle = Vector2.SignedAngle(Vector2.up, _hero.ShootingDirection);
+            var hits = Physics2D.BoxCastAll(transform.position,
+                                            Vector2.one * _beamWidth,
+                                            angle,
+                                            _hero.ShootingDirection,
+                                            _laserVector.magnitude,
+                                            hurtingLayers);
             if (hits.Length <= 0) return;
 
-            foreach (RaycastHit2D hit2D in hits)
-            {
-                var gameObject = hit2D.collider.gameObject;
-                gameObject.GetComponent<Minotaur>()?.TakeDamage(damage, FightingStyle.Style.Magic);
-                
-                gameObject.GetComponent<Rock>()?.DestroyMe();
+            foreach (var hit2D in hits) {
+                var obj = hit2D.collider.gameObject;
+                obj.GetComponent<Minotaur>()?.TakeDamage(laserData.damage, FightingStyle.Style.Magic);
+
+                obj.GetComponent<Rock>()?.DestroyMe();
             }
         }
 
-        // Update timer
-        chargingTimer += Time.deltaTime;
-
         // If charging
-        if (chargingTimer <= chargingTime)
-        {
-            // Update charging circle 
-            chargingCircle.transform.localScale = initialChargingCircleScale * (chargingTime - chargingTimer) / chargingTime;
-
-            // Update ray width
-            float newWidth = (initialRayWidth - readyRayWidth) * (chargingTime - chargingTimer) / chargingTime + readyRayWidth;
-            ray.startWidth = newWidth;
-            ray.endWidth = newWidth;
-        }
-        // If transitionning to "ready" state
-        else if (!isReady)
-        {
-            chargingCircle.SetActive(false);
-            StartCoroutine(ReadyRay());
-            isReady = true;
-        }
+        if (_isCharging)
+            UpdateChargingRay();
 
         // Raycast in laser's direction
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, dir, float.PositiveInfinity, obstacleLayers);
-        Vector3 hitCoords = transform.InverseTransformPoint(hit.point);
-        Vector3[] points = new Vector3[2];
+        var hit = Physics2D.Raycast(transform.position, _hero.ShootingDirection, float.PositiveInfinity, obstacleLayers);
+        var hitCoords = transform.InverseTransformPoint(hit.point);
+        var points = new Vector3[2];
 
         // Update ray's points
         points[0] = Vector3.zero;
         points[1] = new Vector3(hitCoords.x, hitCoords.y, 0f);
         ray.SetPositions(points);
-        laserVector.x = hitCoords.x;
-        laserVector.y = hitCoords.y;
+        _laserVector.x = hitCoords.x;
+        _laserVector.y = hitCoords.y;
     }
 
-    public void Shoot()
-    {
-        if (!isReady) return;
+    public void Shoot() {
+        if (!IsReady) return;
 
         FreezeFrame.Instance.Freeze(0.15f);
 
         // Display beam
-        Quaternion rotation = Quaternion.FromToRotation(Vector3.up, new Vector3(laserVector.x, laserVector.y, 0f));
-        float startBeamLength = beamStartSprite.transform.localScale.y;
+        var rotation = Quaternion.FromToRotation(Vector3.up, new Vector3(_laserVector.x, _laserVector.y, 0f));
+        var startBeamLength = beamStartSprite.transform.localScale.y;
 
-        beamSprite.transform.localScale = new Vector3(beamSprite.transform.localScale.x, beamSprite.transform.localScale.y * (laserVector.magnitude - startBeamLength) / 2f, 0f);
+        beamSprite.transform.localScale = new Vector3(beamSprite.transform.localScale.x,
+                                                      beamSprite.transform.localScale.y * (_laserVector.magnitude - startBeamLength) / 2f,
+                                                      0f);
         beamSprite.transform.rotation = rotation;
-        beamSprite.transform.Translate(Vector2.up * (laserVector.magnitude / 2f + startBeamLength));
+        beamSprite.transform.Translate(Vector2.up * (_laserVector.magnitude / 2f + startBeamLength));
         beamSprite.gameObject.SetActive(true);
 
         beamStartSprite.transform.rotation = rotation;
         beamStartSprite.transform.Translate(Vector2.up * startBeamLength);
         beamStartSprite.gameObject.SetActive(true);
 
-        beamWidth = beamSprite.transform.localScale.x;
+        _beamWidth = beamSprite.transform.localScale.x;
 
         // Remove ray
         ray.gameObject.SetActive(false);
 
         // Screen shake
-        CinemachineEffects.Instance?.Shake(6f, 0.5f);
+        if (CinemachineEffects.Instance)
+            CinemachineEffects.Instance.Shake(6f, 0.5f);
 
-        isShooting = true;
-
-        Invoke("Destroy", beamDuration);
+        StartCoroutine(Shooting());
     }
 
-    IEnumerator ReadyRay()
-    {
+    private IEnumerator ReadyRay() {
         ray.startColor = Color.white;
         ray.endColor = Color.white;
         yield return new WaitForSeconds(0.05f);
-        ray.startColor = readyRayColor;
-        ray.endColor = readyRayColor;
+        ray.startColor = laserData.readyRayColor;
+        ray.endColor = laserData.readyRayColor;
+
+        yield return null;
     }
 }

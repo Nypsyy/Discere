@@ -9,7 +9,7 @@ public class MinotaurSprite : MonoBehaviour
 {
     public float dashInFactor;
     public bool isBlinking { get; private set; }
-    
+
 
     private Minotaur minotaurBehavior;
     private Animator _animator;                       // Sprite animator
@@ -37,11 +37,11 @@ public class MinotaurSprite : MonoBehaviour
         _hitboxForward.enabled = false;
         _hitboxBelow.enabled = false;
     }
-    
+
 
     private void Update() {
         // Update the running animation
-        _animator.SetFloat(AnimationVariables.Speed, Mathf.Abs(_aiPath.desiredVelocity.x));
+        _animator.SetFloat(AnimStrings.Speed, Mathf.Abs(_aiPath.desiredVelocity.x));
 
         Flip(); // Flip sprite
     }
@@ -86,13 +86,12 @@ public class MinotaurSprite : MonoBehaviour
     }
 
     public void DashIn() {
-        
         var rb = GetComponentInParent<Rigidbody2D>();
 
         rb.isKinematic = false;
         Vector2 toTarget = GetComponentInParent<AIDestinationSetter>().target.position - transform.position;
         rb.AddForce(toTarget * dashInFactor, ForceMode2D.Impulse);
-        _animator.SetBool(AnimationVariables.PrepareDash, false);
+        _animator.SetBool(AnimStrings.PrepareDash, false);
     }
 
     public void ShockwaveAttack() {
@@ -102,7 +101,12 @@ public class MinotaurSprite : MonoBehaviour
 
     public void ProjectileWallAttack() {
         FreezeFrame.Instance.Freeze(0.07f);
-        minotaurBehavior.SpawnBulletWall(6, 10, 70);
+        var progress = Mathf.Max(1 - minotaurBehavior.magicRage.progress, 1 - minotaurBehavior.distanceRage.progress);
+        var angleWidth = 45 + 135 * progress;
+        var nbBullets = (int) angleWidth / 5;
+        var speed = 5 + 15 * progress;
+        
+        minotaurBehavior.SpawnBulletWall(nbBullets, speed, angleWidth);
     }
 
     public void LightMeleeAttackForward() {

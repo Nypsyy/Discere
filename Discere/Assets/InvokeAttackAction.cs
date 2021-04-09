@@ -4,10 +4,10 @@ using static Utils;
 public class InvokeAttackAction : BasicAction
 {
     public ProjectileWallAttackCost costEvaluator;
-    private bool AttackDone => !AgentData.Animator.GetBool(AnimationVariables.BossAttacking) && !Cooldown.Active;
+    private bool AttackDone => !AgentData.Animator.GetBool(AnimStrings.BossAttacking) && !Cooldown.Active;
     
     public override bool PrePerform() {
-        AgentData.Animator.SetTrigger(AnimationVariables.InvokeAttack);
+        AgentData.Animator.SetTrigger(AnimStrings.InvokeAttack);
         return base.PrePerform();
     }
 
