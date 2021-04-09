@@ -143,7 +143,7 @@ MonoBehaviour:
         useNativeMouse: 1
       maxJoysticksPerPlayer: 1
       autoAssignJoysticks: 1
-      assignJoysticksToPlayingPlayersOnly: 0
+      assignJoysticksToPlayingPlayersOnly: 1
       distributeJoysticksEvenly: 1
       reassignJoystickToPreviousOwnerOnReconnect: 1
       defaultJoystickAxis2DDeadZoneType: 1
@@ -185,9 +185,15 @@ MonoBehaviour:
       _name: System
       _descriptiveName: System
       _startPlaying: 1
-      _defaultJoystickMaps: []
+      _defaultJoystickMaps:
+      - _enabled: 1
+        _categoryId: 2
+        _layoutId: 0
       _defaultMouseMaps: []
-      _defaultKeyboardMaps: []
+      _defaultKeyboardMaps:
+      - _enabled: 1
+        _categoryId: 2
+        _layoutId: 0
       _defaultCustomControllerMaps: []
       _startingCustomControllers: []
       _assignMouseOnStart: 1
@@ -203,7 +209,7 @@ MonoBehaviour:
     - _id: 1
       _name: Player
       _descriptiveName: Player
-      _startPlaying: 1
+      _startPlaying: 0
       _defaultJoystickMaps:
       - _enabled: 0
         _categoryId: 1
@@ -264,8 +270,8 @@ MonoBehaviour:
       _name: UI Horizontal
       _type: 0
       _descriptiveName: UI Horizontal
-      _positiveDescriptiveName: UI Left
-      _negativeDescriptiveName: UI Right
+      _positiveDescriptiveName: UI Right
+      _negativeDescriptiveName: UI Left
       _behaviorId: 0
       _userAssignable: 1
       _categoryId: 2
@@ -948,6 +954,50 @@ MonoBehaviour:
         _invert: 0
         _axisContribution: 0
         _keyboardKeyCode: 8
+        _modifierKey1: 0
+        _modifierKey2: 0
+        _modifierKey3: 0
+      - _actionCategoryId: 0
+        _actionId: 3
+        _elementType: 1
+        _elementIdentifierId: -1
+        _axisRange: 0
+        _invert: 0
+        _axisContribution: 0
+        _keyboardKeyCode: 273
+        _modifierKey1: 0
+        _modifierKey2: 0
+        _modifierKey3: 0
+      - _actionCategoryId: 0
+        _actionId: 2
+        _elementType: 1
+        _elementIdentifierId: -1
+        _axisRange: 0
+        _invert: 0
+        _axisContribution: 0
+        _keyboardKeyCode: 275
+        _modifierKey1: 0
+        _modifierKey2: 0
+        _modifierKey3: 0
+      - _actionCategoryId: 0
+        _actionId: 3
+        _elementType: 1
+        _elementIdentifierId: -1
+        _axisRange: 0
+        _invert: 0
+        _axisContribution: 1
+        _keyboardKeyCode: 274
+        _modifierKey1: 0
+        _modifierKey2: 0
+        _modifierKey3: 0
+      - _actionCategoryId: 0
+        _actionId: 2
+        _elementType: 1
+        _elementIdentifierId: -1
+        _axisRange: 0
+        _invert: 0
+        _axisContribution: 1
+        _keyboardKeyCode: 276
         _modifierKey1: 0
         _modifierKey2: 0
         _modifierKey3: 0
