@@ -10,6 +10,7 @@ public class Rock : MonoBehaviour
 
     private float _speed = -1;
     private Vector2 _targetPos;
+    private new AudioManager audio;
 
     public void Create(Vector2 targetPos) {
         GameObject obj = Instantiate(this.gameObject);
@@ -24,7 +25,7 @@ public class Rock : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        audio = FindObjectOfType<AudioManager>();
     }
 
     // Update is called once per frame
@@ -73,6 +74,7 @@ public class Rock : MonoBehaviour
             particles.Play();
             AstarPath.active.Scan();
             CinemachineEffects.Instance.Shake(2f, 0.2f);
+            audio.Play("RockFall");
         }
         transform.position = new Vector2(transform.position.x, newY);
         

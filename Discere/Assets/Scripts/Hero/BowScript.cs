@@ -52,7 +52,7 @@ public class BowScript : MonoBehaviour
     public void UpgradeArrow() {
         if (_arrowIndex < arrows.Length) {
             _arrowIndex++;
-            _audio.Play(Sounds.BowCharge, pitchMultiplier: 0.5f * _arrowIndex);
+            _audio.Play("BowChange", pitchMultiplier: 0.5f * _arrowIndex);
         }
 
         arrowSprite.sprite = arrowSprites[_arrowIndex];

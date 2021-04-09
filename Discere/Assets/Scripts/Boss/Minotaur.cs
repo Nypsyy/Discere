@@ -53,12 +53,6 @@ public class Minotaur : MonoBehaviour
             return;
         }
 
-        // If the boss' health reaches 0
-        if (health.value <= 0f) {
-            _spriteAnimator.SetTrigger(AnimStrings.IsDead); // Trigger death animation
-            _isDead = true;
-        }
-
         _isDashing = _rigidbody.velocity.sqrMagnitude > 10;
     }
 

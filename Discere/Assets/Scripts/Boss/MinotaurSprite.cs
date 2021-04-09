@@ -18,6 +18,7 @@ public class MinotaurSprite : MonoBehaviour
     private AIDestinationSetter _aiDestinationSetter; // Pathfinding script
     private CircleCollider2D _hitboxForward;
     private CapsuleCollider2D _hitboxBelow;
+    private AudioManager _audio;
 
     private bool _isLookingRight = true; // Looking state of the sprite
 
@@ -30,6 +31,7 @@ public class MinotaurSprite : MonoBehaviour
         _aiDestinationSetter = GetComponentInParent<AIDestinationSetter>();
         _hitboxForward = GetComponentInChildren<CircleCollider2D>();
         _hitboxBelow = GetComponentInChildren<CapsuleCollider2D>();
+        _audio = FindObjectOfType<AudioManager>();
     }
 
     private void Start() {
@@ -87,7 +89,7 @@ public class MinotaurSprite : MonoBehaviour
 
     public void DashIn() {
         var rb = GetComponentInParent<Rigidbody2D>();
-
+        _audio.Play("BossDash");
         rb.isKinematic = false;
         Vector2 toTarget = GetComponentInParent<AIDestinationSetter>().target.position - transform.position;
         rb.AddForce(toTarget * dashInFactor, ForceMode2D.Impulse);
@@ -96,6 +98,7 @@ public class MinotaurSprite : MonoBehaviour
 
     public void ShockwaveAttack() {
         CinemachineEffects.Instance.Shake(3f, 0.3f);
+        _audio.Play("BossWave");
         Instantiate(minotaurBehavior.shockwave, transform.position, Quaternion.identity);
     }
 
@@ -110,10 +113,12 @@ public class MinotaurSprite : MonoBehaviour
     }
 
     public void LightMeleeAttackForward() {
+        _audio.Play("BossAttack");
         _hitboxForward.enabled = true;
     }
 
     public void LightMeleeAttackBelow() {
+        _audio.Play("BossAttackHeavy");
         _hitboxBelow.enabled = true;
     }
 
