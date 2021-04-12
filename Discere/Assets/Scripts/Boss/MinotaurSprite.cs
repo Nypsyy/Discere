@@ -95,7 +95,7 @@ public class MinotaurSprite : MonoBehaviour
 
     public void DashIn() {
         var rb = GetComponentInParent<Rigidbody2D>();
-        _audio.Play("BossDash");
+        _audio.Play(Sounds.BossDash);
         dashTrigger.enabled = true;
         rb.isKinematic = false;
         Vector2 toTarget = GetComponentInParent<AIDestinationSetter>().target.position - transform.position;
@@ -105,7 +105,7 @@ public class MinotaurSprite : MonoBehaviour
 
     public void ShockwaveAttack() {
         CinemachineEffects.Instance.Shake(3f, 0.3f);
-        _audio.Play("BossWave");
+        _audio.Play(Sounds.BossShockwave);
         Instantiate(minotaurBehavior.shockwave, transform.position, Quaternion.identity);
     }
 
@@ -120,12 +120,12 @@ public class MinotaurSprite : MonoBehaviour
     }
 
     public void LightMeleeAttackForward() {
-        _audio.Play("BossAttack");
+        _audio.Play(Sounds.BossAttack);
         _hitboxForward.enabled = true;
     }
 
     public void LightMeleeAttackBelow() {
-        _audio.Play("BossAttackHeavy");
+        _audio.Play(Sounds.BossAttackHeavy);
         _hitboxBelow.enabled = true;
     }
 

@@ -26,6 +26,13 @@ public static class Utils
         public const string HeroHurt = "HeroHurt";
         public const string BowShoot = "BowShoot";
         public const string BowCharge = "BowCharge";
+        public const string BowChange = "BowChange";
+        public const string RockFall = "RockFall";
+        public const string BossShockwave = "BossWave";
+        public const string BossAttack = "BossAttack";
+        public const string BossAttackHeavy = "BossAttackHeavy";
+        public const string BossDash = "BossDash";
+        public const string FamilierSpawn = "FamilierSpawn";
     }
 
     public struct Inputs

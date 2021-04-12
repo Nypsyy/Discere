@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using static Utils;
 
 public class Familier : MonoBehaviour
 {
@@ -63,7 +64,7 @@ public class Familier : MonoBehaviour
     private void Start() {
         Invoke(nameof(Fade), _lifeTime);
         InvokeRepeating(nameof(Fire), _fireDelay, _fireDelay);
-        FindObjectOfType<AudioManager>().Play("FamilierSpawn");
+        FindObjectOfType<AudioManager>().Play(Sounds.FamilierSpawn);
     }
 
     private void Update() {

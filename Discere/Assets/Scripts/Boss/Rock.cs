@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
+using static Utils;
 
 public class Rock : MonoBehaviour
 {
@@ -73,7 +74,7 @@ public class Rock : MonoBehaviour
         if (newY < _targetPos.y) {
             newY = _targetPos.y;
             onLandEvent.Invoke();
-            audio.Play("RockFall");
+            audio.Play(Sounds.RockFall);
         }
 
         transform.position = new Vector3(transform.position.x, newY);
