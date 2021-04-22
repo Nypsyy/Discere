@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using Rewired;
 using Rewired.Integration.UnityUI;
 using UnityEngine.SceneManagement;
+using SGoap.Services;
 
 public class Pause : MonoBehaviour
 {
@@ -82,6 +83,7 @@ public class Pause : MonoBehaviour
     public void OnExit()
     {
         Time.timeScale = timeScaleBackup;
+        TargetManager.Clear();
         SceneManager.LoadScene("MainMenu");
     }
 
