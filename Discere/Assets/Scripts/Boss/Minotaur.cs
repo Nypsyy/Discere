@@ -118,6 +118,7 @@ public class Minotaur : MonoBehaviour
         hero.GetComponent<Hero>().Won = true;
 
         _spriteAnimator.SetBool(AnimStrings.IsDead, true); // Trigger death animation
+        _spriteAnimator.SetTrigger(AnimStrings.Die);
         _isDead = true;
         Time.timeScale = 0.5f;
 

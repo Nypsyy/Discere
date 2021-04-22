@@ -51,6 +51,8 @@ public class MinotaurSprite : MonoBehaviour
 
     // Changes the sprite rendering direction
     private void Flip() {
+        if (_animator.GetBool(AnimStrings.IsDead)) return;
+
         // If the boss' target is on the left and the boss is looking right
         if (_aiDestinationSetter.target.position.x < transform.position.x && _isLookingRight) {
             transform.parent.localScale =

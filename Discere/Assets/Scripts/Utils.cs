@@ -70,6 +70,7 @@ public static class Utils
         public static readonly int BossDash = Animator.StringToHash("Dash");
         public static readonly int BossRockFallAttack = Animator.StringToHash("Rock Fall Attack");
         public static readonly int IsDead = Animator.StringToHash("IsDead");
+        public static readonly int Die = Animator.StringToHash("Die");
 
         public static readonly int PrepareDash = Animator.StringToHash("Prepare Dash");
 
